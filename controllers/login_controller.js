@@ -17,40 +17,32 @@ exports.ingresar = async (req, res, next) => {
     };
 
     const todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
-    if (todosLosCamposLlenos) {
+    if (todosLosCamposLlenos) {   
+
       const getUser = await queries_General.get_user(originalUser.email);
-      if(getUser[0]!==""){
-        const password = getUser[0].contrasena;
-        const isPasswordValid = await bcrypt.compare(originalUser.contrasena, password);
-        if (isPasswordValid){
-          jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
-            res.json({
-              token, 
-              id: getUser[0].id, 
-              });
+      const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
+
+      console.log(getUser);
+      console.log(isPasswordValid);
+      
+      if (isPasswordValid){
+        jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
+          res.json({
+            token, 
+            id: getUser[0].id, 
             });
-        }else{       
-          const result = {
-            status: false,
-            message: "Contraseña incorrecta",
-          };
-          response.error(req, res, result, 400, "error");
-        }
+          });
+      }else{       
+        const result = {
+          status: false,
+          message: "Contraseña incorrecta",
+        };
+        response.error(req, res, result, 400, "error");
+      }
         result = {
           status: true,
           message: "successful",
         };
-      }else{
-        const result = {
-          status: false,
-          message: "Usuario no existe",
-        };
-        response.error(req, res, result, 400, "error");
-      }
-      result = {
-        status: true,
-        message: "successful",
-      };
     } else {
       res.status(400);
       result = {
@@ -92,7 +84,6 @@ exports.user_create = async (req, res, next) => {
       contrasena: await bcrypt.hash(req.body.contrasena, saltRounds),
       cargo: req.body.cargo,
     };
-    console.log(employee);
     const todosLosCamposLlenos = Object.values(employee).every((value) => value !== undefined && value !== '');
     if (todosLosCamposLlenos) {
       await queries_General.create_user(employee);

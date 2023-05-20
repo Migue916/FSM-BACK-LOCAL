@@ -15,21 +15,23 @@ exports.ingresar = async (req, res, next) => {
       email: req.body.email,
       contrasena: req.body.contrasena,
     };
-
+    console.log("paso uno");
     console.log(originalUser);
 
-    const todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined || value !== "");
+    var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
     if (todosLosCamposLlenos) {   
-
+      console.log("paso dos");
       const getUser = await queries_General.get_user(originalUser.email);
-      const todosLosCamposLlenos = Object.values(getUser).every((value) => value !== undefined || value !== "");
+      todosLosCamposLlenos = Object.values(getUser).every((value) => value !== undefined && value !== '');
+
       if(todosLosCamposLlenos){
         const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
-
+        console.log("paso tres");
         console.log(getUser);
         console.log(isPasswordValid);
 
         if (isPasswordValid){
+          console.log("paso cuatro");
           jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
             res.json({
               token, 

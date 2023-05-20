@@ -68,4 +68,3 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
         run: |
           npm start
-        run: exit 1

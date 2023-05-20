@@ -27,9 +27,6 @@ exports.ingresar = async (req, res, next) => {
       if(todosLosCamposLlenos){
         const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
         console.log("paso tres");
-        console.log(getUser);
-        console.log(isPasswordValid);
-
         if (isPasswordValid){
           console.log("paso cuatro");
           jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
@@ -40,23 +37,19 @@ exports.ingresar = async (req, res, next) => {
               });
             });
         }else{       
-          const result = {
+          result = {
             status: false,
             message: "Contraseña incorrecta",
           };
           response.error(req, res, result, 400, "error");
         }
       }else{
-        const result = {
+        result = {
           status: false,
           message: "Correo incorrecto",
         };
         response.error(req, res, result, 400, "error");
       }
-      result = {
-        status: true,
-        message: "successful",
-      };
     } else {
       res.status(400);
       result = {
@@ -65,6 +58,10 @@ exports.ingresar = async (req, res, next) => {
       };
       res.send(result);
     }
+    result = {
+      status: true,
+      message: "successful",
+    };
   } catch (error) {
     const result = {
       status: false,

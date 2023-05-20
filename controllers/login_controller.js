@@ -58,10 +58,6 @@ exports.ingresar = async (req, res, next) => {
       };
       res.send(result);
     }
-    result = {
-      status: true,
-      message: "successful",
-    };
   } catch (error) {
     const result = {
       status: false,

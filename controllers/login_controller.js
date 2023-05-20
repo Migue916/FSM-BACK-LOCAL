@@ -16,22 +16,48 @@ exports.ingresar = async (req, res, next) => {
       contrasena: req.body.contrasena,
     };
 
-    const getUser = await queries_General.get_user(originalUser.email);
-    const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
-
-    if (isPasswordValid){
-      jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
-        res.json({
-          token, 
-          id: getUser[0].id, 
-          });
-        });
-    }else{       
-      const result = {
-        status: false,
-        message: "Contraseña incorrecta",
+    const todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
+    if (todosLosCamposLlenos) {
+      const getUser = await queries_General.get_user(originalUser.email);
+      if(getUser[0]!==""){
+        const password = getUser[0].contrasena;
+        const isPasswordValid = await bcrypt.compare(originalUser.contrasena, password);
+        if (isPasswordValid){
+          jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
+            res.json({
+              token, 
+              id: getUser[0].id, 
+              });
+            });
+        }else{       
+          const result = {
+            status: false,
+            message: "Contraseña incorrecta",
+          };
+          response.error(req, res, result, 400, "error");
+        }
+        result = {
+          status: true,
+          message: "successful",
+        };
+      }else{
+        const result = {
+          status: false,
+          message: "Usuario no existe",
+        };
+        response.error(req, res, result, 400, "error");
+      }
+      result = {
+        status: true,
+        message: "successful",
       };
-      response.error(req, res, result, 400, "error");
+    } else {
+      res.status(400);
+      result = {
+        status: false,
+        message: "Faltan campos por llenar",
+      };
+      res.send(result);
     }
   } catch (error) {
     const result = {

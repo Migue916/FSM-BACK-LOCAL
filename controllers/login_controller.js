@@ -24,12 +24,13 @@ exports.ingresar = async (req, res, next) => {
 
       console.log(getUser);
       console.log(isPasswordValid);
-      
+
       if (isPasswordValid){
         jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
           res.json({
             token, 
-            id: getUser[0].id, 
+            id: getUser[0].id,
+            Tipo_usuario: getUser[0].cargo, 
             });
           });
       }else{       

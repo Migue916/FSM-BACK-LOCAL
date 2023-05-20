@@ -1,0 +1,8 @@
+# Ignorar arquivos temporários
+*.tmp
+
+# Ignorar diretório específico
+node_modules/
+
+# Ignorar todos os arquivos com extensão .log
+*.log

@@ -1,0 +1,15 @@
+module.exports = {
+    get_EmpleadosActuales: require("./get_EmpleadosActuales"),
+    get_EmpleadosActualesPasado: require("./get_EmpleadosActualesPasado"),
+    get_EmpleadosEgresados: require("./get_EmpleadosEgresados"),
+    get_EmpleadosEgresadosPasado: require("./get_EmpleadosEgresadosPasado"),
+
+    get_EmpleadosGeneros: require("./get_EmpleadosGeneros"),
+
+    get_EmpleadosModulo: require("./get_EmpleadosModulo"),
+
+    get_Empleados: require("./get_Empleados_lastTen"),
+    get_Consultas: require("./get_Consultas"),
+    get_Cargo: require("./get_Cargo"),
+    get_EmpleadosPorNombre: require("./get_EmpleadosPorNombre"),
+};

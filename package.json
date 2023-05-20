@@ -1,0 +1,30 @@
+{
+  "name": "sgd-fsm-back",
+  "version": "1.0.0",
+  "description": "backEnd",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo 'No hay Test'",
+    "start": "node app.js",
+    "build": "echo 'Build completed'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JnDavid17/SGD-FSM-Back.git"
+  },
+  "author": "miguel-julian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JnDavid17/SGD-FSM-Back/issues"
+  },
+  "homepage": "https://github.com/JnDavid17/SGD-FSM-Back#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.10.0"
+  }
+}

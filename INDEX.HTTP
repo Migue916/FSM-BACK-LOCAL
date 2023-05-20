@@ -1,0 +1,127 @@
+
+POST http://localhost:3000/login/user HTTP/1.1
+Content-Type: application/json
+###
+POST http://localhost:3000/login/create HTTP/1.1
+Content-Type: application/json
+body:{"id_tipo_doc":2,"p_nombre":"Juan","s_nombre":"Carlos","p_apellido":"Pérez","s_apellido":"García","id_profesion":2,"tarjeta_profesional":"TP12345","id_cargo":2,"aceptacion_tyc":true,"firma":"firma_juan","activo":true,"id_genero":2,"fecha_ingreso":"2023-05-03","pertenencia_de_modulo":2,"email":"juan@example.com","contraseña":"contraseña123"}
+
+//////////////////////////////////////////////////////
+###
+
+POST http://localhost:3000/beneficiarios/create HTTP/1.1
+Content-Type: application/json
+body:{"id_tipo_doc":2,"p_nombre":"Juan","s_nombre":"Carlos","p_apellido":"Pérez","s_apellido":"García","id_profesion":2,"tarjeta_profesional":"TP12345","id_cargo":2,"aceptacion_tyc":true,"firma":"firma_juan","activo":true,"id_genero":2,"fecha_ingreso":"2023-05-03","pertenencia_de_modulo":2,"email":"juan@example.com","contraseña":"contraseña123"}
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/beneficiarios/list/riesgos/?Riesgos=suicidio  HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/beneficiarios/list/alergias/?Alergias=pole  HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/beneficiarios/list/orientacion/?Orientacion=het  HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+
+###
+GET http://localhost:3000/beneficiarios/list/sede/?Sede=tocaima  HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/beneficiarios/list/diagnostico/?Diagnostico=trastorno HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/beneficiarios/perfil/?id=1 HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/beneficiarios/estadisticas HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/beneficiarios/desplegables HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/beneficiarios/list/?page=1&Sede=TOCAIMA&Edad=21&Fecha_ingreso=2023-02-25T05:00:00.000Z&Diagnostico_p=No_registra&Identificador=1 HTTP/1.1
+Content-Type: application/jsonK<KS>
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/beneficiarios/last_ten HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/beneficiarios/ten/?nombre=Sergio HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/beneficiarios/balance/?anio=2023 HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/beneficiarios/anios HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/beneficiarios/estadisticas/Diagnosticos HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/beneficiarios/estadisticas/edad HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+////////////////////////////////////////////////////
+###
+GET http://localhost:3000/empleados/estadisticas HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/empleados/estadisticas/genero HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/empleados/estadisticas/modulo HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+
+###
+GET http://localhost:3000/empleados/lastTen HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU
+
+###
+GET http://localhost:3000/empleados/ten/?nombre=juan HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJub21icmUiOiJNYXJpbyIsImVtYWlsIjoibWFyaW9CQG5pbnRlbmRvLmNvbSJ9LCJpYXQiOjE2ODI3MzgxMTN9.wno1OY1s0EDkaikyZyKaVwPwFgH2oEOR0I2sx8RPeLU

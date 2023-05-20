@@ -6,7 +6,7 @@ const queries_General = require("../infraestructure/queries/general/general_Quer
 
 exports.ingresar = async (req, res, next) => {
   try {
-    const result = {
+    var result = {
       status: true,
       message: "successful",
     };

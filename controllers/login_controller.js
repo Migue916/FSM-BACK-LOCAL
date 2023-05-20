@@ -47,6 +47,7 @@ exports.ingresar = async (req, res, next) => {
 exports.user_create = async (req, res, next) => {
   let result;
   try {
+    console.log("Salt: ", saltRounds);
     const employee = {
       id: req.body.id,
       id_tipo_doc: req.body.id_tipo_doc,
@@ -64,6 +65,7 @@ exports.user_create = async (req, res, next) => {
       contrasena: await bcrypt.hash(req.body.contrasena, saltRounds),
       cargo: req.body.cargo,
     };
+    console.log(employee);
     const todosLosCamposLlenos = Object.values(employee).every((value) => value !== undefined && value !== '');
     if (todosLosCamposLlenos) {
       await queries_General.create_user(employee);

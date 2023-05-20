@@ -16,34 +16,45 @@ exports.ingresar = async (req, res, next) => {
       contrasena: req.body.contrasena,
     };
 
-    const todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
+    console.log(originalUser);
+
+    const todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined || value !== "");
     if (todosLosCamposLlenos) {   
 
       const getUser = await queries_General.get_user(originalUser.email);
-      const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
+      const todosLosCamposLlenos = Object.values(getUser).every((value) => value !== undefined || value !== "");
+      if(todosLosCamposLlenos){
+        const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
 
-      console.log(getUser);
-      console.log(isPasswordValid);
+        console.log(getUser);
+        console.log(isPasswordValid);
 
-      if (isPasswordValid){
-        jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
-          res.json({
-            token, 
-            id: getUser[0].id,
-            Tipo_usuario: getUser[0].cargo, 
+        if (isPasswordValid){
+          jwt.sign({getUser}, 'secretKey', {expiresIn: '10h'}, (err, token) =>{
+            res.json({
+              token, 
+              id: getUser[0].id,
+              Tipo_usuario: getUser[0].cargo, 
+              });
             });
-          });
-      }else{       
+        }else{       
+          const result = {
+            status: false,
+            message: "Contraseña incorrecta",
+          };
+          response.error(req, res, result, 400, "error");
+        }
+      }else{
         const result = {
           status: false,
-          message: "Contraseña incorrecta",
+          message: "Correo incorrecto",
         };
         response.error(req, res, result, 400, "error");
       }
-        result = {
-          status: true,
-          message: "successful",
-        };
+      result = {
+        status: true,
+        message: "successful",
+      };
     } else {
       res.status(400);
       result = {

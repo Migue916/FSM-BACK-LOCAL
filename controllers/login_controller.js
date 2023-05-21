@@ -22,7 +22,7 @@ exports.ingresar = async (req, res, next) => {
     if (todosLosCamposLlenos) {   
       console.log("paso dos");
       const getUser = await queries_General.get_user(originalUser.email);
-      todosLosCamposLlenos = Object.values(getUser).every((value) => value !== undefined && value !== '');
+      todosLosCamposLlenos =  getUser != undefined || getUser != "";
 
       if(todosLosCamposLlenos){
         const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);

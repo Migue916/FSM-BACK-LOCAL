@@ -246,7 +246,7 @@ exports.getPerfil = async (id) => {
           Identificacion: getPerfil[0].id,
           Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
           Edad: getPerfil[0].edad,
-          Diagnostico_p: diagnosticos_principal_beneficiario(0),
+          Diagnostico_p: diagnosticos_principal_beneficiario(id),
           Sede: sede[0].sede, 
           Fecha_ingreso: getPerfil[0].fecha_ingreso, 
           Diagnostico_s: await diagnosticos_secundarios_beneficiario(id),
@@ -672,6 +672,7 @@ exports.getBeneficiariosLastTen = async () => {
             const segundo_apellido = row.s_apellido;
             const id_sede = row.id_sede;
             const fecha_nacimiento = row.fecha_nacimiento;
+            const edad = row.edad;
             const id_orientacion = row.id_orientacion;
             const fecha_ingreso = row.fecha_ingreso;
         
@@ -687,6 +688,8 @@ exports.getBeneficiariosLastTen = async () => {
               primer_apellido: primer_apellido,
               segundo_apellido: segundo_apellido,
               sede: sede[0].sede,
+              edad: edad,
+              Diagnostico_p: diagnosticos_principal_beneficiario(id),
               fecha_nacimiento: fecha_nacimiento,
               orientacion: orientacion[0].orientacion,
               fecha_ingreso: fecha_ingreso,

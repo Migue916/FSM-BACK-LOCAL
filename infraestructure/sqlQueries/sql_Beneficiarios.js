@@ -75,7 +75,7 @@ const sqlQueries = {
         "SELECT COUNT(*) FROM beneficiario WHERE estado = true AND EXTRACT(MONTH FROM fecha_ingreso) != EXTRACT(MONTH FROM CURRENT_DATE);",
     
     GET_BENEFICIARIOS_ULTIMOS_DIEZ:
-        "SELECT * FROM beneficiario WHERE estado = true ORDER BY fecha_ingreso DESC LIMIT 10;", 
+        "SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true ORDER BY fecha_ingreso DESC LIMIT 10;", 
         
     GET_BENEFICIARIOS_POR_NOMBRE:
         "SELECT * FROM ( SELECT *, SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$1) AS similitud FROM beneficiario WHERE estado = true ORDER BY fecha_ingreso DESC LIMIT 10 ) AS subconsulta WHERE similitud > 0.07 ORDER BY similitud DESC;",

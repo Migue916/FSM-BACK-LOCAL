@@ -51,6 +51,28 @@ exports.getAlergiasList = async (alergias) => {
 }
 };
 
+exports.postEps = async (eps) => {
+  try { 
+    const postEps = await queries_General.post_Eps(eps);
+      const results = [];
+      results.push(postEps);
+      return results;
+} catch (error) {
+  throw error;
+}
+};
+
+exports.postGenero = async (genero) => {
+  try { 
+    const postGenero = await queries_General.post_Genero(genero);
+      const results = [];
+      results.push(postGenero);
+      return results;
+} catch (error) {
+  throw error;
+}
+};
+
 exports.postAlergias = async (alergia) => {
   try { 
     const postAlergias = await queries_General.post_Alergias(alergia);
@@ -229,6 +251,32 @@ exports.getRiesgosList = async (riegos) => {
 }
 };
 
+exports.getEpsList = async () => {
+  try { 
+    const getEpsList = await queries_General.get_EpsList();
+    const result = {
+      id: getEpsList[0].id,
+      sede: getEpsList[0].eps
+    };
+    return result;
+} catch (error) {
+  throw error;
+}
+};
+
+exports.getGeneroList = async () => {
+  try { 
+    const getGeneroList = await queries_General.get_GeneroList();
+    const result = {
+      id: getGeneroList[0].id,
+      sede: getGeneroList[0].genero
+    };
+    return result;
+} catch (error) {
+  throw error;
+}
+};
+
 exports.getSedeList = async (sede) => {
   try { 
     const getSedeList = await queries_Beneficiarios.get_SedeList(sede);
@@ -254,6 +302,7 @@ exports.getPerfil = async (id) => {
 
       const sede = await queries_General.get_sede(getPerfil[0].id_sede);
       const orientacion = await queries_General.get_orientacion(getPerfil[0].id_orientacion);
+      const eps = await queries_General.get_eps(getPerfil[0].id_eps);
 
       const result = {
           Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
@@ -268,6 +317,7 @@ exports.getPerfil = async (id) => {
           Riesgos: await riesgos_beneficiario(id),
           Alergias: await alergias_beneficiario(id),
           Orientacion: orientacion[0].orientacion,
+          eps: eps[0].eps,
         };   
         results.push(result);
         return results;

@@ -1,4 +1,19 @@
 const sqlQueries = {
+    POST_EPS:
+        "INSERT INTO eps (eps) VALUES (\$1);",
+
+    POST_GENERO:
+        "INSERT INTO genero (genero) VALUES (\$1);",
+
+    GET_EPS_LIST:
+        "SELECT * FROM EPS",
+
+    GET_GENERO_LIST:
+        "SELECT * FROM GENERO",
+
+    GET_EPS:
+        "SELECT * FROM EPS WHERE id = \$1",
+
     GET_ORIENTACION:
         "SELECT orientacion FROM orientacion WHERE id = \$1",
         

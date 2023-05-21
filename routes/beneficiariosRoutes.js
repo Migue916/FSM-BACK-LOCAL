@@ -16,25 +16,23 @@ router.get('/estadisticas/Diagnosticos', getBeneficiarioController.getDiagBen);
 router.get('/estadisticas/edad', getBeneficiarioController.getEstEdad);
 router.get('/list/', getBeneficiarioController.getBeneficiarios);
 router.get('/desplegables', getBeneficiarioController.getDesplegables);
-router.get('/perfil/', getBeneficiarioController.getPerfil);/////////////////////////7
+router.get('/perfil/', getBeneficiarioController.getPerfil);
 
 router.get('/list/diagnostico/', getBeneficiarioController.getDiagnosticoList);
 router.get('/list/sede/', getBeneficiarioController.getSedeList);
 router.get('/list/riesgos/', getBeneficiarioController.getRiesgosList);
 router.get('/list/alergias/', getBeneficiarioController.getAlergiasList);
 router.get('/list/orientacion/', getBeneficiarioController.getOrientacionList);
-
-//router.get('/list/genero/', getBeneficiarioController.getOrientacionList);//////////////
-//router.get('/list/eps/', getBeneficiarioController.getOrientacionList);/////////////////
+router.get('/list/genero', getBeneficiarioController.getGeneroList);
+router.get('/list/eps', getBeneficiarioController.getEpsList);
 
 router.post('/new/diagnostico', getBeneficiarioController.postDiagnostico);
 router.post('/new/sede', getBeneficiarioController.postSede);
 router.post('/new/riesgos', getBeneficiarioController.postRiesgos);
 router.post('/new/alergias', getBeneficiarioController.postAlergias);
 router.post('/new/orientacion', getBeneficiarioController.postOrientacion);
-
-//router.post('/new/genero', getBeneficiarioController.postOrientacion);/////////////
-//router.post('/new/eps', getBeneficiarioController.postOrientacion);///////////////
+router.post('/new/genero', getBeneficiarioController.postGenero);
+router.post('/new/eps', getBeneficiarioController.postEps);
 
 
 router.post('/edit/diagnostico', getBeneficiarioController.putDiagnostico);///////////put_Diagnostico

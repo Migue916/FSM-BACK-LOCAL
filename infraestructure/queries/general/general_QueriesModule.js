@@ -11,4 +11,9 @@ module.exports = {
     post_Riesgos: require("./post_Riesgos"),
     post_Alergias: require("./post_Alergias"),
     post_Orientacion: require("./post_Orientacion"),
+    post_Genero: require("./post_Genero"),
+    post_Eps: require("./post_Eps"),
+    get_eps: require("./get_eps"),
+    get_GeneroList: require("./get_GeneroList"),
+    get_EpsList: require("./get_EpsList"),
 };

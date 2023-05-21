@@ -409,6 +409,56 @@ exports.postSede= async (req, res, next) => {
   }
 };
 
+exports.postEps= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    eps = req.body.Eps;
+    if (eps.length !== 0){
+      result.postEps = 
+        await beneficiarioServices.postEps(eps);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.postGenero= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    genero = req.body.Genero;
+    if (genero.length !== 0){
+      result.postGenero = 
+        await beneficiarioServices.postGenero(genero);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 
 exports.postDiagnostico= async (req, res, next) => {
   try {
@@ -424,6 +474,50 @@ exports.postDiagnostico= async (req, res, next) => {
       console.error(error.message);
       response.error(req, res, result, 400, "error");
     }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.getEpsList= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    result.getEpsList =
+      await beneficiarioServices.getEpsList();
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.getGeneroList= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    result.getGeneroList =
+      await beneficiarioServices.getGeneroList();
+
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

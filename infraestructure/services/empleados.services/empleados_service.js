@@ -4,13 +4,17 @@ const queries_General = require("../../queries/general/general_QueriesModule");
 
 exports.nombreEmpleado = async(id) =>{
   try { 
+
     const nombreEmpleado = await queries_Empleados.get_nombre(id);
+    const cargo = await queries_Empleados.get_Cargo(nombreEmpleado[0].id_cargo);
+
     const result = {
       id: id,
       Nombre: nombreEmpleado[0].p_nombre + " " + nombreEmpleado[0].s_nombre,
       Apellido: nombreEmpleado[0].p_apellido + " " + nombreEmpleado[0].s_apellido,
-      Cargo: nombreEmpleado[0].id_cargo
+      Cargo: cargo
     };
+    
     return result;
 } catch (error) {
   throw error;

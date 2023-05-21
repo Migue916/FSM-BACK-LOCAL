@@ -1,7 +1,7 @@
 const sqlQueries = {
 
     GET_NOMBRE: 
-        "SELECT * FROM empleado WHERE id = \$1",
+        "SELECT * FROM empleado WHERE id = 1",
 
     GET_EMPLEADOS_EGRESADOS:
         "SELECT COUNT(*) FROM egreso WHERE TIPO_USUARIO = FALSE;",
@@ -31,7 +31,7 @@ const sqlQueries = {
         "SELECT cargo FROM cargo WHERE id = \$1;",
     
     GET_EMPLEADOS_POR_NOMBRE:
-        "SELECT * FROM ( SELECT *, SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$1) AS similitud FROM empleado WHERE activo = true ORDER BY fecha_ingreso DESC LIMIT 10 ) AS subconsulta WHERE similitud > 0.07 ORDER BY similitud DESC;",
+        "SELECT * FROM ( SELECT *, SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), 'juan') AS similitud FROM empleado WHERE activo = true ORDER BY fecha_ingreso DESC LIMIT 10 ) AS subconsulta WHERE similitud > 0.07 ORDER BY similitud DESC;",
     
 }
 module.exports = sqlQueries;

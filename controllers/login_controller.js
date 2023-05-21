@@ -23,7 +23,7 @@ exports.ingresar = async (req, res, next) => {
       console.log("paso dos");
       const getUser = await queries_General.get_user(originalUser.email);
       todosLosCamposLlenos =  getUser != undefined || getUser != "";
-
+      console.log(todosLosCamposLlenos);
       if(todosLosCamposLlenos){
         const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
         console.log("paso tres");

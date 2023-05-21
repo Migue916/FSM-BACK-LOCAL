@@ -254,11 +254,15 @@ exports.getRiesgosList = async (riegos) => {
 exports.getEpsList = async () => {
   try { 
     const getEpsList = await queries_General.get_EpsList();
-    const result = {
-      id: getEpsList[0].id,
-      sede: getEpsList[0].eps
-    };
-    return result;
+    const results = [];
+    for (const row of getEpsList){
+        const result = {
+        id: row.id,
+        eps: row.eps
+      };
+      results.push(result);
+    }
+    return results;
 } catch (error) {
   throw error;
 }
@@ -267,11 +271,15 @@ exports.getEpsList = async () => {
 exports.getGeneroList = async () => {
   try { 
     const getGeneroList = await queries_General.get_GeneroList();
-    const result = {
-      id: getGeneroList[0].id,
-      sede: getGeneroList[0].genero
-    };
-    return result;
+    const results = [];
+    for (const row of getGeneroList){
+        const result = {
+        id: row.id,
+        genero: row.genero
+      };
+      results.push(result);
+    }
+    return results;
 } catch (error) {
   throw error;
 }

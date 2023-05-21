@@ -1,6 +1,6 @@
 const queries_Beneficiarios = require("../../queries/beneficiarios/beneficiarios_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
-const queries_Empleados = require("../empleados.services/empleados_services")
+const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
 
 exports.getOrientacionList = async (orientacion) => {
   try { 
@@ -14,6 +14,21 @@ exports.getOrientacionList = async (orientacion) => {
         results.push(result);
       }
         return results;
+} catch (error) {
+  throw error;
+}
+};
+
+exports.nombreEmpleado = async(id) =>{
+  try { 
+    const nombreEmpleado = await queries_Empleados.get_nombre(id);
+    const result = {
+      id: id,
+      Nombre: get_nombre[0].p_nombre + " " + get_nombre[0].s_nombre,
+      Apellido: get_nombre[0].p_apellido + " " + get_nombre[0].s_apellido,
+      Cargo: get_nombre[0].cargo
+    };
+    return result;
 } catch (error) {
   throw error;
 }
@@ -284,7 +299,7 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
         const diagnosticos_secundario = await queries_Beneficiarios.get_tipos_diagnosticos(row.id_enfermedad);
         allDiagnosticos.push({ 
             diagnosticos_secundario: diagnosticos_secundario[0].enfermedad,
-            Empleado: queries_Empleados.nombreEmpleado(diagnosticos_secundario[0].id)[0].Nombre,
+            Empleado: nombreEmpleado(diagnosticos_secundario[0].id)[0].Nombre,
             Fecha: diagnosticos_secundario[0].fecha
           });
       }
@@ -308,7 +323,7 @@ const riesgos_beneficiario = async (id) => {
         const riesgo = await queries_Beneficiarios.get_riesgos_list(row.id_riesgo);
         allRiesgo.push({ 
           riesgos: riesgo[0].riesgo,
-          Empleado: queries_Empleados.nombreEmpleado(riesgo[0].id)[0].Nombre,
+          Empleado: nombreEmpleado(riesgo[0].id)[0].Nombre,
           Fecha: riesgo[0].fecha
         });
       }
@@ -331,7 +346,7 @@ const alergias_beneficiario = async (id) => {
         const alergia = await queries_Beneficiarios.get_alergias_list(row.id_tipo_alergia);
         allAlergias.push({
            alergias: alergia[0].alergia,
-           Empleado: queries_Empleados.nombreEmpleado(alergia[0].id)[0].Nombre,
+           Empleado: nombreEmpleado(alergia[0].id)[0].Nombre,
            Fecha: alergia[0].fecha
           });
       }

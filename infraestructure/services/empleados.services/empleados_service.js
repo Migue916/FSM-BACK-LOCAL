@@ -1,6 +1,22 @@
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
 
+
+exports.nombreEmpleado = async(id) =>{
+  try { 
+    const nombreEmpleado = await queries_Empleados.get_nombre(id);
+    const result = {
+      id: id,
+      Nombre: get_nombre[0].p_nombre + " " + get_nombre[0].s_nombre,
+      Apellido: get_nombre[0].p_apellido + " " + get_nombre[0].s_apellido,
+      Cargo: get_nombre[0].cargo
+    };
+    return result;
+} catch (error) {
+  throw error;
+}
+};
+
 exports.getEmpleadosPorNombre = async (nombre) => {
   try {
 

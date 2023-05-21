@@ -1,5 +1,8 @@
 const sqlQueries = {
 
+    GET_NOMBRE: 
+        "SEKECT * FROM EMPLEADO WHERE id = $\1",
+
     GET_EMPLEADOS_EGRESADOS:
         "SELECT COUNT(*) FROM egreso WHERE TIPO_USUARIO = FALSE;",
     

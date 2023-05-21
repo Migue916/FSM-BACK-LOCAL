@@ -9,4 +9,4 @@ const get_GeneroList = async () => {
         throw error;
     };
 };
-module.exports = get_eps;
+module.exports = get_GeneroList;

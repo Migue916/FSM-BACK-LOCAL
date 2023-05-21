@@ -9,7 +9,7 @@ exports.nombreEmpleado = async(id) =>{
       id: id,
       Nombre: get_nombre[0].p_nombre + " " + get_nombre[0].s_nombre,
       Apellido: get_nombre[0].p_apellido + " " + get_nombre[0].s_apellido,
-      Cargo: get_nombre[0].cargo
+      Cargo: get_nombre[0].id_cargo
     };
     return result;
 } catch (error) {

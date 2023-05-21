@@ -1,7 +1,7 @@
 const sqlQueries = {
 
     GET_NOMBRE: 
-        "SELECT * FROM EMPLEADO WHERE id = \$1",
+        "SELECT * FROM empleado WHERE id = \$1",
 
     GET_EMPLEADOS_EGRESADOS:
         "SELECT COUNT(*) FROM egreso WHERE TIPO_USUARIO = FALSE;",

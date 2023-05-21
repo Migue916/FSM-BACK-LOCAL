@@ -253,7 +253,7 @@ exports.getPerfil = async (id) => {
       const results = [];
 
       const sede = await queries_General.get_sede(getPerfil[0].id_sede);
-      const orientacion = await queries_General.get_orientacion(row.id_orientacion);
+      const orientacion = await queries_General.get_orientacion(getPerfil[0].id_orientacion);
 
       const result = {
           Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,

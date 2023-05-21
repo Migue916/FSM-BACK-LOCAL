@@ -9,7 +9,7 @@ exports.nombreEmpleado = async(id) =>{
     const cargo = await queries_Empleados.get_Cargo(nombreEmpleado[0].id_cargo);
 
     const result = {
-      id: id,
+      id: id.id,
       Nombre: nombreEmpleado[0].p_nombre + " " + nombreEmpleado[0].s_nombre,
       Apellido: nombreEmpleado[0].p_apellido + " " + nombreEmpleado[0].s_apellido,
       Cargo: cargo[0].cargo

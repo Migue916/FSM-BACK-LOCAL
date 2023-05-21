@@ -10,6 +10,6 @@ router.get('/estadisticas/genero', getEmpleadoController.getStatisticsEmpleadosG
 router.get('/estadisticas/modulo', getEmpleadoController.getStatisticsEmpleadosModulo);
 router.get('/lastTen', getEmpleadoController.getEmpleados);
 router.get('/ten/', getEmpleadoController.getEmpleadosPorNombre);
-
+router.get('/saludo/', getEmpleadoController.getNombre);
 
 module.exports = router;

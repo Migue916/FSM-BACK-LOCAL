@@ -1,6 +1,27 @@
 const response = require("./responses/response");
 const empleadosServices = require("../infraestructure/services/empleados.services/empleados_service");
 
+exports.getNombre = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    id = req.query;
+    result.Nombre =
+      await empleadosServices.nombreEmpleado(id);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 exports.getStatisticsEmpleados = async (req, res, next) => {
     try {
       const result = {

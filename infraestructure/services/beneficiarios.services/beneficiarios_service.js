@@ -1,6 +1,6 @@
 const queries_Beneficiarios = require("../../queries/beneficiarios/beneficiarios_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
-const queries_Empleados = require("../../../empleados.services/empleados_services.js")
+const queries_Empleados = require("../empleados.services/empleados_services")
 
 exports.getOrientacionList = async (orientacion) => {
   try { 

@@ -12,7 +12,7 @@ exports.nombreEmpleado = async(id) =>{
       id: id,
       Nombre: nombreEmpleado[0].p_nombre + " " + nombreEmpleado[0].s_nombre,
       Apellido: nombreEmpleado[0].p_apellido + " " + nombreEmpleado[0].s_apellido,
-      Cargo: cargo
+      Cargo: cargo[0].cargo
     };
     
     return result;

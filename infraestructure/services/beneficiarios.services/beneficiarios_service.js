@@ -2,7 +2,7 @@ const queries_Beneficiarios = require("../../queries/beneficiarios/beneficiarios
 const queries_General = require("../../queries/general/general_QueriesModule");
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
 const { BlobServiceClient } = require('@azure/storage-blob');
-const connectionString = '9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==';
+const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs7100320029bb315a8;AccountKey=9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==;EndpointSuffix=core.windows.net';
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 
 exports.postConsultas = async(consulta) =>{

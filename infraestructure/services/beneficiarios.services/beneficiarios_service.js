@@ -2,7 +2,7 @@ const queries_Beneficiarios = require("../../queries/beneficiarios/beneficiarios
 const queries_General = require("../../queries/general/general_QueriesModule");
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
 const { BlobServiceClient } = require('@azure/storage-blob');
-const connectionString = 'sp=racwdli&st=2023-05-22T04:04:27Z&se=2099-12-30T05:00:00Z&spr=https&sv=2022-11-02&sr=c&sig=rOLfWZuYV%2Bzrb9ntCYwys%2B16GzLVmcwP82vKtVg53SM%3D';
+const connectionString = '9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==';
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 
 exports.postConsultas = async(consulta) =>{

@@ -12,16 +12,16 @@ const sqlQueries = {
         "UPDATE public.beneficiario SET id_orientacion=\$2 WHERE id = \$1",
 
     PUT_ALERGIA:
-        "INSERT INTO public.beneficiario_rel_tipo_alergia( id_beneficiario, id_tipo_alergia, id_empleado, observacion) VALUES (\$1, \$2, \$3, \$4);",
+        "INSERT INTO public.beneficiario_rel_tipo_alergia( id_beneficiario, id_tipo_alergia, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",
 
     PUT_RIESGOS: 
-        "INSERT INTO public.beneficiario_rel_riesgo( id_beneficiario, id_riesgo, observacion) VALUES (\$1, \$2, \$3);",
+        "INSERT INTO public.beneficiario_rel_riesgo( id_beneficiario, id_riesgo, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",
 
     PUT_SEDE:
         "UPDATE public.beneficiario SET id_sede=\$2 WHERE id = \$1;",
 
     PUT_DIAGNOSTICO:
-        "INSERT INTO public.enfermedad_rel_beneficiario( id_enfermedad, id_beneficiario, id_empleado, tipo, observacion) VALUES (\$1, \$2, \$3, \$4, \$5);",
+        "INSERT INTO public.enfermedad_rel_beneficiario( id_enfermedad, id_beneficiario, id_empleado, fecha, tipo, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE,\$4, \$5);",
    
     GET_ORIENTACION_LIST:
         "select * from (SELECT *, SIMILARITY(orientacion, \$1) AS similitud FROM orientacion) as sc where similitud > 0.08",

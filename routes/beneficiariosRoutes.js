@@ -35,10 +35,10 @@ router.post('/new/genero', getBeneficiarioController.postGenero);
 router.post('/new/eps', getBeneficiarioController.postEps);
 
 
-router.post('/edit/diagnostico', getBeneficiarioController.putDiagnostico);///////////put_Diagnostico
+router.post('/edit/diagnostico', getBeneficiarioController.putDiagnostico);
 router.put('/edit/sede', getBeneficiarioController.putSede);
-router.post('/edit/riesgos', getBeneficiarioController.putRiesgos);//////////////////put_Riesgos
-router.post('/edit/alergias', getBeneficiarioController.putAlergias);/////////////////put_Alergias
+router.post('/edit/riesgos', getBeneficiarioController.putRiesgos);
+router.post('/edit/alergias', getBeneficiarioController.putAlergias);
 router.put('/edit/orientacion', getBeneficiarioController.putOrientacion);
 
 router.delete('/delete/diagnostico', getBeneficiarioController.deleteDiagnostico);

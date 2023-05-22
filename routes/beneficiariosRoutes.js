@@ -45,7 +45,7 @@ router.delete('/delete/diagnostico', getBeneficiarioController.deleteDiagnostico
 router.delete('/delete/riesgos', getBeneficiarioController.deleteRiesgos);
 router.delete('/delete/alergias', getBeneficiarioController.deleteAlergias);
 
-
+router.post('/consulta', getBeneficiarioController.postConsulta);
 
 module.exports = router;
 

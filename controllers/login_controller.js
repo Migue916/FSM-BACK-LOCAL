@@ -107,6 +107,7 @@ exports.user_create = async (req, res, next) => {
       };
       res.send(result);
     }
+    response.success(req, res, result, 200, "success");
   } catch (error) {
     console.error(error.message);
     result = {

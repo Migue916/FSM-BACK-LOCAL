@@ -28,6 +28,34 @@ exports.putEgresado= async (req, res, next) => {
   }
 };
 
+exports.postConsulta= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const consulta  = {
+      id_empleado: req.body.id_empleado, 
+      id_beneficiario: req.body.id_beneficiario, 
+      id_modulo: req.body.id_modulo,
+      consulta: req.body.consulta 
+    };
+
+    result.postConsultas = 
+      await beneficiarioServices.postConsulta(consulta);
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
 exports.deleteAlergias= async (req, res, next) => {
   try {
     const result = {
@@ -681,7 +709,8 @@ exports.postBeneficiario = async (req, res, next) =>{
 
     result.postBeneficiario = 
       await beneficiarioServices.post_beneficiario(beneficiario);
-
+    
+    response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
       status: false,

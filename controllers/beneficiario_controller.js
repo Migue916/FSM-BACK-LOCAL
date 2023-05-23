@@ -39,7 +39,7 @@ exports.postConsulta= async (req, res, next) => {
       id_empleado: req.body.id_empleado, 
       id_beneficiario: req.body.id_beneficiario, 
       id_modulo: req.body.id_modulo,
-      consulta: req.body.consulta 
+      consulta: req.file.consulta 
     };
 
     result.postConsultas = 

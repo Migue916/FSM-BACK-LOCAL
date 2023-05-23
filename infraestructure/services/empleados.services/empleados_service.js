@@ -1,6 +1,60 @@
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
 
+exports.getEmpleados = async (page) => {
+  try { 
+    const getEmpleados = await queries_Empleados.get_Empleados(page);
+    const results = [];
+    for (const row of getEmpleados) { 
+
+      const sede = await queries_General.get_sede(row.id_sede);
+      const consultas = await queries_Empleados.get_Consultas(row.id);
+      const cargo = await queries_Empleados.get_Cargo(row.id_cargo);
+      const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
+
+      if (cant.length === 0){
+        cant.push(
+          {
+            cant:"0"
+          }
+        )
+    }
+
+      const result = {
+        Nombre: row.p_nombre + " " +
+                row.s_nombre + " " +
+                row.p_apellido + " " +
+                row.s_apellido,
+
+        Identificacion: row.id,
+        Edad: row.edad,
+        Sede: sede[0].sede, 
+        Consultas_realizadas: consultas[0].cant,
+        Cargo: cargo[0].cargo,
+        Modulo: modulo[0].modulo,
+      };
+      results.push(result);
+    }
+    var filtredData = results;
+    if (page.Sede !== undefined){
+      filtredData = filtredData.filter(empleado => empleado.Sede = page.Sede);
+    }
+    if (page.Edad !== undefined){
+      filtredData = filtredData.filter(empleado => empleado.Edad = +page.Edad);
+    }
+    if (page.Cargo !== undefined){
+      filtredData = filtredData.filter(empleado => empleado.Cargo = page.Cargo);
+    }
+    if (page.Modulo !== undefined){
+      filtredData = filtredData.filter(empleado => empleado.Modulo = page.Modulo);
+    }
+
+    return filtredData;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 exports.nombreEmpleado = async(id) =>{
   try { 

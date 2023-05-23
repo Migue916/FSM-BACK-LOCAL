@@ -752,7 +752,9 @@ exports.getBeneficiarios= async (req, res, next) => {
       status: true,
       message: "successful",
     };
+    
     const page = req.query;
+
     const total_paginas =
       await beneficiarioServices.getBeneficiariosActuales();
     result.paginas = (total_paginas.value)/10;

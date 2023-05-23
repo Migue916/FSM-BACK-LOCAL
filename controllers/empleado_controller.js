@@ -1,6 +1,32 @@
 const response = require("./responses/response");
 const empleadosServices = require("../infraestructure/services/empleados.services/empleados_service");
 
+exports.getEmpleados= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    const page = req.query;
+    const total_paginas =
+      await empleadosServices.getEmpleadosActuales();
+
+    result.paginas = (total_paginas.value)/10;
+
+    result.getEmpleados =
+      await empleadosServices.getEmpleados(page);
+      
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 exports.getNombre = async (req, res, next) => {
   try {
     const result = {

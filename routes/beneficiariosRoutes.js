@@ -14,7 +14,7 @@ router.get('/balance/', getBeneficiarioController.getBalance);
 router.get('/anios', getBeneficiarioController.getAnios);
 router.get('/estadisticas/Diagnosticos', getBeneficiarioController.getDiagBen);
 router.get('/estadisticas/edad', getBeneficiarioController.getEstEdad);
-router.get('/list/', getBeneficiarioController.getBeneficiarios);
+router.get('/listAll/', getBeneficiarioController.getBeneficiarios);
 router.get('/desplegables', getBeneficiarioController.getDesplegables);
 router.get('/perfil/', getBeneficiarioController.getPerfil);
 

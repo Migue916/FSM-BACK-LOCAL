@@ -1,10 +1,10 @@
 const sqlQueries = {
 
     GET_EMPLEADO:
-    "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true OFFSET \$1 LIMIT \$2", 
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true OFFSET \$1 LIMIT \$2", 
 
     GET_EMPLEADO_IDENTITY:
-    "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND ((SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$3)) > 0.07 OR id = cast(\$3 AS INTEGER)) ) AS busqueda OFFSET \$1 LIMIT \$2",
+        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND ((SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$3)) > 0.07 OR id = cast(\$3 AS INTEGER)) ) AS busqueda OFFSET \$1 LIMIT \$2",
 
     GET_NOMBRE: 
         "SELECT * FROM empleado WHERE id = \$1",

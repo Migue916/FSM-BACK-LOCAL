@@ -3,8 +3,12 @@ const queries_General = require("../../queries/general/general_QueriesModule");
 
 exports.getEmpleados = async (page) => {
   try { 
+    
+    console.log(page);
+
     const getEmpleados = await queries_Empleados.get_Empleados(page);
     const results = [];
+
     for (const row of getEmpleados) { 
 
       const sede = await queries_General.get_sede(row.id_sede);

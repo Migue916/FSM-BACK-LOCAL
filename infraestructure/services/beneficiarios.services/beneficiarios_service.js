@@ -468,7 +468,11 @@ exports.getBeneficiarios = async (page) => {
       const sede = await queries_General.get_sede(row.id_sede);
       const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
+
+      console.log(ultima_consulta[0].id_empleado);
+
       const Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
+      
       if(ultima_consulta.lenght === 0)
         Empleado_ultima_consulta = null;
 

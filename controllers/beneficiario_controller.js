@@ -757,7 +757,9 @@ exports.getBeneficiarios= async (req, res, next) => {
 
     const total_paginas =
       await beneficiarioServices.getBeneficiariosActuales();
+
     result.paginas = (total_paginas.value)/10;
+    
     result.getBeneficiarios =
       await beneficiarioServices.getBeneficiarios(page);
       

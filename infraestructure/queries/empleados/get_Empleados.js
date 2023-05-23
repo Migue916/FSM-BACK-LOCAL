@@ -1,5 +1,5 @@
 const pool = require("../../postgresDB");
-const sqlQueries = require("../../sqlQueries/sql_Beneficiarios");
+const sqlQueries = require("../../sqlQueries/sql_Empleados");
 
 const get_Empleados = async (page) => {
     try {

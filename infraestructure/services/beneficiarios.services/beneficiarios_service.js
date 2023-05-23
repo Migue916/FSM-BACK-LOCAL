@@ -468,6 +468,9 @@ exports.getBeneficiarios = async (page) => {
       const sede = await queries_General.get_sede(row.id_sede);
       const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
+      const Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
+      if(ultima_consulta.lenght === 0)
+        Empleado_ultima_consulta = null;
 
       const result = {
         Nombre: row.p_nombre + " " +
@@ -480,7 +483,7 @@ exports.getBeneficiarios = async (page) => {
         Diagnostico_p: diagnosticos_principal_beneficiario(row.id),
         Sede: sede[0].sede, 
         Fecha_ingreso: row.fecha_ingreso,
-        Empleado_ultima_consulta: ultima_consulta[0].id_empleado, 
+        Empleado_ultima_consulta: Empleado_ultima_consulta, 
         Orientacion: orientacion[0].orientacion,
       };
       results.push(result);

@@ -1,30 +1,27 @@
-const swaggerAutogen = require('swagger-autogen')()
+const express = require('express');
+const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
-const outputFile = './swagger_output.json'
-const endpointsFiles = ['./allRoutes.js']
-
-const doc = {
+// Configuración de Swagger
+const options = {
+  definition: {
+    openapi: '3.0.0',
     info: {
-        version: "1.0.0",
-        title: "Mi API",
-        description: "Documentación API"
+      title: 'API de ejemplo',
+      version: '1.0.0',
+      description: 'Descripción de tu API',
     },
-    host: "backappsantamaria.azurewebsites.net",
-    basePath: "/",
-    schemes: ['http', 'https'],
-    consumes: ['application/json'],
-    produces: ['application/json'],
-    tags: [
-        {
-            "name": "Fsm",
-            "description": "Endpoints relacionados con los el software para la fundacion santa maria"
-        }
+    servers: [
+      {
+        url: 'backappsantamaria.azurewebsites.net',
+      },
     ],
-    securityDefinitions: {
-        // Configura aquí tus mecanismos de autenticación (JWT, OAuth, etc.) si los utilizas
-    }
-}
+  },
+  apis: ['./routes/*.js'], // Indica la ubicación de tus archivos de ruta
+};
 
-swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
-    require('./routes/index.js')
-})
+const specs = swaggerJsdoc(options);
+
+// Usa Swagger UI en la ruta /api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

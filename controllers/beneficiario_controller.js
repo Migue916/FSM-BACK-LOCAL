@@ -2,9 +2,6 @@ const response = require("./responses/response");
 const beneficiarioServices = require("../infraestructure/services/beneficiarios.services/beneficiarios_service");
 
 exports.putEgresado= async (req, res, next) => {
-    // #swagger.tags = ['Egreso de beneficiarios']
-    // #swagger.description = 'Egresa a un beneficiriario'
-    // #swagger.parameters['id_presona, observacion, tipo_usuario'] = { in: 'body', description: 'Toma lo datos del usuarios a egresar, true para beneficiario, false para empleado', required: true, type: 'object', schema: { $id_persona: '1', $observacion: 'Agrega una observacion' } }
   try {
     const result = {
       status: true,
@@ -32,9 +29,6 @@ exports.putEgresado= async (req, res, next) => {
 };
 
 exports.postConsulta= async (req, res, next) => {
-    // #swagger.tags = ['post de consultas para beneficiarios']
-    // #swagger.description = 'Archiva una consulta a un beneficiriario'
-    // #swagger.parameters['id_empleado, id_beneficiario, id_modulo, consulta'] = { in: 'body', description: 'Recive como parametro la informacion basica para hacer almacenar la consulta juto al archivo por req.fle', required: true, type: 'object', schema: { $id_beneficiairo: '1', $id_empleado: '1', $id_modulo: '1', $consulta: 'consulta.js', } }
   try {
     const result = {
       status: true,

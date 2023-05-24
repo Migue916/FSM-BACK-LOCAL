@@ -120,8 +120,7 @@ exports.acceso = async (req, res, next) => {
   try{
     verifyToken();
     result = {
-      status: true,
-      message: error.message,
+      status: true
     };
     response.success(req, res, result, 200, "success");
   } catch (error) {

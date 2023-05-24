@@ -22,7 +22,6 @@ function verifyToken(req, res, next) {
         if(error){
           res.sendStatus(403);
         }else{
-          res.sendStatus(200);
           next();
         }
       });

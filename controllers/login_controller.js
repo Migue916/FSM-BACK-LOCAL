@@ -25,7 +25,7 @@ exports.ingresar = async (req, res, next) => {
       if(todosLosCamposLlenos){
         const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
         if (isPasswordValid){
-          jwt.sign({getUser}, '!@#$%&/()=?¡*', {expiresIn: '5s'}, (err, token) =>{
+          jwt.sign({getUser}, '!@#$%&/()=?¡*', {expiresIn: '60s'}, (err, token) =>{
             res.json({
               token, 
               id: getUser[0].id,
@@ -67,6 +67,7 @@ exports.ingresar = async (req, res, next) => {
 
 exports.user_create = async (req, res, next) => {
   let result;
+  verifyToken();
   try {
     console.log("Salt: ", saltRounds);
     console.log("Contraseña: ", req.body.contrasena);
@@ -114,3 +115,38 @@ exports.user_create = async (req, res, next) => {
   }
 };
 
+exports.acceso = async (req, res, next) => {
+  const result;
+  try{
+    verifyToken();
+    result = {
+      status: true,
+      message: error.message,
+    };
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    console.error(error.message);
+    result = {
+      status: false,
+      message: error.message,
+    };
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+function verifyToken(req, res, next) {
+  const bearerHeader = req.headers['authorization'];
+  if (typeof bearerHeader !== 'undefined') {
+    const bearerToken = bearerHeader.split(" ")[1];
+    req.token = bearerToken;
+    jwt.verify(req.token, '!@#$%&/()=?¡*', (error) => {
+      if(error){
+        res.sendStatus(403);
+      }else{
+        next();
+      }
+    });
+  } else {
+    res.sendStatus(403);
+  }
+}

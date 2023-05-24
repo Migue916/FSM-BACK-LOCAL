@@ -7,6 +7,7 @@ const router = express.Router();
 //GET Method
 router.post('/egresar', getBeneficiarioController.putEgresado);
 router.post('/create', getBeneficiarioController.postBeneficiario);
+
 router.get('/last_ten', getBeneficiarioController.getLastTenBeneficiarios);
 router.get('/estadisticas', getBeneficiarioController.getStatisticsBeneficiarios);
 router.get('/ten/', getBeneficiarioController.getBuscaPorNombre);
@@ -33,7 +34,6 @@ router.post('/new/alergias', getBeneficiarioController.postAlergias);
 router.post('/new/orientacion', getBeneficiarioController.postOrientacion);
 router.post('/new/genero', getBeneficiarioController.postGenero);
 router.post('/new/eps', getBeneficiarioController.postEps);
-
 
 router.post('/edit/diagnostico', getBeneficiarioController.putDiagnostico);
 router.put('/edit/sede', getBeneficiarioController.putSede);

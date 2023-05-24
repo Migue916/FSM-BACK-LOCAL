@@ -4,10 +4,17 @@ const app = express();
 const http = require('http');
 const db = require('./infraestructure/postgresDB');
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 // Obtengo las rutas principales
 const allRoutes = require('./routes');
 const server = http.createServer(app);
 
+require(allRoutes)(app)
+    
 db.initPoolDB();
 app.use(express.json()); // application/json
 

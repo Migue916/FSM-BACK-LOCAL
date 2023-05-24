@@ -5,12 +5,10 @@ const jwt = require('jsonwebtoken');
 const beneficiariosRoutes = require("./beneficiariosRoutes");
 const empleadosRoutes = require("./empleadosRoutes");
 const loginRoute = require("./loginRoute");
-const doc = require("../utils/swagger"); 
 
 allRoutes.use("/beneficiarios", verifyToken, beneficiariosRoutes);
 allRoutes.use("/empleados", verifyToken, empleadosRoutes);
 allRoutes.use("/login", loginRoute);
-allRoutes.use("/api-docs", verifyToken, doc);
 
 module.exports = allRoutes;
 

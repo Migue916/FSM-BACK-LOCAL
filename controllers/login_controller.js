@@ -1,4 +1,5 @@
 const response = require("./responses/response");
+const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -136,6 +137,7 @@ exports.acceso = async (req, res, next) => {
 };
 
 function verifyToken(req, res, next) {
+  console.log(req);
   const bearerHeader = req.headers['authorization'];
   let response = { calledNext: false, message: '' };
 

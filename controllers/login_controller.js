@@ -66,7 +66,7 @@ exports.ingresar = async (req, res, next) => {
 
 
 exports.user_create = async (req, res, next) => {
-  let result;
+  let result = [];
   verifyToken();
   try {
     console.log("Salt: ", saltRounds);
@@ -116,7 +116,7 @@ exports.user_create = async (req, res, next) => {
 };
 
 exports.acceso = async (req, res, next) => {
-  const result;
+  let result = [];
   try{
     verifyToken();
     result = {

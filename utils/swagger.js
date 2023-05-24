@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
@@ -24,4 +24,4 @@ const options = {
 const specs = swaggerJsdoc(options);
 
 // Usa Swagger UI en la ruta /api-docs
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+router.use('/', swaggerUi.serve, swaggerUi.setup(specs));

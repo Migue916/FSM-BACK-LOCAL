@@ -4,7 +4,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /egresados:
+ * /beneficiarios/egresar:
  *   put:
  *     summary: Actualizar información de un egresado
  *     description: Actualiza la información de un egresado en la base de datos.
@@ -66,7 +66,7 @@ router.post('/egresar', getBeneficiarioController.putEgresado);
 
 /**
  * @swagger
- * /beneficiarios:
+ * /beneficiarios/create:
  *   post:
  *     summary: Crear un beneficiario.
  *     requestBody:
@@ -172,7 +172,7 @@ router.post('/create', getBeneficiarioController.postBeneficiario);
 
 /**
  * @swagger
- * /api/beneficiarios/last-ten:
+ * /beneficiarios/last_ten:
  *   get:
  *     tags:
  *       - Beneficiarios
@@ -246,7 +246,7 @@ router.get('/estadisticas', getBeneficiarioController.getStatisticsBeneficiarios
 
 /**
  * @swagger
- * /buscaPorNombre:
+ * /beneficiarios/ten/:
  *   get:
  *     summary: Busca por nombre
  *     description: Realiza una búsqueda por nombre
@@ -274,7 +274,7 @@ router.get('/ten/', getBeneficiarioController.getBuscaPorNombre);
 
 /**
  * @swagger
- * /balance:
+ * /beneficiarios/balance:
  *   get:
  *     summary: Obtener el balance de beneficiarios
  *     description: Devuelve el balance de beneficiarios nuevos y egresados para el año especificado.
@@ -331,7 +331,7 @@ router.get('/balance/', getBeneficiarioController.getBalance);
 
 /**
  * @swagger
- * /anios:
+ * /beneficiarios/anios:
  *   get:
  *     summary: Obtiene la lista de años disponibles
  *     description: Este endpoint retorna la lista de años disponibles en el servicio beneficiario
@@ -372,79 +372,80 @@ router.get('/anios', getBeneficiarioController.getAnios);
 
 /**
  * @swagger
- * /endpoint:
+ * /beneficiarios/estadisticas/Diagnosticos:
  *   get:
- *     description: Descripción del endpoint
- *     produces:
- *       - application/json
+ *     summary: Obtiene el diagnóstico y la cantidad de beneficiarios
+ *     description: Obtiene el diagnóstico y la cantidad de beneficiarios actuales del sistema
  *     responses:
  *       200:
- *         description: Respuesta exitosa
+ *         description: La operación fue exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 cantidad_de_beneficiarios:
+ *                   type: integer
+ *                 diagnosticos:
+ *                   type: array
+ *                   items:
+ *                     type: object
  *       400:
  *         description: Error en la solicitud
- *     parameters:
- *       - name: parametro1
- *         description: Descripción del parámetro 1
- *         in: query
- *         type: string
- *         required: true
- *       - name: parametro2
- *         description: Descripción del parámetro 2
- *         in: query
- *         type: integer
- *         required: false
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
  */
 
 router.get('/estadisticas/Diagnosticos', getBeneficiarioController.getDiagBen);
 
 /**
  * @swagger
- * /endpoint/path:
+ * /beneficiarios/estadisticas/edad:
  *   get:
- *     summary: Returns the estimated age of beneficiaries
- *     description: Returns the estimated age of beneficiaries based on some criteria
+ *     description: Obtiene el resultado del cálculo de EstEdad
+ *     tags:
+ *       - EstEdad
+ *     produces:
+ *       - application/json
  *     responses:
  *       200:
- *         description: Successful response
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   example: true
- *                   description: Status of the response
- *                 message:
- *                   type: string
- *                   example: successful
- *                   description: Message of the response
- *                 estEdad:
- *                   type: number
- *                   example: 30
- *                   description: Estimated age of beneficiaries
+ *         description: Resultado exitoso
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *             estEdad:
+ *               type: integer
  *       400:
- *         description: Error response
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   example: false
- *                   description: Status of the response
- *                 message:
- *                   type: string
- *                   example: Error message
- *                   description: Error message of the response
+ *         description: Error en la solicitud
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
  */
 
 router.get('/estadisticas/edad', getBeneficiarioController.getEstEdad);
 
 /**
  * @swagger
- * /beneficiarios:
+ * /beneficiarios/listAll/:
  *   get:
  *     summary: Obtiene los beneficiarios
  *     description: Obtiene los beneficiarios actuales y los filtra por pagina, sede, edad, diagnostico principal, y fecha de ingreso.
@@ -488,8 +489,101 @@ router.get('/estadisticas/edad', getBeneficiarioController.getEstEdad);
  */
 router.get('/listAll/', getBeneficiarioController.getBeneficiarios);
 
-
+/**
+ * @swagger
+ * /beneficiarios/desplegables:
+ *   get:
+ *     summary: Obtiene los desplegables y sus datos relacionados
+ *     description: Este endpoint devuelve los desplegables y sus datos relacionados, incluyendo beneficiarios por edades, beneficiarios por diagnosticos, beneficiarios por sedes y fechas de ingreso.
+ *     responses:
+ *       200:
+ *         description: Desplegables y datos relacionados obtenidos exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica si la operación fue exitosa o no
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   description: Contiene el mensaje de éxito o error
+ *                   example: "success"
+ *                 getBeneficiariosEdades:
+ *                   type: object
+ *                   description: Datos de beneficiarios por edades
+ *                   example: { data: [...], ... }
+ *                 getBeneficiariosDiagnosticos:
+ *                   type: object
+ *                   description: Datos de beneficiarios por diagnosticos
+ *                   example: { data: [...], ... }
+ *                 getBeneficiariosSedes:
+ *                   type: object
+ *                   description: Datos de beneficiarios por sedes
+ *                   example: { data: [...], ... }
+ *                 getBeneficiariosFechasIng:
+ *                   type: object
+ *                   description: Datos de beneficiarios por fechas de ingreso
+ *                   example: { data: [...], ... }
+ *       400:
+ *         description: Error en la operación
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica si la operación fue exitosa o no
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   description: Contiene el mensaje de éxito o error
+ *                   example: "error"
+ */
 router.get('/desplegables', getBeneficiarioController.getDesplegables);
+
+/**
+ * @swagger
+ * /beneficiarios/perfil/:
+ *   get:
+ *     summary: Obtiene el perfil de un beneficiario
+ *     description: Obtiene el perfil de un beneficiario utilizando su ID
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del beneficiario
+ *     responses:
+ *       200:
+ *         description: Perfil obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getPerfil:
+ *                   $ref: '#/components/schemas/Perfil'
+ *       400:
+ *         description: Error al obtener el perfil
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ * */
 router.get('/perfil/', getBeneficiarioController.getPerfil);
 
 router.get('/list/diagnostico/', getBeneficiarioController.getDiagnosticoList);

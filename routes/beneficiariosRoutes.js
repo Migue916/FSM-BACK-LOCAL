@@ -62,6 +62,7 @@ const router = express.Router();
  *                   description: Mensaje de error.
  *                   example: "Error al actualizar el egresado"
  */
+
 router.post('/egresar', getBeneficiarioController.putEgresado);
 
 /**
@@ -167,6 +168,7 @@ router.post('/egresar', getBeneficiarioController.putEgresado);
  *                   description: El mensaje de error.
  *                   example: "error"
  */
+
 router.post('/create', getBeneficiarioController.postBeneficiario);
 
 
@@ -196,6 +198,7 @@ router.post('/create', getBeneficiarioController.postBeneficiario);
  *       400:
  *         description: Error en la solicitud
  */
+
 router.get('/last_ten', getBeneficiarioController.getLastTenBeneficiarios);
 
 /**
@@ -242,6 +245,7 @@ router.get('/last_ten', getBeneficiarioController.getLastTenBeneficiarios);
  *                    type: string
  *                    example: "error"
  */
+
 router.get('/estadisticas', getBeneficiarioController.getStatisticsBeneficiarios);
 
 /**
@@ -270,6 +274,7 @@ router.get('/estadisticas', getBeneficiarioController.getStatisticsBeneficiarios
  *                   items:
  *                     $ref: '#/components/schemas/BuscaPorNombre'
  */
+
 router.get('/ten/', getBeneficiarioController.getBuscaPorNombre);
 
 /**
@@ -327,6 +332,7 @@ router.get('/ten/', getBeneficiarioController.getBuscaPorNombre);
  *                   description: Mensaje de error
  *                   example: "Error message"
  */
+
 router.get('/balance/', getBeneficiarioController.getBalance);
 
 /**
@@ -368,6 +374,7 @@ router.get('/balance/', getBeneficiarioController.getBalance);
  *                   type: string
  *                   description: Mensaje de error
  */
+
 router.get('/anios', getBeneficiarioController.getAnios);
 
 /**
@@ -487,6 +494,7 @@ router.get('/estadisticas/edad', getBeneficiarioController.getEstEdad);
  *       200:
  *         description: Los beneficiarios fueron obtenidos
  */
+
 router.get('/listAll/', getBeneficiarioController.getBeneficiarios);
 
 /**
@@ -543,6 +551,7 @@ router.get('/listAll/', getBeneficiarioController.getBeneficiarios);
  *                   description: Contiene el mensaje de éxito o error
  *                   example: "error"
  */
+
 router.get('/desplegables', getBeneficiarioController.getDesplegables);
 
 /**
@@ -584,14 +593,313 @@ router.get('/desplegables', getBeneficiarioController.getDesplegables);
  *                 message:
  *                   type: string
  * */
+
 router.get('/perfil/', getBeneficiarioController.getPerfil);
 
+
+/**
+ * @swagger
+ * /beneficiarios/list/diagnostico/:
+ *   get:
+ *     tags:
+ *       - Diagnostico
+ *     description: Obtiene la lista de diagnósticos
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: Diagnostico
+ *         description: Filtra la lista de diagnósticos por el valor de Diagnostico
+ *         in: query
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Lista de diagnósticos obtenida exitosamente
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *             getDiagnosticoList:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       400:
+ *         description: Error al obtener la lista de diagnósticos
+ */
+
 router.get('/list/diagnostico/', getBeneficiarioController.getDiagnosticoList);
+
+/**
+ * @swagger
+ * /beneficiarios/list/sede/:
+ *   get:
+ *     summary: Obtiene la lista de sedes
+ *     description: Retorna un objeto que contiene la lista de sedes y un mensaje de éxito
+ *     tags:
+ *       - Sede
+ *     parameters:
+ *       - in: query
+ *         name: Sede
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Nombre de la sede a buscar (opcional)
+ *     responses:
+ *       200:
+ *         description: Solicitud exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getSedeList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Error en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ * */
+
 router.get('/list/sede/', getBeneficiarioController.getSedeList);
+
+
+/**
+ * @swagger
+ * /beneficiarios/list/riesgos/:
+ *   get:
+ *     summary: Obtiene la lista de riesgos
+ *     description: Obtiene la lista de riesgos basada en los parámetros de consulta proporcionados
+ *     tags:
+ *       - Riesgos
+ *     parameters:
+ *       - in: query
+ *         name: Riesgos
+ *         schema:
+ *           type: string
+ *         description: Los riesgos a buscar en la lista
+ *     responses:
+ *       200:
+ *         description: Éxito en la obtención de la lista de riesgos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getRiesgosList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Error al obtener la lista de riesgos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+
 router.get('/list/riesgos/', getBeneficiarioController.getRiesgosList);
+
+/**
+ * @swagger
+ * /beneficiarios/list/alergias/:
+ *   get:
+ *     tags:
+ *       - Alergias
+ *     description: Obtiene la lista de alergias
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: Alergias
+ *         description: Filtro de alergias
+ *         in: query
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Lista de alergias obtenida con éxito
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *             getAlergiasList:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       400:
+ *         description: Error al obtener la lista de alergias
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ */
+
 router.get('/list/alergias/', getBeneficiarioController.getAlergiasList);
+
+
+/**
+ * @swagger
+ * /beneficiarios/list/orientacion/:
+ *   get:
+ *     summary: Obtiene la lista de orientaciones
+ *     tags:
+ *       - Orientaciones
+ *     parameters:
+ *       - in: query
+ *         name: Orientacion
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Filtro de orientación
+ *     responses:
+ *       200:
+ *         description: Lista de orientaciones obtenida correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getOrientacionList:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       400:
+ *         description: Error en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+
 router.get('/list/orientacion/', getBeneficiarioController.getOrientacionList);
+
+/**
+ * @swagger
+ * /beneficiarios/list/genero:
+ *   get:
+ *     summary: Obtener la lista de géneros
+ *     description: Obtiene la lista de géneros de los beneficiarios
+ *     responses:
+ *       200:
+ *         description: Éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de la operación
+ *                 getGeneroList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: ID del género
+ *                       name:
+ *                         type: string
+ *                         description: Nombre del género
+ *       400:
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
+
 router.get('/list/genero', getBeneficiarioController.getGeneroList);
+
+/**
+ * @swagger
+ * /beneficiarios/list/eps:
+ *   get:
+ *     summary: Retrieve a list of EPS
+ *     description: Retrieve a list of EPS for the beneficiary services.
+ *     responses:
+ *       200:
+ *         description: A list of EPS
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getEpsList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *       400:
+ *         description: An error occurred
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ * */
+
 router.get('/list/eps', getBeneficiarioController.getEpsList);
 
 router.post('/new/diagnostico', getBeneficiarioController.postDiagnostico);

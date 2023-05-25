@@ -18,9 +18,7 @@ exports.ingresar = async (req, res, next) => {
         contrasena: req.body.contrasena,
       };
 
-    console.log(originalUser);
-
-    var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '' && value !== true);
+    var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
 
     if (todosLosCamposLlenos) {   
 
@@ -35,7 +33,7 @@ exports.ingresar = async (req, res, next) => {
 
           jwt.sign(originalUser.email, 'S3cr3tK3yF$M', {expiresIn: '9h'}, (err, token) =>{
             res.json({
-              token, 
+              token: token, 
               id: getUser[0].id,
               Tipo_usuario: getUser[0].cargo, 
               });

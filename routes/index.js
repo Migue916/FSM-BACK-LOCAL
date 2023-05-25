@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const beneficiariosRoutes = require("./beneficiariosRoutes");
 const empleadosRoutes = require("./empleadosRoutes");
 const loginRoute = require("./loginRoute");
+const accesoRoutes = require("./accesoRoutes");
 
 allRoutes.use("/beneficiarios", verifyToken, beneficiariosRoutes);
 allRoutes.use("/empleados", verifyToken, empleadosRoutes);

@@ -14,7 +14,7 @@ exports.ingresar = async (req, res, next) => {
     console.log(req.body);
 
     const originalUser = {
-      correo: req.body.correo,
+      email: req.body.correo,
       contrasena: req.body.contrasena,
     };
 
@@ -24,7 +24,7 @@ exports.ingresar = async (req, res, next) => {
 
     if (todosLosCamposLlenos) {   
 
-      const getUser = await queries_General.get_user(originalUser.correo);
+      const getUser = await queries_General.get_user(originalUser.email);
       todosLosCamposLlenos =  getUser.length > 0;
 
       if(todosLosCamposLlenos){
@@ -33,7 +33,7 @@ exports.ingresar = async (req, res, next) => {
 
         if (isPasswordValid){
 
-          jwt.sign(originalUser.correo, 'S3cr3tK3yF$M', {expiresIn: '9h'}, (err, token) =>{
+          jwt.sign(originalUser.email, 'S3cr3tK3yF$M', {expiresIn: '9h'}, (err, token) =>{
             res.json({
               token, 
               id: getUser[0].id,

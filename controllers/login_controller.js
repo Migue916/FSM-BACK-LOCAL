@@ -31,11 +31,10 @@ exports.ingresar = async (req, res, next) => {
 
         if (isPasswordValid){
 
-          jwt.sign(getUser, 'S3cr3tK3yF$M', {expiresIn: '9h'}, (err, token) =>{
+          jwt.sign({getUser}, 'S3cr3tK3yF$M', {expiresIn: '10h'}, (err, token) =>{
             res.json({
-              token: token, 
-              id: getUser[0].id,
-              Tipo_usuario: getUser[0].cargo, 
+              token, 
+              id: getUser[0].id, 
               });
             });
 

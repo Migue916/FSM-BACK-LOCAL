@@ -902,10 +902,242 @@ router.get('/list/genero', getBeneficiarioController.getGeneroList);
 
 router.get('/list/eps', getBeneficiarioController.getEpsList);
 
+/**
+ * @swagger
+ * /beneficiarios/new/diagnostico:
+ *   post:
+ *     summary: Añadir un nuevo diagnóstico
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Diagnostico:
+ *                 type: string
+ *                 example: "Diabetes"
+ *     responses:
+ *       200:
+ *         description: Diagnóstico añadido con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "successful"
+ *                 postDiagnostico:
+ *                   type: object
+ *       400:
+ *         description: Error al añadir el diagnóstico
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Error message"
+ */
+
 router.post('/new/diagnostico', getBeneficiarioController.postDiagnostico);
+
+/**
+ * @swagger
+ * /beneficiarios/new/sede:
+ *   post:
+ *     summary: Añadir una nueva sede
+ *     tags: [Sede]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               sede:
+ *                 type: string
+ *               direccion:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Sede creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al crear la sede
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+
 router.post('/new/sede', getBeneficiarioController.postSede);
+
+/**
+ * @swagger
+ * /beneficiarios/new/riesgos:
+ *   post:
+ *     tags:
+ *       - Riesgos
+ *     description: Agrega un nuevo riesgo
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: riesgo
+ *         description: Objeto de riesgo
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             riesgo:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Riesgo agregado exitosamente
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *             postRiesgos:
+ *               type: object
+ *       400:
+ *         description: Error al agregar el riesgo
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ * */
+
 router.post('/new/riesgos', getBeneficiarioController.postRiesgos);
+
+/**
+ * @swagger
+ * /beneficiarios/new/alergias:
+ *   post:
+ *     summary: Añade una alergia a un beneficiario
+ *     description: Este endpoint crea una alergia y la asocia a un beneficiario específico.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               alergia:
+ *                 type: string
+ *                 description: La alergia que se va a añadir.
+ *                 example: Polen
+ *     responses:
+ *       200:
+ *         description: Alergia añadida con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de éxito.
+ *                   example: "successful"
+ *                 postAlergias:
+ *                   type: object
+ *                   description: Alergia añadida.
+ *       400:
+ *         description: Error al añadir la alergia
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error.
+ *                   example: "error"
+ */
+
 router.post('/new/alergias', getBeneficiarioController.postAlergias);
+
+/**
+ * @swagger
+ * /beneficiarios/new/orientacion:
+ *   post:
+ *     summary: Create an Orientacion entry
+ *     description: This endpoint creates an Orientacion entry if the provided Orientacion data is not empty.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Orientacion:
+ *                 type: array
+ *                 description: The Orientacion data to be added.
+ *     responses:
+ *       200:
+ *         description: Successfully created the Orientacion entry.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: The status of the operation.
+ *                 message:
+ *                   type: string
+ *                   description: The message indicating success.
+ *       400:
+ *         description: An error occurred while creating the Orientacion entry.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: The status of the operation.
+ *                 message:
+ *                   type: string
+ *                   description: The error message.
+ */
+
 router.post('/new/orientacion', getBeneficiarioController.postOrientacion);
 router.post('/new/genero', getBeneficiarioController.postGenero);
 router.post('/new/eps', getBeneficiarioController.postEps);

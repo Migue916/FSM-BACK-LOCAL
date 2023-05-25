@@ -11,9 +11,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API de ejemplo',
+      title: 'API del proyecto CareTrack',
       version: '1.0.0',
-      description: 'Descripción de tu API',
+      description: 'Esta api contiene las rutas de conexion desde y hacia la base de datos de la fundacion santa maria',
     },
     servers: [
       {

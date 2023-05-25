@@ -33,8 +33,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 // Obtengo las rutas principales
 const allRoutes = require('./routes');
 const server = http.createServer(app);
-
-app.use(allRoutes);
     
 db.initPoolDB();
 app.use(express.json()); // application/json

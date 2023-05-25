@@ -13,14 +13,14 @@ exports.ingresar = async (req, res, next) => {
 
     console.log(req.body);
 
-    const originalUser = {
-      email: req.body.correo,
-      contrasena: req.body.contrasena,
-    };
+      const originalUser = {
+        email: req.body.correo,
+        contrasena: req.body.contrasena,
+      };
 
     console.log(originalUser);
 
-    var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
+    var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '' && value !== true);
 
     if (todosLosCamposLlenos) {   
 

@@ -9,8 +9,8 @@ const accesoRoutes = require("./accesoRoutes");
 
 allRoutes.use("/beneficiarios", verifyToken, beneficiariosRoutes);
 allRoutes.use("/empleados", verifyToken, empleadosRoutes);
-allRoutes.use("/acceso", verifyToken, accesoRoutes);
 allRoutes.use("/login", loginRoute);
+allRoutes.use("/acceso", verifyToken, accesoRoutes);
 
 module.exports = allRoutes;
 

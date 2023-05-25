@@ -135,7 +135,7 @@ exports.acceso = async (req, res, next) => {
   }
 };
 
-function verifyToken(req, res, next) {
+const verifyToken  = async (req, res, next) => {
   console.log(req);
   const bearerHeader = req.headers['authorization'];
   let response = { calledNext: false, message: '' };

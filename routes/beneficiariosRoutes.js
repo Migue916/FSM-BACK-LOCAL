@@ -246,53 +246,29 @@ router.get('/estadisticas', getBeneficiarioController.getStatisticsBeneficiarios
 
 /**
  * @swagger
- * /endpoint:
+ * /buscaPorNombre:
  *   get:
- *     summary: Get beneficiario by name
+ *     summary: Busca por nombre
+ *     description: Realiza una búsqueda por nombre
  *     parameters:
- *       - in: query
- *         name: nombre
+ *       - name: nombre
+ *         in: query
+ *         description: Nombre a buscar
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: Name of the beneficiario to search for
  *     responses:
- *       '200':
- *         description: Successful response
+ *       200:
+ *         description: Búsqueda exitosa
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: boolean
- *                   example: true
- *                   description: Indicates if the request was successful
- *                 message:
- *                   type: string
- *                   example: successful
- *                   description: Message indicating the status of the request
  *                 getBuscaPorNombre:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       // Add properties here that define the response object
- *     '400':
- *       description: Error response
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: boolean
- *                 example: false
- *                 description: Indicates if the request was unsuccessful
- *               message:
- *                 type: string
- *                 example: error message
- *                 description: Message indicating the reason for the error
+ *                     $ref: '#/components/schemas/BuscaPorNombre'
  */
 router.get('/ten/', getBeneficiarioController.getBuscaPorNombre);
 

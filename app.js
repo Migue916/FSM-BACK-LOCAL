@@ -34,7 +34,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 const allRoutes = require('./routes');
 const server = http.createServer(app);
 
-require(allRoutes);
+app.use(allRoutes);
     
 db.initPoolDB();
 app.use(express.json()); // application/json

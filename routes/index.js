@@ -20,7 +20,7 @@ function verifyToken(req, res, next) {
     if (typeof bearerHeader !== 'undefined') {
       const bearerToken = bearerHeader.split(" ")[1];
       req.token = bearerToken;
-      jwt.verify(req.token, '!@#$%&/()=?¡*', (error) => {
+      jwt.verify(req.token, 'S3cr3tK3yF$M', (error) => {
         if(error){
           res.sendStatus(403);
         }else{

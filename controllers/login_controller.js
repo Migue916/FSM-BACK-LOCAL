@@ -18,6 +18,8 @@ exports.ingresar = async (req, res, next) => {
       contrasena: req.body.contrasena,
     };
 
+    console.log(originalUser);
+
     var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
 
     if (todosLosCamposLlenos) {   
@@ -31,7 +33,7 @@ exports.ingresar = async (req, res, next) => {
 
         if (isPasswordValid){
 
-          jwt.sign(originalUser.email, '!@#$%&/()=?¡*', {expiresIn: '9h'}, (err, token) =>{
+          jwt.sign(originalUser.email, 'S3cr3tK3yF$M', {expiresIn: '9h'}, (err, token) =>{
             res.json({
               token, 
               id: getUser[0].id,

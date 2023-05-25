@@ -11,28 +11,36 @@ exports.ingresar = async (req, res, next) => {
       message: "successful",
     };
 
+    console.log(req.body);
+
     const originalUser = {
       email: req.body.email,
       contrasena: req.body.contrasena,
     };
-    console.log(originalUser);
 
     var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
+
     if (todosLosCamposLlenos) {   
+
       const getUser = await queries_General.get_user(originalUser.email);
       todosLosCamposLlenos =  getUser.length > 0;
-      console.log(todosLosCamposLlenos);
+
       if(todosLosCamposLlenos){
+
         const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
+
         if (isPasswordValid){
-          jwt.sign({getUser}, '!@#$%&/()=?¡*', {expiresIn: '9h'}, (err, token) =>{
+
+          jwt.sign(originalUser.email, '!@#$%&/()=?¡*', {expiresIn: '9h'}, (err, token) =>{
             res.json({
               token, 
               id: getUser[0].id,
               Tipo_usuario: getUser[0].cargo, 
               });
             });
-        }else{       
+
+        }else{     
+            
           result = {
             status: false,
             message: "Contraseña incorrecta",
@@ -67,7 +75,6 @@ exports.ingresar = async (req, res, next) => {
 
 exports.user_create = async (req, res, next) => {
   let result = [];
-  if(verifyToken()){
   try {
     console.log("Salt: ", saltRounds);
     console.log("Contraseña: ", req.body.contrasena);
@@ -113,49 +120,4 @@ exports.user_create = async (req, res, next) => {
     };
     response.error(req, res, result, 400, "error");
   }
-}else{
-  res.sendStatus(403);
-}
 };
-
-exports.acceso = async (req, res, next) => {
-  let result = [];
-  try{
-    result = {
-      status: verifyToken()
-    };
-    response.success(req, res, result, 200, "success");
-  } catch (error) {
-    console.error(error.message);
-    result = {
-      status: false,
-      message: error.message,
-    };
-    response.error(req, res, result, 400, "error");
-  }
-};
-
-const verifyToken  = async (req, res, next) => {
-  console.log(req);
-  const bearerHeader = req.headers['authorization'];
-  let response = { calledNext: false, message: '' };
-
-  if (typeof bearerHeader !== 'undefined') {
-    const bearerToken = bearerHeader.split(" ")[1];
-    req.token = bearerToken;
-    jwt.verify(req.token, '!@#$%&/()=?¡*', (error) => {
-      if(error){
-        res.sendStatus(403);
-        response.message = 'Error en la verificación del token';
-      }else{
-        next();
-        response.calledNext = true;
-        response.message = 'next() fue llamado';
-      }
-    });
-  } else {
-    res.sendStatus(403);
-    response.message = 'No se proporcionó el encabezado de autorización';
-  }
-  return response;
-}

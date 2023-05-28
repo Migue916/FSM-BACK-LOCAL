@@ -404,9 +404,9 @@ exports.getPerfil = async (id) => {
     const getPerfil = await queries_Beneficiarios.get_Perfil(id);
       const results = [];
 
-      const sede = await queries_General.get_sede(+getPerfil[0].id_sede);
+      const sede = await queries_General.get_sede(getPerfil[0].id_sede);
       const orientacion = await queries_General.get_orientacion(+getPerfil[0].id_orientacion);
-      const eps = await queries_General.get_eps(+getPerfil[0].id_eps);
+      const eps = await queries_General.get_eps(getPerfil[0].id_eps);
 
       const result = {
           Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
@@ -414,12 +414,12 @@ exports.getPerfil = async (id) => {
           Identificacion: getPerfil[0].id,
           Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
           Edad: getPerfil[0].edad,
-          Diagnostico_p: diagnosticos_principal_beneficiario(+getPerfil[0].id),
+          Diagnostico_p: diagnosticos_principal_beneficiario(id),
           Sede: sede[0].sede, 
           Fecha_ingreso: getPerfil[0].fecha_ingreso, 
-          Diagnostico_s: await diagnosticos_secundarios_beneficiario(+getPerfil[0].id),
-          Riesgos: await riesgos_beneficiario(+getPerfil[0].id),
-          Alergias: await alergias_beneficiario(+getPerfil[0].id),
+          Diagnostico_s: await diagnosticos_secundarios_beneficiario(id),
+          Riesgos: await riesgos_beneficiario(id),
+          Alergias: await alergias_beneficiario(id),
           Orientacion: orientacion[0].orientacion,
           eps: eps[0].eps,
         };   
@@ -436,9 +436,8 @@ const diagnosticos_principal_beneficiario = async(id) =>{
   if (diagnostico_principal.length === 0) {
     return getDiagnostico;
   }
-  getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(diagnostico_principal[0].id_enfermedad);
+  getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(+diagnostico_principal[0].id_enfermedad);
   return getDiagnostico[0].enfermedad;
-  
 };
 
 const diagnosticos_secundarios_beneficiario = async (id) => {
@@ -450,10 +449,11 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
       return allDiagnosticos;
     } else {
       for (const row of diagnosticos_secundarios) {
-        const diagnosticos_secundario = await queries_Beneficiarios.get_tipos_diagnosticos(row.id_enfermedad);
+        const diagnosticos_secundario = await queries_Beneficiarios.get_tipos_diagnosticos(+row.id_enfermedad);
+        const empleado = nombreEmpleado(diagnosticos_secundario[0].id_empleado);
         allDiagnosticos.push({ 
             diagnosticos_secundario: diagnosticos_secundario[0].enfermedad,
-            Empleado: nombreEmpleado(diagnosticos_secundario[0].id)[0].Nombre,
+            Empleado: empleado[0].Nombre,
             Fecha: diagnosticos_secundario[0].fecha
           });
       }
@@ -474,9 +474,10 @@ const riesgos_beneficiario = async (id) => {
     } else {
       for (const row of riesgos) {
         const riesgo = await queries_Beneficiarios.get_riesgos_list(row.id_riesgo);
+        const empleado = nombreEmpleado(riesgo[0].id_empleado);
         allRiesgo.push({ 
           riesgos: riesgo[0].riesgo,
-          Empleado: nombreEmpleado(riesgo[0].id)[0].Nombre,
+          Empleado: empleado[0].Nombre,
           Fecha: riesgo[0].fecha
         });
       }
@@ -497,9 +498,10 @@ const alergias_beneficiario = async (id) => {
     } else {
       for (const row of alergias) {
         const alergia = await queries_Beneficiarios.get_alergias_list(row.id_tipo_alergia);
+        const empleado = nombreEmpleado(alergia[0].id_empleado);
         allAlergias.push({
            alergias: alergia[0].alergia,
-           Empleado: nombreEmpleado(alergia[0].id)[0].Nombre,
+           Empleado: empleado[0].Nombre,
            Fecha: alergia[0].fecha
           });
       }
@@ -764,15 +766,17 @@ exports.getBalance = async (anio) => {
       if(mesNuevos.length === 0){
         mesNuevos = {
           mes: meses[i],
-          cant: 0
+          count: 0
         };
       }
       if(mesEgresos.length === 0){
         mesEgresos = {
           mes: meses[i],
-          cant: 0
+          count: 0
         };
       }
+      console.log(mesNuevos);
+      console.log(mesEgresos);
       const result = {
         Mes: ObtenerMes(meses[i]),
         Nuevos: mesNuevos[0].count,

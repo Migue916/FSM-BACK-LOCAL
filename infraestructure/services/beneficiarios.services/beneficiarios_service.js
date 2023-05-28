@@ -752,41 +752,39 @@ function ObtenerMes(mes){
   };
   return mes;
 };
-
 exports.getBalance = async (anio) => {
   try { 
     const getBalanceNuevos = await queries_Beneficiarios.get_BalanceNuevos(anio);
     const getBalanceEgresados = await queries_Beneficiarios.get_BalanceEgresados(anio);
-        const results = [];
-        const meses = Array.from({ length: 12 }, (_, i) => i+1);
-        for (let i = 0; i < meses.length; i++){
-          const mesNuevos = getBalanceNuevos.filter(element => element.mes === meses[i]);
-          const mesEgresos = getBalanceEgresados.filter(element => element.mes === meses[i]);
-          if(mesNuevos.lenght === 0){
-            mesNuevos = {
-              mes: meses[i],
-              cant: 0
-            };
-          }
-          if(mesEgresos.lenght === 0){
-            mesEgresos = {
-              mes: meses[i],
-              cant: 0
-            };
-          }
-          const result = {
-            Mes: ObtenerMes(meses[i]),
-            Nuevos: mesNuevos[0].count,
-            Egresados: mesEgresos[0].count
-          };
-          results.push(result);
-        }
-        return results;
-} catch (error) {
-  throw error;
-}
+    const results = [];
+    const meses = Array.from({ length: 12 }, (_, i) => i+1);
+    for (let i = 0; i < meses.length; i++){
+      let mesNuevos = getBalanceNuevos.filter(element => element.mes === meses[i]);
+      let mesEgresos = getBalanceEgresados.filter(element => element.mes === meses[i]);
+      if(mesNuevos.length === 0){
+        mesNuevos = {
+          mes: meses[i],
+          cant: 0
+        };
+      }
+      if(mesEgresos.length === 0){
+        mesEgresos = {
+          mes: meses[i],
+          cant: 0
+        };
+      }
+      const result = {
+        Mes: ObtenerMes(meses[i]),
+        Nuevos: mesNuevos[0].count,
+        Egresados: mesEgresos[0].count
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }
 };
-
 
 exports.getBuscaPorNombre = async (nombre) => {
   try { 

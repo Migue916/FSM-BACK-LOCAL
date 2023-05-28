@@ -45,19 +45,19 @@ const sqlQueries = {
         "select * from (SELECT *, SIMILARITY(enfermedad, \$1) AS similitud FROM enfermedades) as sc where similitud > 0.07",
 
     GET_BENEFICIARIO_DIAGNOSTICOS_SECUNDARIOS:
-        "SELECT * FROM enfermedad_rel_beneficiario WHERE id_beneficiario = \$1 AND tipo = false",
+        "SELECT * FROM enfermedad_rel_beneficiario WHERE id_beneficiario=\$1 AND tipo = false",
     
     GET_BENEFICIARIO_ALERGIAS_LIST:
-        "SELECT * FROM tipo_alergia WHERE id = \$1",
+        "SELECT * FROM tipo_alergia WHERE id=\$1",
 
     GET_BENEFICIARIO_ALERGIAS:
-        "SELECT * FROM beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1",
+        "SELECT * FROM beneficiario_rel_tipo_alergia WHERE id_beneficiario=\$1",
 
     GET_BENEFICIARIO_RIESGOS_LIST:
-        "select * from riesgos where id = \$1",
+        "select * from riesgos where id=\$1",
 
     GET_BENEFICIARIO_RIESGOS:
-        "SELECT * FROM beneficiario_rel_riesgo WHERE id_beneficiario = \$1",
+        "SELECT * FROM beneficiario_rel_riesgo WHERE id_beneficiario=\$1",
 
     GET_BENEFICIARIO_PERFIL:
         "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND id = \$1",
@@ -99,13 +99,13 @@ const sqlQueries = {
         "SELECT id_enfermedad, count(*) from enfermedad_rel_beneficiario group by id_enfermedad;",
     
     GET_TIPOS_DIAGNOSTICOS:
-        "SELECT enfermedad from enfermedades where id = \$1;",    
+        "SELECT enfermedad FROM enfermedades WHERE id=\$1;",    
     
     GET_ESTADISTICA_POR_EDAD:
         "SELECT CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN 0 AND 9 THEN '0-9' WHEN EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN 10 AND 19 THEN '10-19' WHEN EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN 20 AND 29 THEN '20-29' WHEN EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN 30 AND 39 THEN '30-39' WHEN EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN 40 AND 49 THEN '40-49' WHEN EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN 50 AND 59 THEN '50-59' WHEN EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN 60 AND 69 THEN '60-69' ELSE '70+' END AS rango_edad, COUNT(*) FROM Beneficiario GROUP BY rango_edad ORDER BY rango_edad;",
     
     GET_BENEFICIARIO_DIAGNOSTICO_PRINCIPAL:
-        "SELECT  * FROM enfermedad_rel_beneficiario WHERE tipo = TRUE and id_beneficiario = \$1;",    
+        "SELECT  * FROM enfermedad_rel_beneficiario WHERE tipo = TRUE and id_beneficiario=\$1;",    
     
     GET_BENEFICIARIO_ULTIMA_CONSULTA:
         "SELECT * FROM reporte_modulo WHERE id_beneficiario = \$1 order by fecha DESC LIMIT 1",   

@@ -4,8 +4,14 @@ module.exports = {
     get_orientacion: require("./get_orientacion"),
     get_Modulo: require("./get_Modulo"),
     get_user: require("./get_user"),
+    get_eps: require("./get_eps"),
+    get_GeneroList: require("./get_GeneroList"),
+    get_EpsList: require("./get_EpsList"),
+    get_Foto: require("./get_Foto"),
+    
     create_user: require("./create_user"),
     create_user_account: require("./create_user_account"),
+
     post_Diagnostico: require("./post_Diagnostico"),
     post_Sede: require("./post_Sede"),
     post_Riesgos: require("./post_Riesgos"),
@@ -13,7 +19,5 @@ module.exports = {
     post_Orientacion: require("./post_Orientacion"),
     post_Genero: require("./post_Genero"),
     post_Eps: require("./post_Eps"),
-    get_eps: require("./get_eps"),
-    get_GeneroList: require("./get_GeneroList"),
-    get_EpsList: require("./get_EpsList"),
+    post_Foto: require("./post_Foto"),
 };

@@ -1097,8 +1097,7 @@ router.post('/new/alergias', getBeneficiarioController.postAlergias);
  * @swagger
  * /beneficiarios/new/orientacion:
  *   post:
- *     summary: Create an Orientacion entry
- *     description: This endpoint creates an Orientacion entry if the provided Orientacion data is not empty.
+ *     summary: Crea una nueva orientación.
  *     requestBody:
  *       required: true
  *       content:
@@ -1107,11 +1106,12 @@ router.post('/new/alergias', getBeneficiarioController.postAlergias);
  *             type: object
  *             properties:
  *               Orientacion:
- *                 type: array
- *                 description: The Orientacion data to be added.
+ *                 type: string
+ *                 description: La orientación a crear.
+ *                 example: "Nueva Orientación"
  *     responses:
  *       200:
- *         description: Successfully created the Orientacion entry.
+ *         description: Orientación creada correctamente.
  *         content:
  *           application/json:
  *             schema:
@@ -1119,12 +1119,18 @@ router.post('/new/alergias', getBeneficiarioController.postAlergias);
  *               properties:
  *                 status:
  *                   type: boolean
- *                   description: The status of the operation.
+ *                   description: Estado de la operación.
+ *                   example: true
  *                 message:
  *                   type: string
- *                   description: The message indicating success.
+ *                   description: Mensaje de éxito.
+ *                   example: "successful"
+ *                 postOrientacion:
+ *                   type: string
+ *                   description: Orientación creada.
+ *                   example: "Nueva Orientación"
  *       400:
- *         description: An error occurred while creating the Orientacion entry.
+ *         description: Error en la creación de la orientación.
  *         content:
  *           application/json:
  *             schema:
@@ -1132,28 +1138,727 @@ router.post('/new/alergias', getBeneficiarioController.postAlergias);
  *               properties:
  *                 status:
  *                   type: boolean
- *                   description: The status of the operation.
+ *                   description: Estado de la operación.
+ *                   example: false
  *                 message:
  *                   type: string
- *                   description: The error message.
+ *                   description: Mensaje de error.
+ *                   example: "Error al crear la orientación"
  */
 
 router.post('/new/orientacion', getBeneficiarioController.postOrientacion);
+
+/**
+ * @swagger
+ * /beneficiarios/new/genero:
+ *   post:
+ *     description: Añade un nuevo género
+ *     tags:
+ *       - generos
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: Genero
+ *         description: Objeto Genero para añadir
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - Genero
+ *           properties:
+ *             Genero:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Género añadido exitosamente
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *             postGenero:
+ *               type: object
+ *       400:
+ *         description: Error al añadir el género
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ */
 router.post('/new/genero', getBeneficiarioController.postGenero);
+
+/**
+ * @swagger
+ * /beneficiarios/new/eps:
+ *   post:
+ *     summary: Crea una nueva EPS
+ *     description: Crea una nueva EPS y la agrega a la lista de beneficiarios
+ *     requestBody:
+ *       description: Datos de la nueva EPS
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Eps:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: EPS creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al crear la EPS
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.post('/new/eps', getBeneficiarioController.postEps);
 
+
+/**
+ * @swagger
+ * /beneficiarios/edit/diagnostico:
+ *   post:
+ *     summary: Actualizar el diagnóstico de un beneficiario
+ *     description: Actualiza el diagnóstico de un beneficiario con los datos proporcionados en el cuerpo de la solicitud.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_enfermedad:
+ *                 type: integer
+ *                 description: El ID de la enfermedad.
+ *                 example: 1
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: El ID del beneficiario.
+ *                 example: 1
+ *               id_empleado:
+ *                 type: integer
+ *                 description: El ID del empleado.
+ *                 example: 1
+ *               tipo:
+ *                 type: string
+ *                 description: El tipo de diagnóstico.
+ *                 example: "agudo"
+ *               observacion:
+ *                 type: string
+ *                 description: La observación del diagnóstico.
+ *                 example: "Paciente con síntomas leves"
+ *     responses:
+ *       200:
+ *         description: Diagnóstico actualizado con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de la operación.
+ *                   example: "successful"
+ *       400:
+ *         description: Error al actualizar el diagnóstico
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error.
+ *                   example: "error"
+ */
 router.post('/edit/diagnostico', getBeneficiarioController.putDiagnostico);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/sede:
+ *   put:
+ *     summary: Actualizar la sede de un beneficiario
+ *     description: Actualiza la sede de un beneficiario existente.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_beneficiario
+ *               - id_sede_proxima
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: ID del beneficiario.
+ *               id_sede_proxima:
+ *                 type: integer
+ *                 description: ID de la sede próxima.
+ *     responses:
+ *       200:
+ *         description: Sede actualizada con éxito.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al actualizar la sede.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.put('/edit/sede', getBeneficiarioController.putSede);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/riesgos:
+ *   post:
+ *     summary: Actualiza la información de riesgos de un beneficiario
+ *     tags: [Riesgos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_beneficiario
+ *               - id_riesgo
+ *               - id_empleado
+ *               - observacion
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: ID del beneficiario
+ *               id_riesgo:
+ *                 type: integer
+ *                 description: ID del riesgo
+ *               id_empleado:
+ *                 type: integer
+ *                 description: ID del empleado
+ *               observacion:
+ *                 type: string
+ *                 description: Observación del riesgo
+ *     responses:
+ *       200:
+ *         description: Riesgo actualizado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: successful
+ *       400:
+ *         description: Error al actualizar el riesgo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: error
+ */
 router.post('/edit/riesgos', getBeneficiarioController.putRiesgos);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/alergias:
+ *   post:
+ *     summary: Actualiza las alergias del beneficiario
+ *     description: Actualiza las alergias del beneficiario con el ID proporcionado
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *               id_alergia:
+ *                 type: integer
+ *               id_empleado:
+ *                 type: integer
+ *               observacion:
+ *                 type: string
+ *             required:
+ *               - id_beneficiario
+ *               - id_alergia
+ *               - id_empleado
+ *               - observacion
+ *     responses:
+ *       200:
+ *         description: Alergias actualizadas correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error en la actualización de alergias
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.post('/edit/alergias', getBeneficiarioController.putAlergias);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/orientacion:
+ *   put:
+ *     summary: Actualiza la orientación de un beneficiario
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: ID del beneficiario
+ *               id_orientacion:
+ *                 type: integer
+ *                 description: ID de la orientación
+ *     responses:
+ *       200:
+ *         description: La orientación del beneficiario se actualizó correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al actualizar la orientación del beneficiario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.put('/edit/orientacion', getBeneficiarioController.putOrientacion);
 
+/**
+ * @swagger
+ * /beneficiarios/delete/diagnostico:
+ *   delete:
+ *     summary: Elimina un diagnóstico
+ *     description: Elimina un diagnóstico basado en los identificadores proporcionados.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *               id_diagnostico:
+ *                 type: integer
+ *               id_empleado:
+ *                 type: integer
+ *             required:
+ *               - id_beneficiario
+ *               - id_diagnostico
+ *               - id_empleado
+ *     responses:
+ *       200:
+ *         description: Diagnóstico eliminado con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al eliminar el diagnóstico
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.delete('/delete/diagnostico', getBeneficiarioController.deleteDiagnostico);
+
+/**
+ * @swagger
+ * /beneficiarios/delete/riesgos:
+ *   delete:
+ *     summary: Elimina un riesgo asociado a un beneficiario
+ *     tags: [Riesgos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: ID del beneficiario
+ *               id_riesgo:
+ *                 type: integer
+ *                 description: ID del riesgo
+ *     responses:
+ *       200:
+ *         description: Riesgo eliminado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al eliminar el riesgo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
 router.delete('/delete/riesgos', getBeneficiarioController.deleteRiesgos);
+
+/**
+ * @swagger
+ * /beneficiarios/delete/alergias:
+ *   delete:
+ *     summary: Elimina una alergia de un beneficiario
+ *     tags: [Alergias]
+ *     parameters:
+ *       - in: body
+ *         name: id_beneficiario
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: El ID del beneficiario
+ *       - in: body
+ *         name: id_alergia
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: El ID de la alergia
+ *       - in: body
+ *         name: id_empleado
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: El ID del empleado que realiza la acción
+ *     responses:
+ *       200:
+ *         description: Alergia eliminada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "successful"
+ *                 deleteAlergias:
+ *                   type: object
+ *       400:
+ *         description: Error al eliminar la alergia
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "error"
+ */
 router.delete('/delete/alergias', getBeneficiarioController.deleteAlergias);
 
+/**
+ * @swagger
+ * /beneficiarios/consulta:
+ *   post:
+ *     summary: Realiza una consulta de beneficiario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_empleado:
+ *                 type: integer
+ *                 description: El ID del empleado que realiza la consulta
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: El ID del beneficiario consultado
+ *               id_modulo:
+ *                 type: integer
+ *                 description: El ID del módulo en el que se realiza la consulta
+ *               consulta:
+ *                 type: file
+ *                 description: La consulta realizada por el empleado
+ *     responses:
+ *       200:
+ *         description: Consulta realizada con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de éxito de la consulta
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de resultado de la consulta
+ *                 postConsultas:
+ *                   type: object
+ *                   description: Resultado de la consulta realizada
+ *       400:
+ *         description: Error al realizar la consulta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de error de la consulta
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error de la consulta
+ */
 router.post('/consulta', getBeneficiarioController.postConsulta);
 
+
+/**
+ * @swagger
+ * /beneficiarios/consulta/:
+ *   get:
+ *     summary: Consulta de beneficiario
+ *     description: Obtiene información del beneficiario basándose en el ID proporcionado.
+ *     parameters:
+ *       - in: query
+ *         name: Id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del beneficiario
+ *     responses:
+ *       200:
+ *         description: Información del beneficiario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getConsulta:
+ *                   type: object
+ *       400:
+ *         description: Error al obtener la información del beneficiario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.get('/consulta/', getBeneficiarioController.getConsulta);
+
+/**
+ * @swagger
+ * /beneficiarios/perfil-foto/:
+ *   post:
+ *     summary: Subir una foto de perfil para un beneficiario
+ *     description: Permite subir una foto de perfil para un beneficiario, almacenándola en el servidor y asociándola al beneficiario correspondiente.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: El ID del beneficiario.
+ *               foto:
+ *                 type: string
+ *                 format: binary
+ *                 description: La foto de perfil del beneficiario.
+ *     responses:
+ *       200:
+ *         description: Éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de la operación.
+ *       400:
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error.
+ */
+router.post('/perfil-foto/', getBeneficiarioController.postFoto);
+
+/**
+ * @openapi
+ * '/beneficiarios/perfil-foto/':
+ *   get:
+ *     tags:
+ *       - Beneficiario Controller
+ *     summary: Obtiene la foto del beneficiario
+ *     parameters:
+ *       - in: query
+ *         name: Id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Identificador del beneficiario
+ *     responses:
+ *       200:
+ *         description: Foto obtenida con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "successful"
+ *                 getFoto:
+ *                   type: string
+ *                   example: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQN..."
+ *       400:
+ *         description: Error al obtener la foto
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Error message"
+ */
+router.get('/perfil-foto/', getBeneficiarioController.getFoto);
 module.exports = router;
 
 

@@ -28,6 +28,31 @@ exports.putEgresado= async (req, res, next) => {
   }
 };
 
+exports.postFoto= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const foto  = {
+      id: req.body.id, 
+      foto: req.file.foto
+    };
+
+    result.postFoto = 
+      await beneficiarioServices.postFoto(foto);
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 exports.postConsulta= async (req, res, next) => {
   try {
     const result = {
@@ -513,6 +538,47 @@ exports.postDiagnostico= async (req, res, next) => {
   }
 };
 
+exports.getFoto = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    id = req.query.Id;
+    result.getFoto =
+      await beneficiarioServices.getFoto(id);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.getConsulta= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    id = req.query.Id;
+    result.getConsulta =
+      await beneficiarioServices.getConsulta(id);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
 
 exports.getEpsList= async (req, res, next) => {
   try {

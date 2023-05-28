@@ -1,5 +1,8 @@
 module.exports = {
 
+    post_consulta: require("./post_consulta"),
+    get_Consultas_url: require("./get_Consultas_url"),
+
     post_beneficiario: require("./post_beneficiario"),
 
     put_beneficiario: require("./put_beneficiario"),

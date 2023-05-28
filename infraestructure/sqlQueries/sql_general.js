@@ -1,4 +1,10 @@
 const sqlQueries = {
+    GET_FOTO: 
+        "SELECT * FROM public.profilePhoto WHERE id_persona = \$1",
+
+    POST_FOTO:
+        "INSERT INTO profilePhoto(id_persona, hex) VALUES (\$1, \$2)", 
+
     POST_EPS:
         "INSERT INTO eps (eps) VALUES (\$1);",
 
@@ -23,7 +29,7 @@ const sqlQueries = {
     GET_TIPO_DOC:
         "SELECT abreviacion FROM tipo_doc WHERE id = \$1;", 
     
-    GET_ORIENTACION:
+    GET_MODULO:
         "SELECT modulo FROM modulo WHERE id = \$1;",
 
     GET_USER: 

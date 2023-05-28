@@ -1,4 +1,10 @@
 const sqlQueries = {
+    GET_BENEFICIARIO_CONSULTA_URL:
+        "SELECT * FROM public.reporte_modulo WHERE id_beeficiario = \$1",
+
+    POST_CONSULTA:
+        "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE)",
+
     DELETE_ALERGIA:
         "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1 AND id_tipo_alergia  = \$2 AND id_empleado = \$3;",
 

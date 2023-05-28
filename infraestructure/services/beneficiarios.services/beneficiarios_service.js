@@ -5,6 +5,35 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs7100320029bb315a8;AccountKey=9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==;EndpointSuffix=core.windows.net';
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 
+
+
+exports.postFoto = async(foto) =>{
+  containter = "profilePhotos";
+  const containerClient = blobServiceClient.getContainerClient(container);
+  await containerClient.createIfNotExists();
+
+  const blockBlobClient = containerClient.getBlockBlobClient(foto.foto);
+  const data = fs.readFileSync(foto.foto);
+  await blockBlobClient.uploadData(data);
+  
+  const storageUrl = blockBlobClient.url;
+
+  const Foto = {
+    id_persona: foto.id,
+    ruta: storageUrl
+  };
+
+try { 
+    const postFoto = await queries_General.post_Foto(Foto);
+      const results = [];
+      results.push(postFoto);
+      return results;
+} catch (error) {
+  throw error;
+}
+};
+
+
 exports.postConsultas = async(consulta) =>{
     containter = consulta.id_beneficiario + consulta.id_modulo
     const containerClient = blobServiceClient.getContainerClient(container);
@@ -15,8 +44,35 @@ exports.postConsultas = async(consulta) =>{
     await blockBlobClient.uploadData(data);
     
     const storageUrl = blockBlobClient.url;
-    console.log('Archivo almacenado en:', storageUrl);
-    return storageUrl;
+
+    const Consulta = {
+      id_beneficiario: consulta.id_beneficiario,
+      id_empleado: consulta.id_empleado,
+      id_modulo: consulta.id_modulo,
+      ruta: storageUrl
+    };
+
+  try { 
+      const postConsulta = await queries_Beneficiarios.post_consulta(Consulta);
+        const results = [];
+        results.push(postConsulta);
+        return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.getFoto = async (id) => {
+  try { 
+    const getFoto = await queries_General.get_Foto(id);
+        const result = {
+          id: getFoto.id_persona,
+          ruta: getFoto.hex
+        };
+        return result;
+} catch (error) {
+  throw error;
+}
 };
 
 exports.getOrientacionList = async (orientacion) => {
@@ -27,6 +83,29 @@ exports.getOrientacionList = async (orientacion) => {
         const result = {
           id: row.id,
           Orientacion: row.orientacion
+        };
+        results.push(result);
+      }
+        return results;
+} catch (error) {
+  throw error;
+}
+};
+
+exports.getConsulta = async (id) => {
+  try { 
+    const getConsulta = await queries_Beneficiarios.get_Consultas_url(id);
+      const results = [];
+      for (const row of getConsulta){
+
+        const modulo = await queries_General.get_Modulo(row.id_modulo);
+        const nombreEmpleado = this.nombreEmpleado(row.id_empleado);
+
+        const result = {
+          url: row.hex,
+          modulo: modulo, 
+          responsable: nombreEmpleado,
+          fecha: row.fecha
         };
         results.push(result);
       }

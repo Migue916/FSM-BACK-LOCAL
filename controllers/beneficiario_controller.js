@@ -914,10 +914,8 @@ exports.getBalance= async (req, res, next) => {
     };
 
     const anio = req.query;
-    result.getBalance_Nuevos =
-      await beneficiarioServices.getBalanceNuevos(anio);
-    result.getBalance_Egresados =
-      await beneficiarioServices.getBalanceEgresados(anio);
+    result.getBalance =
+      await beneficiarioServices.getBalance(anio);
       
     response.success(req, res, result, 200, "success");
   } catch (error) {

@@ -753,42 +753,7 @@ function ObtenerMes(mes){
   return mes;
 };
 
-
-
-exports.getBalanceEgresados = async (anio) => {
-  try { 
-    
-        const results = [];
- 
-        const meses = Array.from({ length: 12 }, (_, i) => i+1);
-
-        for (const row of getBalance) {
-          const cant = row.count;
-          const Mes = ObtenerMes(+row.mes);
-          meses[(+row.mes)-1] = 0;
-          const result = {
-            mes: Mes,
-            cantidad: row.cant,
-          };
-          results.push(result);
-        }
-
-        for (let i = 0; i < meses.length; i++){
-          if(meses[i] !== 0){
-            const result = {
-              mes: ObtenerMes(meses[i]),
-              cantidad: 0,
-            };
-            results.push(result);
-          }
-        }
-        return results;
-} catch (error) {
-  throw error;
-}
-};
-
-exports.getBalanceNuevos = async (anio) => {
+exports.getBalance = async (anio) => {
   try { 
     const getBalanceNuevos = await queries_Beneficiarios.get_BalanceNuevos(anio);
     const getBalanceEgresados = await queries_Beneficiarios.get_BalanceEgresados(anio);
@@ -811,8 +776,8 @@ exports.getBalanceNuevos = async (anio) => {
           }
           const result = {
             Mes: ObtenerMes(meses[i]),
-            Nuevos: mesNuevos[0].cant,
-            Egresados: mesEgresos[0].cant
+            Nuevos: mesNuevos[0].count,
+            Egresados: mesEgresos[0].count
           };
           results.push(result);
         }

@@ -404,9 +404,9 @@ exports.getPerfil = async (id) => {
     const getPerfil = await queries_Beneficiarios.get_Perfil(id);
       const results = [];
 
-      const sede = await queries_General.get_sede(getPerfil[0].id_sede);
-      const orientacion = await queries_General.get_orientacion(getPerfil[0].id_orientacion);
-      const eps = await queries_General.get_eps(getPerfil[0].id_eps);
+      const sede = await queries_General.get_sede(+getPerfil[0].id_sede);
+      const orientacion = await queries_General.get_orientacion(+getPerfil[0].id_orientacion);
+      const eps = await queries_General.get_eps(+getPerfil[0].id_eps);
 
       const result = {
           Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
@@ -414,12 +414,12 @@ exports.getPerfil = async (id) => {
           Identificacion: getPerfil[0].id,
           Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
           Edad: getPerfil[0].edad,
-          Diagnostico_p: diagnosticos_principal_beneficiario(id),
+          Diagnostico_p: diagnosticos_principal_beneficiario(+getPerfil[0].id),
           Sede: sede[0].sede, 
           Fecha_ingreso: getPerfil[0].fecha_ingreso, 
-          Diagnostico_s: await diagnosticos_secundarios_beneficiario(id),
-          Riesgos: await riesgos_beneficiario(id),
-          Alergias: await alergias_beneficiario(id),
+          Diagnostico_s: await diagnosticos_secundarios_beneficiario(+getPerfil[0].id),
+          Riesgos: await riesgos_beneficiario(+getPerfil[0].id),
+          Alergias: await alergias_beneficiario(+getPerfil[0].id),
           Orientacion: orientacion[0].orientacion,
           eps: eps[0].eps,
         };   
@@ -435,10 +435,10 @@ const diagnosticos_principal_beneficiario = async(id) =>{
   var getDiagnostico = [];
   if (diagnostico_principal.length === 0) {
     return getDiagnostico;
-  } else {
-    getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(diagnostico_principal[0].id_enfermedad);
-    return getDiagnostico[0].enfermedad;
   }
+  getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(diagnostico_principal[0].id_enfermedad);
+  return getDiagnostico[0].enfermedad;
+  
 };
 
 const diagnosticos_secundarios_beneficiario = async (id) => {
@@ -563,7 +563,7 @@ exports.getBeneficiarios = async (page) => {
 
         Identificacion: row.id,
         Edad: row.edad,
-        Diagnostico_p: diagnosticos_principal_beneficiario(row.id),
+        Diagnostico_p: diagnosticos_principal_beneficiario(+row.id),
         Sede: sede[0].sede, 
         Fecha_ingreso: row.fecha_ingreso,
         Empleado_ultima_consulta: Empleado_ultima_consulta, 
@@ -755,23 +755,33 @@ function ObtenerMes(mes){
 };
 
 
+
 exports.getBalanceEgresados = async (anio) => {
   try { 
     const getBalance = await queries_Beneficiarios.get_BalanceEgresados(anio);
         const results = [];
-      
-        for (const row of getBalance) {
-          var mes = row.mes;
-          const cant = row.count;
-          
-          mes = ObtenerMes(mes);
+ 
+        const meses = Array.from({ length: 12 }, (_, i) => i+1);
 
+        for (const row of getBalance) {
+          const cant = row.count;
+          const Mes = ObtenerMes(+row.mes);
+          meses[(+row.mes)-1] = 0;
           const result = {
-            mes: mes,
+            mes: Mes,
             cantidad: cant,
           };
-    
           results.push(result);
+        }
+
+        for (let i = 0; i < meses.length; i++){
+          if(meses[i] !== 0){
+            const result = {
+              mes: ObtenerMes(meses[i]),
+              cantidad: 0,
+            };
+            results.push(result);
+          }
         }
         return results;
 } catch (error) {
@@ -783,19 +793,28 @@ exports.getBalanceNuevos = async (anio) => {
   try { 
     const getBalance = await queries_Beneficiarios.get_BalanceNuevos(anio);
         const results = [];
-      
-        for (const row of getBalance) {
-          var mes = row.mes;
-          const cant = row.count;
-          
-          mes = ObtenerMes(mes);
 
+        const meses = Array.from({ length: 12 }, (_, i) => i+1);
+
+        for (const row of getBalance) {
+          const cant = row.count;
+          const Mes = ObtenerMes(+row.mes);
+          meses[(+row.mes)-1] = 0;
           const result = {
-            mes: mes,
+            mes: Mes,
             cantidad: cant,
           };
-    
           results.push(result);
+        }
+
+        for (let i = 0; i < meses.length; i++){
+          if(meses[i] !== 0){
+            const result = {
+              mes: ObtenerMes(meses[i]),
+              cantidad: 0,
+            };
+            results.push(result);
+          }
         }
         return results;
 } catch (error) {
@@ -878,7 +897,7 @@ exports.getBeneficiariosLastTen = async () => {
               segundo_apellido: segundo_apellido,
               sede: sede[0].sede,
               edad: edad,
-              Diagnostico_p: diagnosticos_principal_beneficiario(id),
+              Diagnostico_p: diagnosticos_principal_beneficiario(+row.id),
               fecha_nacimiento: fecha_nacimiento,
               orientacion: orientacion[0].orientacion,
               fecha_ingreso: fecha_ingreso,
@@ -903,7 +922,7 @@ exports.getBeneficiariosActuales = async () => {
 
     const result = {
       value: +actual[0].count,
-      percentage: porcentaje
+      percentage: porcentaje.fixedTo(2)
     };
     return result;
   } catch (error) {
@@ -922,7 +941,7 @@ exports.getBeneficiariosEgresados = async () => {
 
       const result = {
         value: +actual[0].count,
-        percentage: porcentaje
+        percentage: porcentaje.fixedTo(2)
       };
     return result;
   } catch (error) {
@@ -940,7 +959,7 @@ exports.getBeneficiariosNuevos = async () => {
 
       const result = {
         value: +actual[0].count,
-        percentage: porcentaje
+        percentage: porcentaje.fixedTo(2)
       };
     return result;
   } catch (error) {

@@ -447,7 +447,7 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
     var allDiagnosticos = [];
   
     if (diagnosticos_secundarios.length === 0) {
-
+      return allDiagnosticos;
     } else {
       for (const row of diagnosticos_secundarios) {
         const diagnosticos_secundario = await queries_Beneficiarios.get_tipos_diagnosticos(row.id_enfermedad);
@@ -458,7 +458,6 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
           });
       }
     }
-  
     return allDiagnosticos;
 } catch (error) {
   throw error;
@@ -758,7 +757,7 @@ function ObtenerMes(mes){
 
 exports.getBalanceEgresados = async (anio) => {
   try { 
-    const getBalance = await queries_Beneficiarios.get_BalanceEgresados(anio);
+    
         const results = [];
  
         const meses = Array.from({ length: 12 }, (_, i) => i+1);
@@ -791,30 +790,31 @@ exports.getBalanceEgresados = async (anio) => {
 
 exports.getBalanceNuevos = async (anio) => {
   try { 
-    const getBalance = await queries_Beneficiarios.get_BalanceNuevos(anio);
+    const getBalanceNuevos = await queries_Beneficiarios.get_BalanceNuevos(anio);
+    const getBalanceEgresados = await queries_Beneficiarios.get_BalanceEgresados(anio);
         const results = [];
-
         const meses = Array.from({ length: 12 }, (_, i) => i+1);
-
-        for (const row of getBalance) {
-          const cant = row.count;
-          const Mes = ObtenerMes(+row.mes);
-          meses[(+row.mes)-1] = 0;
+        for (let i = 0; i < meses.length; i++){
+          const mesNuevos = getBalanceNuevos.filter(element => element.mes === meses[i]);
+          const mesEgresos = getBalanceEgresados.filter(element => element.mes === meses[i]);
+          if(mesNuevos.lenght === 0){
+            mesNuevos = {
+              mes: meses[i],
+              cant: 0
+            };
+          }
+          if(mesEgresos.lenght === 0){
+            mesEgresos = {
+              mes: meses[i],
+              cant: 0
+            };
+          }
           const result = {
-            mes: Mes,
-            cantidad: cant,
+            Mes: ObtenerMes(meses[i]),
+            Nuevos: mesNuevos[0].cant,
+            Egresados: mesEgresos[0].cant
           };
           results.push(result);
-        }
-
-        for (let i = 0; i < meses.length; i++){
-          if(meses[i] !== 0){
-            const result = {
-              mes: ObtenerMes(meses[i]),
-              cantidad: 0,
-            };
-            results.push(result);
-          }
         }
         return results;
 } catch (error) {
@@ -840,9 +840,9 @@ exports.getBuscaPorNombre = async (nombre) => {
       const id_orientacion = row.id_orientacion;
       const fecha_ingreso = row.fecha_ingreso;
   
-      const tipo_doc = await queries_General.get_tipo_doc(id_tipo_doc);
-      const sede = await queries_General.get_sede(id_sede);
-      const orientacion = await queries_General.get_orientacion(id_orientacion);
+      const tipo_doc = await queries_General.get_tipo_doc(+id_tipo_doc);
+      const sede = await queries_General.get_sede(+id_sede);
+      const orientacion = await queries_General.get_orientacion(+id_orientacion);
   
       const result = {
         id: id,
@@ -884,9 +884,9 @@ exports.getBeneficiariosLastTen = async () => {
             const id_orientacion = row.id_orientacion;
             const fecha_ingreso = row.fecha_ingreso;
         
-            const tipo_doc = await queries_General.get_tipo_doc(id_tipo_doc);
-            const sede = await queries_General.get_sede(id_sede);
-            const orientacion = await queries_General.get_orientacion(id_orientacion);
+            const tipo_doc = await queries_General.get_tipo_doc(+id_tipo_doc);
+            const sede = await queries_General.get_sede(+id_sede);
+            const orientacion = await queries_General.get_orientacion(+id_orientacion);
         
             const result = {
               id: id,
@@ -913,16 +913,15 @@ exports.getBeneficiariosLastTen = async () => {
 
 exports.getBeneficiariosActuales = async () => {
   try {
-    // Segunda forma si va a hacer los calculos desde javascript
-    const actual =
+    const actual = 
       await queries_Beneficiarios.get_BeneficiariosActuales();
-    const pasado =
+    const pasado = 
       await queries_Beneficiarios.get_BeneficiariosActualesPasado();
-    const porcentaje = (100/(+pasado[0].count))*((+actual[0].count) - (+pasado[0].count));
+    const porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
 
     const result = {
       value: +actual[0].count,
-      percentage: porcentaje.fixedTo(2)
+      percentage: Number(porcentaje).toFixed(2)
     };
     return result;
   } catch (error) {
@@ -930,19 +929,19 @@ exports.getBeneficiariosActuales = async () => {
   }
 };
 
+
 exports.getBeneficiariosEgresados = async () => {
   try {
-    // Segunda forma si va a hacer los calculos desde javascript
     const actual =
       await queries_Beneficiarios.get_BeneficiariosEgresados();
     const pasado =
       await queries_Beneficiarios.get_BeneficiariosEgresadosPasado();
-      const porcentaje = (100/(+pasado[0].count))*((+actual[0].count) - (+pasado[0].count));
+    const porcentaje = (100/(+pasado[0].count))*((+actual[0].count) - (+pasado[0].count));
 
-      const result = {
-        value: +actual[0].count,
-        percentage: porcentaje.fixedTo(2)
-      };
+    const result = {
+      value: +actual[0].count,
+      percentage: Number(porcentaje).toFixed(2)
+    };
     return result;
   } catch (error) {
     throw error;
@@ -955,12 +954,12 @@ exports.getBeneficiariosNuevos = async () => {
       await queries_Beneficiarios.get_BeneficiariosNuevos();
     const pasado =
       await queries_Beneficiarios.get_BeneficiariosNuevosPasado();
-      const porcentaje = (100/(+pasado[0].count))*((+actual[0].count) - (+pasado[0].count));
+    const porcentaje = (100/(+pasado[0].count))*((+actual[0].count) - (+pasado[0].count));
 
-      const result = {
-        value: +actual[0].count,
-        percentage: porcentaje.fixedTo(2)
-      };
+    const result = {
+      value: +actual[0].count,
+      percentage: Number(porcentaje).toFixed(2)
+    };
     return result;
   } catch (error) {
     throw error;

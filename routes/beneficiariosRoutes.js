@@ -5,7 +5,7 @@ const router = express.Router();
 /**
  * @swagger
  * /beneficiarios/egresar:
- *   put:
+ *   post:
  *     summary: Actualizar información de un egresado
  *     description: Actualiza la información de un egresado en la base de datos.
  *     requestBody:

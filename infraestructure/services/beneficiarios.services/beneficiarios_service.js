@@ -549,12 +549,10 @@ exports.getBeneficiarios = async (page) => {
       const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
 
-      console.log(ultima_consulta[0].id_empleado);
-
-      const Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
-      
-      if(ultima_consulta.lenght === 0)
-        Empleado_ultima_consulta = null;
+      const Empleado_ultima_consulta = null;
+      if(ultima_consulta.length !== 0){
+        Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
+      }
 
       const result = {
         Nombre: row.p_nombre + " " +
@@ -758,11 +756,32 @@ exports.getBalance = async (anio) => {
   try { 
     const getBalanceNuevos = await queries_Beneficiarios.get_BalanceNuevos(anio);
     const getBalanceEgresados = await queries_Beneficiarios.get_BalanceEgresados(anio);
+
     const results = [];
+    const resultsNuevo = [];
+    const resultsEgresado = [];
+
     const meses = Array.from({ length: 12 }, (_, i) => i+1);
+
+    for(const row of getBalanceNuevos){
+      const resultNuevos = {
+        mes: row.mes, 
+        count: row.count
+      };
+      resultsNuevo.push(resultNuevos);
+    }
+
+    for(const row of getBalanceEgresados){
+      const resultEgresado = {
+        mes: row.mes, 
+        count: row.count
+      };
+      resultsEgresado.push(resultEgresado);
+    }
+
     for (let i = 0; i < meses.length; i++){
-      let mesNuevos = getBalanceNuevos.filter(element => element.mes === meses[i]);
-      let mesEgresos = getBalanceEgresados.filter(element => element.mes === meses[i]);
+      let mesNuevos = resultsNuevo.filter(element => element.mes === meses[i]);
+      let mesEgresos = resultsEgresado.filter(element => element.mes === meses[i]);
       if(mesNuevos.length === 0){
         mesNuevos = {
           mes: meses[i],
@@ -775,8 +794,6 @@ exports.getBalance = async (anio) => {
           count: 0
         };
       }
-      console.log(mesNuevos);
-      console.log(mesEgresos);
       const result = {
         Mes: ObtenerMes(meses[i]),
         Nuevos: mesNuevos[0].count,
@@ -884,8 +901,10 @@ exports.getBeneficiariosActuales = async () => {
       await queries_Beneficiarios.get_BeneficiariosActuales();
     const pasado = 
       await queries_Beneficiarios.get_BeneficiariosActualesPasado();
-    const porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
-
+    let porcentaje = 100;
+    if(pasado.length !== 0){
+      porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
+    }
     const result = {
       value: +actual[0].count,
       percentage: Number(porcentaje).toFixed(2)
@@ -903,7 +922,11 @@ exports.getBeneficiariosEgresados = async () => {
       await queries_Beneficiarios.get_BeneficiariosEgresados();
     const pasado =
       await queries_Beneficiarios.get_BeneficiariosEgresadosPasado();
-    const porcentaje = (100/(+pasado[0].count))*((+actual[0].count) - (+pasado[0].count));
+    
+    let porcentaje = 100;
+    if(pasado.length !== 0){
+      porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
+    }
 
     const result = {
       value: +actual[0].count,
@@ -921,7 +944,11 @@ exports.getBeneficiariosNuevos = async () => {
       await queries_Beneficiarios.get_BeneficiariosNuevos();
     const pasado =
       await queries_Beneficiarios.get_BeneficiariosNuevosPasado();
-    const porcentaje = (100/(+pasado[0].count))*((+actual[0].count) - (+pasado[0].count));
+
+    let porcentaje = 100;
+    if(pasado.length !== 0){
+      porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
+    }
 
     const result = {
       value: +actual[0].count,

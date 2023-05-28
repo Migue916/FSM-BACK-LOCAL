@@ -768,7 +768,7 @@ exports.getBalanceEgresados = async (anio) => {
           meses[(+row.mes)-1] = 0;
           const result = {
             mes: Mes,
-            cantidad: cant,
+            cantidad: row.cant,
           };
           results.push(result);
         }

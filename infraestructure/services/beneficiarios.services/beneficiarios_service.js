@@ -99,12 +99,12 @@ exports.getConsulta = async (id) => {
       for (const row of getConsulta){
 
         const modulo = await queries_General.get_Modulo(row.id_modulo);
-        const nombreEmpleado = this.nombreEmpleado(row.id_empleado);
+        const empleado = await nombreEmpleado(+row.id_empleado);
 
         const result = {
           url: row.hex,
-          modulo: modulo, 
-          responsable: nombreEmpleado,
+          modulo: modulo[0].modulo, 
+          responsable: empleado.Nombre + " " + empleado.Apellido,
           fecha: row.fecha
         };
         results.push(result);
@@ -115,15 +115,17 @@ exports.getConsulta = async (id) => {
 }
 };
 
-exports.nombreEmpleado = async(id) =>{
-  try { 
-    const nombreEmpleado = await queries_Empleados.get_nombre(id);
+const nombreEmpleado = async(id) =>{
+  try {
+    const nombreEmpleado = await queries_Empleados.get_nombre(+id);
+
     const result = {
       id: id,
-      Nombre: get_nombre[0].p_nombre + " " + get_nombre[0].s_nombre,
-      Apellido: get_nombre[0].p_apellido + " " + get_nombre[0].s_apellido,
-      Cargo: get_nombre[0].cargo
+      Nombre: nombreEmpleado[0].p_nombre + " " + nombreEmpleado[0].s_nombre,
+      Apellido: nombreEmpleado[0].p_apellido + " " + nombreEmpleado[0].s_apellido,
+      Cargo: nombreEmpleado[0].id_cargo
     };
+
     return result;
 } catch (error) {
   throw error;
@@ -414,7 +416,7 @@ exports.getPerfil = async (id) => {
           Identificacion: getPerfil[0].id,
           Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
           Edad: getPerfil[0].edad,
-          Diagnostico_p: diagnosticos_principal_beneficiario(id),
+          Diagnostico_p: await diagnosticos_principal_beneficiario(id),
           Sede: sede[0].sede, 
           Fecha_ingreso: getPerfil[0].fecha_ingreso, 
           Diagnostico_s: await diagnosticos_secundarios_beneficiario(id),
@@ -432,32 +434,36 @@ exports.getPerfil = async (id) => {
 
 const diagnosticos_principal_beneficiario = async(id) =>{
   const diagnostico_principal = await queries_Beneficiarios.get_diagnostico_principal(id);
+
   var getDiagnostico = [];
   if (diagnostico_principal.length === 0) {
     return getDiagnostico;
   }
   getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(+diagnostico_principal[0].id_enfermedad);
-  return getDiagnostico[0].enfermedad;
+  diagnostico = getDiagnostico[0].enfermedad;
+  return diagnostico;
 };
 
 const diagnosticos_secundarios_beneficiario = async (id) => {
   try { 
     const diagnosticos_secundarios = await queries_Beneficiarios.get_diagnosticos_secundarios(id);
     var allDiagnosticos = [];
-  
     if (diagnosticos_secundarios.length === 0) {
-      return allDiagnosticos;
+
     } else {
       for (const row of diagnosticos_secundarios) {
         const diagnosticos_secundario = await queries_Beneficiarios.get_tipos_diagnosticos(+row.id_enfermedad);
-        const empleado = nombreEmpleado(diagnosticos_secundario[0].id_empleado);
-        allDiagnosticos.push({ 
-            diagnosticos_secundario: diagnosticos_secundario[0].enfermedad,
-            Empleado: empleado[0].Nombre,
-            Fecha: diagnosticos_secundario[0].fecha
-          });
+        const id_empleados = diagnosticos_secundarios[0].id_empleado;
+        const empleado = await nombreEmpleado(+id_empleados);
+        diagnostico = {
+          diagnosticos_secundario: diagnosticos_secundario[0].enfermedad,
+          Empleado: empleado.Nombre + " " + empleado.Apellido ,
+          Fecha: diagnosticos_secundario[0].fecha
+        };
+        allDiagnosticos.push(diagnostico);
       }
     }
+    console.log(allDiagnosticos);
     return allDiagnosticos;
 } catch (error) {
   throw error;
@@ -474,12 +480,14 @@ const riesgos_beneficiario = async (id) => {
     } else {
       for (const row of riesgos) {
         const riesgo = await queries_Beneficiarios.get_riesgos_list(row.id_riesgo);
-        const empleado = nombreEmpleado(riesgo[0].id_empleado);
-        allRiesgo.push({ 
+        const id_empleados = riesgo[0].id_empleado;
+        const empleado = await nombreEmpleado(id_empleados);
+        const riesgos = {
           riesgos: riesgo[0].riesgo,
-          Empleado: empleado[0].Nombre,
+          Empleado: empleado.Nombre + " " + empleado.Apellido ,
           Fecha: riesgo[0].fecha
-        });
+        };
+        allRiesgo.push(riesgos);
       }
     }
     return allRiesgo;
@@ -498,12 +506,14 @@ const alergias_beneficiario = async (id) => {
     } else {
       for (const row of alergias) {
         const alergia = await queries_Beneficiarios.get_alergias_list(row.id_tipo_alergia);
-        const empleado = nombreEmpleado(alergia[0].id_empleado);
-        allAlergias.push({
-           alergias: alergia[0].alergia,
-           Empleado: empleado[0].Nombre,
-           Fecha: alergia[0].fecha
-          });
+        const id_empleados = alergia[0].id_empleado;
+        const empleado = await nombreEmpleado(+id_empleados);
+        const alergias = {
+          alergias: alergia[0].alergia,
+          Empleado: empleado.Nombre + " " + empleado.Apellido ,
+          Fecha: alergia[0].fecha
+         };
+        allAlergias.push(alergias);
       }
     }
     return allAlergias;
@@ -562,7 +572,7 @@ exports.getBeneficiarios = async (page) => {
 
         Identificacion: row.id,
         Edad: row.edad,
-        Diagnostico_p: diagnosticos_principal_beneficiario(+row.id),
+        Diagnostico_p: await diagnosticos_principal_beneficiario(+row.id),
         Sede: sede[0].sede, 
         Fecha_ingreso: row.fecha_ingreso,
         Empleado_ultima_consulta: Empleado_ultima_consulta, 
@@ -752,52 +762,46 @@ function ObtenerMes(mes){
   };
   return mes;
 };
+
 exports.getBalance = async (anio) => {
   try { 
     const getBalanceNuevos = await queries_Beneficiarios.get_BalanceNuevos(anio);
     const getBalanceEgresados = await queries_Beneficiarios.get_BalanceEgresados(anio);
 
     const results = [];
-    const resultsNuevo = [];
-    const resultsEgresado = [];
 
     const meses = Array.from({ length: 12 }, (_, i) => i+1);
 
-    for(const row of getBalanceNuevos){
-      const resultNuevos = {
-        mes: row.mes, 
-        count: row.count
-      };
-      resultsNuevo.push(resultNuevos);
-    }
-
-    for(const row of getBalanceEgresados){
-      const resultEgresado = {
-        mes: row.mes, 
-        count: row.count
-      };
-      resultsEgresado.push(resultEgresado);
-    }
+    let mesNuevos = [];
+    let mesEgresos = [];
 
     for (let i = 0; i < meses.length; i++){
-      let mesNuevos = resultsNuevo.filter(element => element.mes === meses[i]);
-      let mesEgresos = resultsEgresado.filter(element => element.mes === meses[i]);
+
+      if(getBalanceNuevos.length !==0){
+        mesNuevos = getBalanceNuevos.filter(element => +element.mes === meses[i]);
+      }
+
+      if(getBalanceEgresados.length !== 0){
+        mesEgresos = getBalanceEgresados.filter(element => +element.mes === meses[i]);
+      }
+
       if(mesNuevos.length === 0){
-        mesNuevos = {
+        mesNuevos = [{
           mes: meses[i],
           count: 0
-        };
+        }];
       }
       if(mesEgresos.length === 0){
-        mesEgresos = {
+        mesEgresos = [{
           mes: meses[i],
           count: 0
-        };
+        }];
       }
+
       const result = {
         Mes: ObtenerMes(meses[i]),
-        Nuevos: mesNuevos[0].count,
-        Egresados: mesEgresos[0].count
+        Nuevos: +mesNuevos[0].count,
+        Egresados: +mesEgresos[0].count
       };
       results.push(result);
     }
@@ -823,6 +827,7 @@ exports.getBuscaPorNombre = async (nombre) => {
       const fecha_nacimiento = row.fecha_nacimiento;
       const id_orientacion = row.id_orientacion;
       const fecha_ingreso = row.fecha_ingreso;
+
   
       const tipo_doc = await queries_General.get_tipo_doc(+id_tipo_doc);
       const sede = await queries_General.get_sede(+id_sede);
@@ -835,6 +840,7 @@ exports.getBuscaPorNombre = async (nombre) => {
         segundo_nombre: segundo_nombre,
         primer_apellido: primer_apellido,
         segundo_apellido: segundo_apellido,
+        edad: row.edad,
         sede: sede[0].sede,
         fecha_nacimiento: fecha_nacimiento,
         orientacion: orientacion[0].orientacion,
@@ -881,7 +887,7 @@ exports.getBeneficiariosLastTen = async () => {
               segundo_apellido: segundo_apellido,
               sede: sede[0].sede,
               edad: edad,
-              Diagnostico_p: diagnosticos_principal_beneficiario(+row.id),
+              Diagnostico_p: await diagnosticos_principal_beneficiario(+row.id),
               fecha_nacimiento: fecha_nacimiento,
               orientacion: orientacion[0].orientacion,
               fecha_ingreso: fecha_ingreso,

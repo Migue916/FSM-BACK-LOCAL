@@ -1,6 +1,6 @@
 const sqlQueries = {
     GET_BENEFICIARIO_CONSULTA_URL:
-        "SELECT * FROM public.reporte_modulo WHERE id_beeficiario = \$1",
+        "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1",
 
     POST_CONSULTA:
         "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE)",
@@ -84,7 +84,7 @@ const sqlQueries = {
         "SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true ORDER BY fecha_ingreso DESC LIMIT 10;", 
         
     GET_BENEFICIARIOS_POR_NOMBRE:
-        "SELECT * FROM ( SELECT *, SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$1) AS similitud FROM beneficiario WHERE estado = true ORDER BY fecha_ingreso DESC LIMIT 10 ) AS subconsulta WHERE similitud > 0.07 ORDER BY similitud DESC;",
+        "SELECT * FROM ( SELECT *, SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$1)  AS similitud, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true ORDER BY fecha_ingreso DESC LIMIT 10 ) AS subconsulta WHERE similitud > 0.09 ORDER BY similitud DESC;",
     
     GET_BALANCE_NUEVOS: 
         "SELECT EXTRACT(MONTH FROM fecha_ingreso) AS mes, COUNT(*) FROM beneficiario WHERE EXTRACT(YEAR FROM fecha_ingreso) = \$1 GROUP BY mes ORDER BY mes;",

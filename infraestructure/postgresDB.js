@@ -1,5 +1,13 @@
+const dotenv = require('dotenv');
 require('dotenv').config();
 const { Pool } = require('pg');
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (!isProduction) {
+  dotenv.config();
+}
+
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
 const pool = new Pool({
@@ -9,7 +17,7 @@ const pool = new Pool({
   database: DB_NAME,
   port: 5432,
   ssl: {
-    require: true,
+    require: isProduction,
     rejectUnauthorized: false,
   },
 });

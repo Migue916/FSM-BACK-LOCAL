@@ -4,7 +4,7 @@ const sqlQueries = require("../../sqlQueries/sql_Empleados");
 
 const get_EmpleadosModulo = async (id) => {
     try{
-        const idEmpleado = parseInt(id.id);
+        const idEmpleado = parseInt(id);
         const result = await pool.DBConnection.query(sqlQueries.GET_NOMBRE, [idEmpleado]);
         return result.rows;
     } catch(error){

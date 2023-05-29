@@ -6,3 +6,7 @@ node_modules/
 
 # Ignorar todos os arquivos com extensão .log
 *.log
+
+# .gitignore
+.env
+

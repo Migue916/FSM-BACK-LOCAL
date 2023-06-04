@@ -1,20 +1,15 @@
 const response = require("./responses/response");
 const empleadosServices = require("../infraestructure/services/empleados.services/empleados_service");
 
-exports.getEmpleados= async (req, res, next) => {
+exports.getEmpleadosLastTen= async (req, res, next) => {
   try {
     const result = {
       status: true,
       message: "successful",
     };
-    const page = req.query;
-    const total_paginas =
-      await empleadosServices.getEmpleadosActuales();
-
-    result.paginas = (total_paginas.value)/10;
 
     result.getEmpleados =
-      await empleadosServices.getEmpleados(page);
+      await empleadosServices.getEmpleadosLastTen();
       
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -33,7 +28,7 @@ exports.getNombre = async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    id = req.query;
+    id = req.query.id;
     result.Nombre =
       await empleadosServices.nombreEmpleado(id);
 
@@ -118,9 +113,14 @@ exports.getStatisticsEmpleados = async (req, res, next) => {
             status: true,
             message: "successful",
           };
+          const page = req.query;
+          const total_paginas =
+            await empleadosServices.getEmpleadosActuales();
       
+          result.paginas = (total_paginas.value)/10;
+
           result.empleados =
-            await empleadosServices.getEmpleados();
+            await empleadosServices.getEmpleados(page);
       
           response.success(req, res, result, 200, "success");
         } catch (error) {

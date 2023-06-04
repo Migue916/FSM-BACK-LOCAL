@@ -2,6 +2,10 @@ const express = require("express");
 const getBeneficiarioController = require("../controllers/beneficiario_controller");
 const router = express.Router();
 
+
+
+router.post('/egresar', getBeneficiarioController.putEgresado);
+
 /**
  * @swagger
  * /beneficiarios/egresar:

@@ -3,7 +3,12 @@ const sqlQueries = require("../../sqlQueries/sql_Beneficiarios");
 
 const get_AlergiasList = async (alergias) => {
     try {
-        const result = await pool.DBConnection.query(sqlQueries.GET_ALERGIAS_LIST, [alergias]);
+        let result;
+        if(alergias === undefined){
+            result = await pool.DBConnection.query(sqlQueries.GET_ALERGIAS_LIST);
+        }else{
+            result = await pool.DBConnection.query(sqlQueries.GET_ALERGIAS_LIST_BUSQUEDA, [alergias]);
+        }
         return result.rows;
     } catch (error) {
         throw error;

@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/estadisticas', getEmpleadoController.getStatisticsEmpleados);
 router.get('/estadisticas/genero', getEmpleadoController.getStatisticsEmpleadosGenero);
 router.get('/estadisticas/modulo', getEmpleadoController.getStatisticsEmpleadosModulo);
-router.get('/lastTen', getEmpleadoController.getEmpleados);
+router.get('/lastTen', getEmpleadoController.getEmpleadosLastTen);
 router.get('/ten/', getEmpleadoController.getEmpleadosPorNombre);
 router.get('/saludo/', getEmpleadoController.getNombre);
 router.get('/listAll/', getEmpleadoController.getEmpleados);

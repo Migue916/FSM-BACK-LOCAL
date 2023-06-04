@@ -30,16 +30,28 @@ const sqlQueries = {
         "INSERT INTO public.enfermedad_rel_beneficiario( id_enfermedad, id_beneficiario, id_empleado, fecha, tipo, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE,\$4, \$5);",
    
     GET_ORIENTACION_LIST:
-        "select * from (SELECT *, SIMILARITY(orientacion, \$1) AS similitud FROM orientacion) as sc where similitud > 0.08",
+        "select * from orientacion",
+    
+    GET_ORIENTACION_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(orientacion, \$1) AS similitud FROM orientacion) as sc where similitud > 0.07",
 
     GET_ALERGIAS_LIST:
-        "select * from (SELECT *, SIMILARITY(alergia, \$1) AS similitud FROM tipo_alergia) as sc where similitud > 0.4",
+        "select * from tipo_alergia",
 
-    GET_RIESGO_LIST:
+    GET_ALERGIAS_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(alergia, \$1) AS similitud FROM tipo_alergia) as sc where similitud > 0.07",
+
+    GET_RIESGO_LIST_BUSQUEDA:
         "select * from (SELECT *, SIMILARITY(riesgo, \$1) AS similitud FROM riesgos) as sc where similitud > 0.07",
+    
+    GET_RIESGO_LIST:
+        "select * from RIESGOS",
 
-    GET_SEDE_LIST:
+    GET_SEDE_LIST_BUSQUEDA:
         "select * from (SELECT *, SIMILARITY(sede, \$1) AS similitud FROM sede) as sc where similitud > 0.07",
+    
+    GET_SEDE_LIST:
+        "select * from SEDE",
 
     GET_DIAGNOSTICOS_LIST:
         "select * from (SELECT *, SIMILARITY(enfermedad, \$1) AS similitud FROM enfermedades) as sc where similitud > 0.07",

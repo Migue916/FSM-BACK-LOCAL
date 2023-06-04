@@ -11,8 +11,6 @@ exports.ingresar = async (req, res, next) => {
       message: "successful",
     };
 
-    console.log(req.body);
-
       const originalUser = {
         email: req.body.correo,
         contrasena: req.body.contrasena,
@@ -75,8 +73,6 @@ exports.ingresar = async (req, res, next) => {
 exports.user_create = async (req, res, next) => {
   let result = [];
   try {
-    console.log("Salt: ", saltRounds);
-    console.log("Contraseña: ", req.body.contrasena);
     const employee = {
       id: req.body.id,
       id_tipo_doc: req.body.id_tipo_doc,

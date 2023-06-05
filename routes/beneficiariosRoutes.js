@@ -1818,7 +1818,7 @@ router.get('/consulta/', getBeneficiarioController.getConsulta);
 router.post('/perfil-foto/', getBeneficiarioController.postFoto);
 
 /**
- * @openapi
+ * @swagger
  * '/beneficiarios/perfil-foto/':
  *   get:
  *     tags:
@@ -1863,6 +1863,48 @@ router.post('/perfil-foto/', getBeneficiarioController.postFoto);
  *                   example: "Error message"
  */
 router.get('/perfil-foto/', getBeneficiarioController.getFoto);
+
+/**
+ * @swagger
+ * /beneficiarios/list/tipo-doc:
+ *   get:
+ *     summary: Obtiene la lista de tipos de documentos de beneficiarios
+ *     description: Retorna la lista de tipos de documentos de beneficiarios en base al tipo de documento proporcionado
+ *     parameters:
+ *       - in: query
+ *         name: TipoDoc
+ *         schema:
+ *           type: string
+ *         description: El tipo de documento a filtrar
+ *     responses:
+ *       200:
+ *         description: Lista de tipos de documentos obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getTipoDocList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Error al obtener la lista de tipos de documentos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.get('/list/tipo-doc', getBeneficiarioController.getTipoDocList);
 module.exports = router;
 
 

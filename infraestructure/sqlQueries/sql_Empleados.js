@@ -1,10 +1,16 @@
 const sqlQueries = {
 
+    GET_EMPLEADO_CARGO:
+    "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true", 
+
+    GET_EMPLEADO_CARGO_IDENTITY:
+    "SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido, ' ',id), \$1) > 0.07);",
+
     GET_EMPLEADO:
         "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true OFFSET \$1 LIMIT \$2", 
 
     GET_EMPLEADO_IDENTITY:
-        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND ((SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$3)) > 0.07 OR id = cast(\$3 AS INTEGER)) ) AS busqueda OFFSET \$1 LIMIT \$2",
+        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$3) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda OFFSET \$1 LIMIT \$2;",
 
     GET_NOMBRE: 
         "SELECT * FROM empleado WHERE id = \$1",

@@ -8,6 +8,7 @@ module.exports = {
     get_GeneroList: require("./get_GeneroList"),
     get_EpsList: require("./get_EpsList"),
     get_Foto: require("./get_Foto"),
+    get_Tipo_Doc_List: require("./get_Tipo_Doc_List"),
     
     create_user: require("./create_user"),
     create_user_account: require("./create_user_account"),

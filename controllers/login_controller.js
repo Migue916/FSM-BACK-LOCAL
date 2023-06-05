@@ -82,6 +82,7 @@ exports.user_create = async (req, res, next) => {
       s_apellido: req.body.s_apellido,
       id_profesion: req.body.id_profesion,
       tarjeta_profesional: req.body.tarjeta_profesional,
+      fecha_nacimiento: req.body.fecha_nacimiento,
       id_cargo: req.body.id_cargo,
       activo: req.body.activo,
       id_genero: req.body.id_genero,

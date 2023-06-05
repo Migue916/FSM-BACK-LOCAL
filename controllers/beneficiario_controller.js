@@ -586,9 +586,9 @@ exports.getEpsList= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-
+    eps = req.query.Eps;
     result.getEpsList =
-      await beneficiarioServices.getEpsList();
+      await beneficiarioServices.getEpsList(eps);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -609,8 +609,10 @@ exports.getGeneroList= async (req, res, next) => {
       message: "successful",
     };
 
+    genero = req.query.Genero;
+
     result.getGeneroList =
-      await beneficiarioServices.getGeneroList();
+      await beneficiarioServices.getGeneroList(genero);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -622,6 +624,30 @@ exports.getGeneroList= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
+exports.getTipoDocList= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    tipoDoc = req.query.TipoDoc;
+
+    result.getTipoDocList =
+      await beneficiarioServices.getTipoDocList(tipoDoc);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 
 exports.getAlergiasList= async (req, res, next) => {
   try {

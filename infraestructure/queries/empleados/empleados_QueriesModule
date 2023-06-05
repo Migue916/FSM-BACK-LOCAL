@@ -14,4 +14,6 @@ module.exports = {
     get_EmpleadosPorNombre: require("./get_EmpleadosPorNombre"),
     get_nombre: require("./get_nombre"),
     get_Empleados: require("./get_Empleados"),
+
+    get_Empleados_Por_Cargo: require("./get_Empleados_Por_Cargo"),
 };

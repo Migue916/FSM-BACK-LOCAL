@@ -11,11 +11,17 @@ const sqlQueries = {
     POST_GENERO:
         "INSERT INTO genero (genero) VALUES (\$1);",
 
+    GET_EPS_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(eps, \$1) AS similitud FROM eps) as sc where similitud > 0.07",
+
     GET_EPS_LIST:
         "SELECT * FROM EPS",
 
     GET_GENERO_LIST:
         "SELECT * FROM GENERO",
+    
+    GET_GENERO_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(genero, \$1) AS similitud FROM genero) as sc where similitud > 0.07",
 
     GET_EPS:
         "SELECT * FROM EPS WHERE id = \$1",
@@ -36,7 +42,7 @@ const sqlQueries = {
         "SELECT * FROM USERS WHERE email = \$1;", 
     
     CREATE_USER:
-        "INSERT INTO empleado (id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_profesion, tarjeta_profesional, id_cargo, activo, id_genero, fecha_ingreso, pertenencia_de_modulo) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, \$11, CURRENT_DATE, \$12)",
+        "INSERT INTO empleado (id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_profesion, tarjeta_profesional, id_cargo, activo, id_genero, fecha_ingreso, pertenencia_de_modulo, fecha_nacimiento) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, \$11, CURRENT_DATE, \$12, \$13)",
     
     CREATE_USER_ACCOUNT:
         "INSERT INTO USERS (id, email, contrasena, cargo) VALUES (\$1, \$2, \$3, \$4)",
@@ -55,5 +61,11 @@ const sqlQueries = {
       
     POST_ORIENTACION:
         "INSERT INTO public.orientacion( orientacion) VALUES (\$1);",
+
+    GET_TIPO_DOC_LIST:
+        "SELECT * FROM TIPO_DOC",
+    
+    GET_TIPO_DOC_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(ABREVIACION, \$1) AS similitud FROM TIPO_DOC) as sc where similitud > 0.07",
 };
 module.exports = sqlQueries;

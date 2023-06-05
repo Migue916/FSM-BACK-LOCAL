@@ -138,7 +138,7 @@ const sqlQueries = {
         "SELECT DISTINCT fecha_ingreso from beneficiario WHERE ESTADO = TRUE",
     
     GET_BENEFICIARIO_IDENTITY:
-        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND ((SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido), \$3)) > 0.07 OR id = cast(\$3 AS INTEGER)) ) AS busqueda OFFSET \$1 LIMIT \$2",
+        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM beneficiario WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$3) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda OFFSET \$1 LIMIT \$2;",
 
     CREATE_BENEFICIARIO:
         "INSERT INTO public.beneficiario(id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_sede, fecha_nacimiento, id_genero, id_orientacion, fecha_ingreso, id_eps, id_psicologo, id_trabajador_social, estado) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, CURRENT_DATE, \$11, \$12, \$13, \$14)",

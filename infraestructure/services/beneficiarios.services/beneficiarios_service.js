@@ -349,9 +349,9 @@ exports.getRiesgosList = async (riegos) => {
 }
 };
 
-exports.getEpsList = async () => {
+exports.getEpsList = async (eps) => {
   try { 
-    const getEpsList = await queries_General.get_EpsList();
+    const getEpsList = await queries_General.get_EpsList(eps);
     const results = [];
     for (const row of getEpsList){
         const result = {
@@ -366,14 +366,31 @@ exports.getEpsList = async () => {
 }
 };
 
-exports.getGeneroList = async () => {
+exports.getGeneroList = async (genero) => {
   try { 
-    const getGeneroList = await queries_General.get_GeneroList();
+    const getGeneroList = await queries_General.get_GeneroList(genero);
     const results = [];
     for (const row of getGeneroList){
         const result = {
         id: row.id,
         genero: row.genero
+      };
+      results.push(result);
+    }
+    return results;
+} catch (error) {
+  throw error;
+}
+};
+
+exports.getTipoDocList = async (tipoDoc) => {
+  try { 
+    const getTipoDocList = await queries_General.get_Tipo_Doc_List(tipoDoc);
+    const results = [];
+    for (const row of getTipoDocList){
+        const result = {
+        id: row.id,
+        tipoDoc: row.abreviacion
       };
       results.push(result);
     }
@@ -582,16 +599,16 @@ exports.getBeneficiarios = async (page) => {
     }
     var filtredData = results;
     if (page.Sede !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Sede = page.Sede);
+      filtredData = filtredData.filter(beneficiario => beneficiario.Sede === page.Sede);
     }
     if (page.Edad !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Edad = +page.Edad);
+      filtredData = filtredData.filter(beneficiario => beneficiario.Edad === +page.Edad);
     }
     if (page.Diagnostico_p !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Diagnostico_p = page.Diagnostico_p);
+      filtredData = filtredData.filter(beneficiario => beneficiario.Diagnostico_p === page.Diagnostico_p);
     }
     if (page.Fecha_ingreso !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Fecha_ingreso = page.Fecha_ingreso);
+      filtredData = filtredData.filter(beneficiario => beneficiario.Fecha_ingreso === page.Fecha_ingreso);
     }
     return filtredData;
   } catch (error) {

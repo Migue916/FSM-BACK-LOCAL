@@ -575,29 +575,36 @@ exports.getBeneficiarios = async (page) => {
       const sede = await queries_General.get_sede(row.id_sede);
       const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
+      const genero = await queries_General.get_genero(row.id_genero);
 
-      const Empleado_ultima_consulta = null;
+      let Empleado_ultima_consulta = null;
       if(ultima_consulta.length !== 0){
         Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
       }
 
       const result = {
+        Identificacion: row.id,
         Nombre: row.p_nombre + " " +
                 row.s_nombre + " " +
                 row.p_apellido + " " +
                 row.s_apellido,
 
-        Identificacion: row.id,
         Edad: row.edad,
+        Genero: genero.genero,
         Diagnostico_p: await diagnosticos_principal_beneficiario(+row.id),
         Sede: sede[0].sede, 
         Fecha_ingreso: row.fecha_ingreso,
         Empleado_ultima_consulta: Empleado_ultima_consulta, 
         Orientacion: orientacion[0].orientacion,
+        Riesgos: await riesgos_beneficiario(row.id)
       };
       results.push(result);
     }
-    var filtredData = results;
+    let filtredData = results;
+
+    if (page.Genero !== undefined){
+      filtredData = filtredData.filter(beneficiario => beneficiario.Genero === page.Genero);
+    }
     if (page.Sede !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Sede === page.Sede);
     }
@@ -609,6 +616,12 @@ exports.getBeneficiarios = async (page) => {
     }
     if (page.Fecha_ingreso !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Fecha_ingreso === page.Fecha_ingreso);
+    }
+    if (page.Riesgos !== undefined){
+      filtredData = filtredData.filter(beneficiario => beneficiario.Riesgos === page.Riesgos.riesgos);
+    }
+    if (page.Orientacion !== undefined){
+      filtredData = filtredData.filter(beneficiario => beneficiario.Orientacion === page.Riesgos.Orientacion);
     }
     return filtredData;
   } catch (error) {
@@ -623,6 +636,40 @@ exports.getBeneficiariosFechasIng = async () => {
         for (const row of getBeneficiariosFechasIng) { 
           const result = {
             Fecha_ingreso: row.fecha_ingreso,
+          };
+          results.push(result);
+        }
+        return results;
+} catch (error) {
+  throw error;
+}
+};
+
+exports.getBeneficiariosGenero = async () => {
+  try { 
+    const getBeneficiariosGenero = await queries_Beneficiarios.get_Beneficiarios_Genero();
+      const results = [];
+        for (const row of getBeneficiariosGenero) { 
+          const genero = await queries_General.get_genero(row.id_genero);
+          const result = {
+            Genero: genero.genero,
+          };
+          results.push(result);
+        }
+        return results;
+} catch (error) {
+  throw error;
+}
+};
+
+exports.getBeneficiariosRiesgos = async () => {
+  try { 
+    const getBeneficiariosRiesgos = await queries_Beneficiarios.get_Beneficiarios_Riesgos();
+      const results = [];
+        for (const row of get_Beneficiarios_Riesgos) { 
+          const genero = await queries_General.get_genero(row.id_genero);
+          const result = {
+            Genero: genero.genero,
           };
           results.push(result);
         }

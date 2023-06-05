@@ -827,6 +827,12 @@ exports.getDesplegables= async (req, res, next) => {
       await beneficiarioServices.getBeneficiariosSedes();
     result.getBeneficiariosFechasIng =
       await beneficiarioServices.getBeneficiariosFechasIng();
+    result.getBeneficiariosGenero =
+      await beneficiarioServices.getBeneficiariosGenero();
+    result.getBeneficiariosRiesgos =
+      await beneficiarioServices.getBeneficiariosRiesgos();
+    result.getBeneficiariosOrientacion =
+      await beneficiarioServices.getBeneficiariosOrientacion();
       
     response.success(req, res, result, 200, "success");
   } catch (error) {

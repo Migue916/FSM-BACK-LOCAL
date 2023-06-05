@@ -1,4 +1,7 @@
 const sqlQueries = {
+    GET_BENEFICIARIOS_GENERO:
+        "SELECT DISTINCT id_genero from beneficiario where estado = true",
+
     GET_BENEFICIARIO_CONSULTA_URL:
         "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1",
 

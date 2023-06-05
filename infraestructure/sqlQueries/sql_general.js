@@ -38,6 +38,9 @@ const sqlQueries = {
     GET_MODULO:
         "SELECT modulo FROM modulo WHERE id = \$1;",
 
+    GET_GENERO:
+        "SELECT * FROM GENERO WHERE id = \$1;",
+
     GET_USER: 
         "SELECT * FROM USERS WHERE email = \$1;", 
     

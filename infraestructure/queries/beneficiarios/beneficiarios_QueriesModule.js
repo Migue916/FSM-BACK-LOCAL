@@ -59,6 +59,8 @@ module.exports = {
     get_BeneficiariosDiagnosticos: require("./get_BeneficiariosDiagnosticos"),
     get_BeneficiariosSedes:require("./get_BeneficiariosSedes"),
     get_BeneficiariosFechasIng:require("./get_BeneficiariosFechasIng"),
+    getBeneficiarios_Genero: require("./get_Beneficiarios_Genero"),
+
     
     
 };

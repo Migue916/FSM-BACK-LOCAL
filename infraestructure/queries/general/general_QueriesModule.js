@@ -5,6 +5,7 @@ module.exports = {
     get_Modulo: require("./get_Modulo"),
     get_user: require("./get_user"),
     get_eps: require("./get_eps"),
+    get_genero: require("./get_genero"),
     get_GeneroList: require("./get_GeneroList"),
     get_EpsList: require("./get_EpsList"),
     get_Foto: require("./get_Foto"),

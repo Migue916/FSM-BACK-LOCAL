@@ -1,4 +1,9 @@
 const sqlQueries = {
+    GET_BENEFICIARIOS_ORIENTACION:
+        "SELECT DISTINCT id_orientacion FROM beneficiario",
+    GET_BENEFICIARIOS_RIESGO:
+        "SELECT DISTINCT id_riesgo from beneficiario_rel_riesgo",
+
     GET_BENEFICIARIOS_GENERO:
         "SELECT DISTINCT id_genero from beneficiario where estado = true",
 

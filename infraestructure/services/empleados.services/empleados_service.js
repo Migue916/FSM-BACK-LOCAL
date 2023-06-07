@@ -122,7 +122,11 @@ exports.getEmpleados = async (page) => {
     if (page.Modulo !== undefined){
       filtredData = filtredData.filter(empleado => empleado.Modulo === page.Modulo);
     }
-
+    if (page.ConsultasIn !== undefined && page.ConsultasFn !== undefined) {
+      filtredData = filtredData.filter(empleado => 
+        empleado.Consultas_realizadas >= page.ConsultasIn && empleado.Consultas_realizadas <= page.ConsultasFn
+      );
+    }
     return filtredData;
   } catch (error) {
     throw error;
@@ -279,4 +283,38 @@ exports.getEmpleadosActuales = async () => {
     } catch (error) {
       throw error;
     }
+  };
+
+  exports.getEmpleadosCargos = async () => {
+    try { 
+      const getEmpleadosCargos = await queries_Empleados.get_EmpleadosCargos();
+        const results = [];
+          for (const row of getEmpleadosCargos) { 
+            const cargo = await queries_Empleados.get_Cargo(row.id_cargo);  
+            const result = {
+              cargos: cargo[0].cargo,
+            };
+            results.push(result);
+          }
+          return results;
+  } catch (error) {
+    throw error;
+  }
+  };
+
+  exports.getEmpleadosModulos = async () => {
+    try { 
+      const getEmpleadosModulos = await queries_Empleados.get_EmpleadosModulos();
+        const results = [];
+          for (const row of getEmpleadosModulos) { 
+            const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
+            const result = {
+              modulos: modulo[0].modulo,
+            };
+            results.push(result);
+          }
+          return results;
+  } catch (error) {
+    throw error;
+  }
   };

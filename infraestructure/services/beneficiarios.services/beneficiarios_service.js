@@ -622,15 +622,11 @@ exports.getBeneficiarios = async (page) => {
     if (page.Sede !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Sede === page.Sede);
     }
-    if (page.Edad !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Edad === +page.Edad);
-    }
+
     if (page.Diagnostico_p !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Diagnostico_p === page.Diagnostico_p);
     }
-    if (page.Fecha_ingreso !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Fecha_ingreso === page.Fecha_ingreso);
-    }
+
     if (page.Riesgos !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Riesgos === page.Riesgos.riesgos);
     }
@@ -643,21 +639,6 @@ exports.getBeneficiarios = async (page) => {
   }
 };
 
-exports.getBeneficiariosFechasIng = async () => {
-  try { 
-    const getBeneficiariosFechasIng = await queries_Beneficiarios.get_BeneficiariosFechasIng();
-      const results = [];
-        for (const row of getBeneficiariosFechasIng) { 
-          const result = {
-            Fecha_ingreso: row.fecha_ingreso,
-          };
-          results.push(result);
-        }
-        return results;
-} catch (error) {
-  throw error;
-}
-};
 
 exports.getBeneficiariosGenero = async () => {
   try { 
@@ -736,22 +717,6 @@ exports.getBeneficiariosDiagnosticos = async () => {
           const diagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(row.id_enfermedad);  
           const result = {
             Diagnosticos: diagnostico[0].enfermedad,
-          };
-          results.push(result);
-        }
-        return results;
-} catch (error) {
-  throw error;
-}
-};
-
-exports.getBeneficiariosEdades = async () => {
-  try { 
-    const getBeneficiariosEdades = await queries_Beneficiarios.get_BeneficiariosEdades();
-      const results = [];
-        for (const row of getBeneficiariosEdades) { 
-          const result = {
-            edad: row.edad,
           };
           results.push(result);
         }
@@ -971,6 +936,16 @@ exports.getBeneficiariosLastTen = async () => {
             const tipo_doc = await queries_General.get_tipo_doc(+id_tipo_doc);
             const sede = await queries_General.get_sede(+id_sede);
             const orientacion = await queries_General.get_orientacion(+id_orientacion);
+
+            let riesgos = await riesgos_beneficiario(row.id);
+            if(riesgos.length === 0){
+               riesgos = null;
+            }
+
+            let diagnostico = await diagnosticos_principal_beneficiario(row.id)
+            if(diagnostico.length === 0){
+              diagnostico = null;
+            }
         
             const result = {
               id: id,
@@ -981,7 +956,8 @@ exports.getBeneficiariosLastTen = async () => {
               segundo_apellido: segundo_apellido,
               sede: sede[0].sede,
               edad: edad,
-              Diagnostico_p: await diagnosticos_principal_beneficiario(+row.id),
+              riesgos: riesgos,
+              Diagnostico_p: diagnostico,
               fecha_nacimiento: fecha_nacimiento,
               orientacion: orientacion[0].orientacion,
               fecha_ingreso: fecha_ingreso,

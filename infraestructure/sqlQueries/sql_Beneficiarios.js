@@ -1,4 +1,10 @@
 const sqlQueries = {
+    GET_BENEFICIARIO_EDAD_FILTER:
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN \$3 AND \$4 OFFSET \$1 LIMIT \$2",
+
+    GET_BENEFICIARIO_FECHA_FILTER:
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND fecha_ingreso BETWEEN \$3 AND \$4 OFFSET \$1 LIMIT \$2",
+
     GET_BENEFICIARIOS_ORIENTACION:
         "SELECT DISTINCT id_orientacion FROM beneficiario",
     GET_BENEFICIARIOS_RIESGO:

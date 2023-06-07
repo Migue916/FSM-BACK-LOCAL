@@ -1,10 +1,19 @@
 const sqlQueries = {
 
+    GET_EMPLEADOS_MODULOS:
+        "SELECT DISTINCT PERTENENCIA_DE_MODULO FROM EMPLEADO WHERE ACTIVO = TRUE",
+
+    GET_EMPLEADOS_CARGOS:
+        "SELECT DISTINCT ID_CARGO FROM EMPLEADO WHERE ACTIVO = TRUE",
+
     GET_EMPLEADO_CARGO:
-    "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true", 
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true", 
 
     GET_EMPLEADO_CARGO_IDENTITY:
-    "SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido, ' ',id), \$1) > 0.07);",
+        "SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre,' ', s_nombre,' ', p_apellido,' ', s_apellido, ' ',id), \$1) > 0.07);",
+
+    GET_EMPLEADO_EDAD_FILTER:
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN \$3 AND \$4 OFFSET \$1 LIMIT \$2",
 
     GET_EMPLEADO:
         "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true OFFSET \$1 LIMIT \$2", 

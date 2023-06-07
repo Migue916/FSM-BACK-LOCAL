@@ -371,6 +371,6 @@ router.get('/listAll/', getEmpleadoController.getEmpleados);
  */
 router.get('/filtarCargo/', getEmpleadoController.getEmpleadosPorCargo);
 
-
+router.get('/desplegables', getEmpleadoController.getDesplegables);
 
 module.exports = router;

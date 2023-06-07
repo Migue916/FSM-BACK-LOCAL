@@ -819,14 +819,11 @@ exports.getDesplegables= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    result.getBeneficiariosEdades =
-      await beneficiarioServices.getBeneficiariosEdades();
+    
     result.getBeneficiariosDiagnosticos =
       await beneficiarioServices.getBeneficiariosDiagnosticos();
     result.getBeneficiariosSedes =
       await beneficiarioServices.getBeneficiariosSedes();
-    result.getBeneficiariosFechasIng =
-      await beneficiarioServices.getBeneficiariosFechasIng();
     result.getBeneficiariosGenero =
       await beneficiarioServices.getBeneficiariosGenero();
     result.getBeneficiariosRiesgos =

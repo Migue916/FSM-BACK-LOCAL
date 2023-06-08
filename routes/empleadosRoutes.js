@@ -371,6 +371,82 @@ router.get('/listAll/', getEmpleadoController.getEmpleados);
  */
 router.get('/filtarCargo/', getEmpleadoController.getEmpleadosPorCargo);
 
+/**
+ * @swagger
+ * /empleados/desplegables:
+ *   get:
+ *     summary: Obtiene información desplegable para empleados
+ *     description: Obtiene información desplegable para empleados, como cargos y módulos.
+ *     responses:
+ *       200:
+ *         description: Información desplegable obtenida con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de éxito o error
+ *                 getEmpleadosCargos:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     description: Información de cargos de empleados
+ *                 getEmpleadosModulos:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     description: Información de módulos de empleados
+ */
 router.get('/desplegables', getEmpleadoController.getDesplegables);
+
+/**
+ * @swagger
+ * /empleados/perfil:
+ *   get:
+ *     summary: Obtener el perfil de un empleado
+ *     description: Retorna el perfil de un empleado basado en su Id.
+ *     parameters:
+ *       - in: query
+ *         name: Id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Identificación del empleado
+ *     responses:
+ *       200:
+ *         description: Perfil del empleado obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 Nombre:
+ *                   type: string
+ *                 Apellido:
+ *                   type: string
+ *                 Identificacion:
+ *                   type: integer
+ *                 Fecha_nacimiento:
+ *                   type: string
+ *                 Edad:
+ *                   type: integer
+ *                 Fecha_ingreso:
+ *                   type: string
+ *                 Num_consultas:
+ *                   type: string
+ *                 Cargo:
+ *                   type: string
+ *                 Modulo:
+ *                   type: string
+ *       400:
+ *         description: Error al obtener el perfil del empleado
+ */
+router.get('/perfil/', getEmpleadoController.getPerfil);
+
 
 module.exports = router;

@@ -1,4 +1,6 @@
 const sqlQueries = {
+    GET_EMPLEADOS_PERFIL:
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE id = \$1",
 
     GET_EMPLEADOS_MODULOS:
         "SELECT DISTINCT PERTENENCIA_DE_MODULO FROM EMPLEADO WHERE ACTIVO = TRUE",

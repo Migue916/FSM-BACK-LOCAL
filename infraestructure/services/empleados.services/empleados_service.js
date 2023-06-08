@@ -318,3 +318,38 @@ exports.getEmpleadosActuales = async () => {
     throw error;
   }
   };
+
+  
+exports.getPerfil = async (id) => {
+  try { 
+    const getPerfil = await queries_Empleados.get_Perfil(id);
+      const results = [];
+
+      const consultas = await queries_Empleados.get_Consultas(id);
+      const cargo = await queries_Empleados.get_Cargo(getPerfil[0].id_cargo);
+      const modulo = await queries_General.get_Modulo(getPerfil[0].pertenencia_de_modulo);
+
+      if (consultas.length === 0){
+        consultas.push(
+          {
+            cant:"0"
+          }
+        )
+      }
+      const result = {
+          Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
+          Apellido: getPerfil[0].p_apellido + " " + getPerfil[0].s_apellido,
+          Identificacion: getPerfil[0].id,
+          Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
+          Edad: getPerfil[0].edad,
+          Fecha_ingreso: getPerfil[0].fecha_ingreso, 
+          Num_consultas: consultas[0].cant,
+          Cargo: cargo[0].cargo, 
+          Modulo: modulo[0].modulo
+        };   
+        results.push(result);
+        return results;
+} catch (error) {
+  throw error;
+}
+};

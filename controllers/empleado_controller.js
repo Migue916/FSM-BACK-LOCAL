@@ -204,3 +204,24 @@ exports.getDesplegables= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
+exports.getPerfil= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    result.getPerfil =
+      await empleadosServices.getPerfil(req.query.Id);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};

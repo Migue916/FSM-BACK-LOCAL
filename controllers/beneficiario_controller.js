@@ -35,11 +35,8 @@ exports.postFoto= async (req, res, next) => {
       message: "successful",
     };
 
-      const id = req.body.id; 
-      const foto = req.file.path;
-
     result.postFoto = 
-      await beneficiarioServices.postFoto(id, foto);
+      await beneficiarioServices.postFoto(req);
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

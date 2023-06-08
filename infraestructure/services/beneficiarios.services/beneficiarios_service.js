@@ -7,7 +7,11 @@ const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs710032002
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 
 
-exports.postFoto = async (id, pathToUploadedFile) => {
+exports.postFoto = async (req) => {
+  
+  const id = req.body.id; 
+  const pathToUploadedFile = req.file.path;
+
   const containerName = 'profilephotos';
   const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();

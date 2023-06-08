@@ -1,8 +1,17 @@
 const express = require("express");
 const getBeneficiarioController = require("../controllers/beneficiario_controller");
 const router = express.Router();
+
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now())
+    }
+  });
+  const upload = multer({ storage: storage });
 
 
 
@@ -1818,7 +1827,7 @@ router.get('/consulta/', getBeneficiarioController.getConsulta);
  *                   type: string
  *                   description: Mensaje de error.
  */
-router.post('/perfil-foto/', upload.single('foto'), getBeneficiarioController.postFoto);
+router.post('/perfil-foto', upload.single('file'), getBeneficiarioController.postFoto);
 
 /**
  * @swagger

@@ -8,8 +8,8 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(connectionStrin
 
 
 exports.postFoto = async(foto) =>{
-  containter = "profilePhotos";
-  const containerClient = blobServiceClient.getContainerClient(container);
+  const containter = "profilePhotos";
+  const containerClient = blobServiceClient.getContainerClient(containter);
   await containerClient.createIfNotExists();
 
   const blockBlobClient = containerClient.getBlockBlobClient(foto.foto);

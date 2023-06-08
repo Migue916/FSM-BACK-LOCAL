@@ -37,7 +37,7 @@ exports.postFoto= async (req, res, next) => {
 
     const foto  = {
       id: req.body.id, 
-      foto: req.file
+      foto: req.file.buffer
     };
 
     result.postFoto = 

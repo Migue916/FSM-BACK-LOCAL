@@ -1,6 +1,9 @@
 const express = require("express");
 const getBeneficiarioController = require("../controllers/beneficiario_controller");
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
+
 
 
 
@@ -1815,7 +1818,7 @@ router.get('/consulta/', getBeneficiarioController.getConsulta);
  *                   type: string
  *                   description: Mensaje de error.
  */
-router.post('/perfil-foto/', getBeneficiarioController.postFoto);
+router.post('/perfil-foto/', upload.single('foto'), getBeneficiarioController.postFoto);
 
 /**
  * @swagger

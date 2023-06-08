@@ -6,16 +6,17 @@ const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs710032002
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 
 
-
-exports.postFoto = async(foto) =>{
-  const containter = "profilePhotos";
-  const containerClient = blobServiceClient.getContainerClient(containter);
+exports.postFoto = async (foto) => {
+  const containerName = "profilephotos";
+  const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();
 
   const blockBlobClient = containerClient.getBlockBlobClient(foto.foto);
-  const data = fs.readFileSync(foto.foto);
-  await blockBlobClient.uploadData(data);
-  
+  const stream = fs.createReadStream(foto.foto);
+
+  const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
+  await blockBlobClient.uploadStream(stream, undefined, undefined, options);
+
   const storageUrl = blockBlobClient.url;
 
   const Foto = {
@@ -23,14 +24,14 @@ exports.postFoto = async(foto) =>{
     ruta: storageUrl
   };
 
-try { 
+  try { 
     const postFoto = await queries_General.post_Foto(Foto);
-      const results = [];
-      results.push(postFoto);
-      return results;
-} catch (error) {
-  throw error;
-}
+    const results = [];
+    results.push(postFoto);
+    return results;
+  } catch (error) {
+    throw error;
+  }
 };
 
 

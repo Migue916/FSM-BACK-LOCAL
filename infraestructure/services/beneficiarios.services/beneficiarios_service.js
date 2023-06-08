@@ -8,11 +8,11 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(connectionStrin
 
 
 exports.postFoto = async (id, pathToUploadedFile) => {
-  const containerName = "profilephotos";
+  const containerName = 'profilephotos';
   const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();
 
-  const blobName = Date.now() + "_" + pathToUploadedFile;
+  const blobName = Date.now() + '_' + req.file.originalname;
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   const stream = fs.createReadStream(pathToUploadedFile);
 
@@ -23,10 +23,10 @@ exports.postFoto = async (id, pathToUploadedFile) => {
 
   const Foto = {
     id_persona: id,
-    ruta: storageUrl
+    ruta: storageUrl,
   };
 
-  try { 
+  try {
     const postFoto = await queries_General.post_Foto(Foto);
     const results = [];
     results.push(postFoto);
@@ -39,9 +39,10 @@ exports.postFoto = async (id, pathToUploadedFile) => {
       console.log('File deleted successfully');
     });
 
-    return results;
+    res.json(results);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).send('Server error');
   }
 };
 

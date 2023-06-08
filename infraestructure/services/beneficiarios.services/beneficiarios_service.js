@@ -1,3 +1,4 @@
+const fs = require('fs');
 const queries_Beneficiarios = require("../../queries/beneficiarios/beneficiarios_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
@@ -6,13 +7,14 @@ const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs710032002
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 
 
-exports.postFoto = async (id, foto) => {
+exports.postFoto = async (id, pathToUploadedFile) => {
   const containerName = "profilephotos";
   const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();
 
-  const blockBlobClient = containerClient.getBlockBlobClient(foto);
-  const stream = fs.createReadStream(foto);
+  const blobName = Date.now() + "_" + pathToUploadedFile;
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  const stream = fs.createReadStream(pathToUploadedFile);
 
   const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
   await blockBlobClient.uploadStream(stream, undefined, undefined, options);
@@ -28,11 +30,21 @@ exports.postFoto = async (id, foto) => {
     const postFoto = await queries_General.post_Foto(Foto);
     const results = [];
     results.push(postFoto);
+
+    fs.unlink(pathToUploadedFile, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log('File deleted successfully');
+    });
+
     return results;
   } catch (error) {
     throw error;
   }
 };
+
 
 
 exports.postConsultas = async(consulta) =>{

@@ -36,7 +36,7 @@ exports.postFoto= async (req, res, next) => {
     };
 
       const id = req.body.id; 
-      const foto = req.file.buffer;
+      const foto = req.file;
 
     result.postFoto = 
       await beneficiarioServices.postFoto(id, foto);

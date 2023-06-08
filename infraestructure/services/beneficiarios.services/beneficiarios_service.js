@@ -6,13 +6,13 @@ const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs710032002
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 
 
-exports.postFoto = async (foto) => {
+exports.postFoto = async (id, foto) => {
   const containerName = "profilephotos";
   const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();
 
-  const blockBlobClient = containerClient.getBlockBlobClient(foto.foto);
-  const stream = fs.createReadStream(foto.foto);
+  const blockBlobClient = containerClient.getBlockBlobClient(foto);
+  const stream = fs.createReadStream(foto);
 
   const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
   await blockBlobClient.uploadStream(stream, undefined, undefined, options);
@@ -20,7 +20,7 @@ exports.postFoto = async (foto) => {
   const storageUrl = blockBlobClient.url;
 
   const Foto = {
-    id_persona: foto.id,
+    id_persona: id,
     ruta: storageUrl
   };
 

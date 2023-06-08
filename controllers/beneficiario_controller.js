@@ -35,13 +35,11 @@ exports.postFoto= async (req, res, next) => {
       message: "successful",
     };
 
-    const foto  = {
-      id: req.body.id, 
-      foto: req.file.buffer
-    };
+      const id = req.body.id; 
+      const foto = req.file.buffer;
 
     result.postFoto = 
-      await beneficiarioServices.postFoto(foto);
+      await beneficiarioServices.postFoto(id, foto);
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

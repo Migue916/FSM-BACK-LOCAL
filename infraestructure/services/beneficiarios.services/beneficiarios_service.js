@@ -690,7 +690,11 @@ exports.getBeneficiarios = async (page) => {
       filtredData = filtredData.filter(beneficiario => beneficiario.Orientacion === page.Orientacion);
     }
 
-    const firstTenRecords = filtredData.slice((+page.page)-1, (+page.page)*10);
+    const remainingRecords = filtredData.length % 10;
+    const isLastPage = Math.ceil(filtredData.length / 10) === +page.page;
+    const recordsToTake = isLastPage ? Math.min(remainingRecords, 10) : 10;
+
+    const firstTenRecords = filtredData.slice((+page.page - 1) * 10, (+page.page - 1) * 10 + recordsToTake);
     
     const filtrados = {
         Cantidad_filtrada : filtredData.length, 

@@ -544,12 +544,12 @@ exports.getFoto = async (req, res, next) => {
     const id = req.query.Id;
     const file = await beneficiarioServices.getFoto(id);
 
-    console.log(file);
+    result.archivo = file;
 
     res.setHeader('Content-Disposition', `attachment; filename=${file.name}`);
     res.setHeader('Content-Type', file.type);
 
-    res.send(file);
+    response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
       status: false,

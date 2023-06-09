@@ -6,6 +6,7 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs7100320029bb315a8;AccountKey=9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==;EndpointSuffix=core.windows.net';
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 const { Blob } = require('buffer');
+const { fileURLToPath } = require('url');
 
 exports.postFoto = async (req) => {
   
@@ -82,7 +83,6 @@ exports.postConsultas = async(consulta) =>{
 
 async function getBlobUrl(id) {
   const foto = await queries_General.get_Foto(id);
-  console.log('FOTO[0].HEX: ' + foto[0].hex)
   return foto[0].hex;
 };
 
@@ -108,6 +108,7 @@ async function blobToFile(blob, filename) {
   const buffer = Buffer.from(await blob.arrayBuffer());
   buffer.name = filename;
   buffer.type = blob.type;
+
   return buffer;
 };
 
@@ -126,7 +127,7 @@ exports.getFoto = async (id) => {
     const { containerName, blobName } = await getContainerAndBlobName(url);
     const blob = await downloadBlob(blobServiceClient, containerName, blobName);
     const file = await blobToFile(blob, 'filename.jpg');
-    return blob;
+    return file;
   } catch (error) {
     throw error;
   }

@@ -82,6 +82,7 @@ exports.postConsultas = async(consulta) =>{
 
 async function getBlobUrl(id) {
   const foto = await queries_General.get_Foto(id);
+  console.log('FOTO[0].HEX: ' + foto[0].hex)
   return foto[0].hex;
 };
 
@@ -107,7 +108,6 @@ async function blobToFile(blob, filename) {
   const buffer = Buffer.from(await blob.arrayBuffer());
   buffer.name = filename;
   buffer.type = blob.type;
-  console.log(buffer);
   return buffer;
 };
 
@@ -680,18 +680,25 @@ exports.getBeneficiarios = async (page) => {
     if (page.Sede !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Sede === page.Sede);
     }
-
     if (page.Diagnostico_p !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Diagnostico_p === page.Diagnostico_p);
     }
-
     if (page.Riesgos !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Riesgos === page.Riesgos);
     }
     if (page.Orientacion !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Orientacion === page.Orientacion);
     }
-    return filtredData;
+
+    const firstTenRecords = filtredData.slice((+page.page)-1, (+page.page)*10);
+    
+    const filtrados = {
+        Cantidad_filtrada : filtredData.length, 
+        Numero_de_paginas : filtredData.length/10
+    };
+    firstTenRecords.push(filtrados);
+
+    return firstTenRecords;
   } catch (error) {
     throw error;
   }

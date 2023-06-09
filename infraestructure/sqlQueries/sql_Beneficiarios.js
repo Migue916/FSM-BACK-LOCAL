@@ -1,9 +1,9 @@
 const sqlQueries = {
     GET_BENEFICIARIO_EDAD_FILTER:
-        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN \$3 AND \$4 OFFSET \$1 LIMIT \$2",
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN \$1 AND \$2",
 
     GET_BENEFICIARIO_FECHA_FILTER:
-        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND fecha_ingreso BETWEEN \$3 AND \$4 OFFSET \$1 LIMIT \$2",
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND fecha_ingreso BETWEEN \$1 AND \$2 ",
 
     GET_BENEFICIARIOS_ORIENTACION:
         "SELECT DISTINCT id_orientacion FROM beneficiario",
@@ -137,7 +137,7 @@ const sqlQueries = {
         "SELECT * FROM reporte_modulo WHERE id_beneficiario = \$1 order by fecha DESC LIMIT 1",   
     
     GET_BENEFICIARIO:
-        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true OFFSET \$1 LIMIT \$2",   
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true",   
     
     GET_BENEFICIARIOS_EDADES:
         "SELECT DISTINCT EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true",
@@ -152,7 +152,7 @@ const sqlQueries = {
         "SELECT DISTINCT fecha_ingreso from beneficiario WHERE ESTADO = TRUE",
     
     GET_BENEFICIARIO_IDENTITY:
-        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM beneficiario WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$3) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda OFFSET \$1 LIMIT \$2;",
+        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM beneficiario WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$1) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda;",
 
     CREATE_BENEFICIARIO:
         "INSERT INTO public.beneficiario(id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_sede, fecha_nacimiento, id_genero, id_orientacion, fecha_ingreso, id_eps, id_psicologo, id_trabajador_social, estado) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, CURRENT_DATE, \$11, \$12, \$13, \$14)",

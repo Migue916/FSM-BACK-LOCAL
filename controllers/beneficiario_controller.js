@@ -548,8 +548,6 @@ exports.getFoto = async (req, res, next) => {
     res.setHeader('Content-Type', file.type);
 
     res.send(file);
-
-    response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
       status: false,
@@ -559,6 +557,7 @@ exports.getFoto = async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
 
 exports.getConsulta= async (req, res, next) => {
   try {
@@ -842,7 +841,7 @@ exports.getDesplegables= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
-exports.getBeneficiarios= async (req, res, next) => {
+exports.getBeneficiarios = async (req, res, next) => {
   try {
     const result = {
       status: true,
@@ -850,19 +849,13 @@ exports.getBeneficiarios= async (req, res, next) => {
     };
     
     const page = req.query;
-
-    const total_paginas =
-      await beneficiarioServices.getBeneficiariosActuales();
-
-    result.paginas = 
-       (total_paginas.value)/10;
-
-    result.cantidad = 
-       total_paginas.value;
     
+    result.Total =
+    (await beneficiarioServices.getBeneficiariosActuales()).value;
+
     result.getBeneficiarios =
       await beneficiarioServices.getBeneficiarios(page);
-      
+    
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
@@ -873,6 +866,7 @@ exports.getBeneficiarios= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
 
 exports.getEstEdad= async (req, res, next) => {
   try {

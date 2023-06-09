@@ -28,15 +28,14 @@ exports.putEgresado= async (req, res, next) => {
   }
 };
 
-exports.postFoto= async (req, res, next) => {
+exports.postFoto = async (req, res, next) => {
   try {
     const result = {
       status: true,
       message: "successful",
     };
 
-    result.postFoto = 
-      await beneficiarioServices.postFoto(req);
+    result.postFoto = await beneficiarioServices.postFoto(req);
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
@@ -47,6 +46,7 @@ exports.postFoto= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+  
 
 exports.postConsulta= async (req, res, next) => {
   try {

@@ -661,7 +661,7 @@ exports.getBeneficiarios = async (page) => {
                 row.s_apellido,
 
         Edad: row.edad,
-        Genero: genero.genero,
+        Genero: genero[0].genero,
         Diagnostico_p: diagnostico,
         Sede: sede[0].sede, 
         Fecha_ingreso: row.fecha_ingreso,
@@ -686,10 +686,10 @@ exports.getBeneficiarios = async (page) => {
     }
 
     if (page.Riesgos !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Riesgos === page.Riesgos.riesgos);
+      filtredData = filtredData.filter(beneficiario => beneficiario.Riesgos === page.Riesgos);
     }
     if (page.Orientacion !== undefined){
-      filtredData = filtredData.filter(beneficiario => beneficiario.Orientacion === page.Riesgos.Orientacion);
+      filtredData = filtredData.filter(beneficiario => beneficiario.Orientacion === page.Orientacion);
     }
     return filtredData;
   } catch (error) {

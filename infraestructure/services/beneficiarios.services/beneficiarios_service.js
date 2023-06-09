@@ -665,11 +665,12 @@ exports.getBeneficiarios = async (page) => {
     if (page.EdadIn !== undefined && page.EdadFn !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
     }
-
-    const FecInDate = new Date(page.FecIn);
-    const FecFnDate = new Date(page.FecFn);
     
-    if (FecInDate !== undefined && FecFnDate !== undefined) {
+    if (page.FecIn !== undefined && page.FecFn !== undefined) { 
+      
+      const FecInDate = new Date(page.FecIn);
+      const FecFnDate = new Date(page.FecFn);
+
       filtredData = filtredData.filter(beneficiario => {
         const FechaIngresoDate = new Date(beneficiario.Fecha_ingreso);
         return FechaIngresoDate >= FecInDate && FechaIngresoDate <= FecFnDate;

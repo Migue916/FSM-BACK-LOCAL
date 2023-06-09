@@ -14,10 +14,6 @@ const storage = multer.diskStorage({
   const upload = multer({ storage: storage });
 
 
-
-
-router.post('/egresar', getBeneficiarioController.putEgresado);
-
 /**
  * @swagger
  * /beneficiarios/egresar:

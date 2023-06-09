@@ -44,7 +44,6 @@ exports.postFoto = async (req, res, next) => {
     console.error(error.message);
     response.error(req, res, result, 400, "error");
   }
-  // add the following line to send a success response
   res.status(200).json({ message: "File upload successful" });
 };
 

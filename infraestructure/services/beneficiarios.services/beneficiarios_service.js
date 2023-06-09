@@ -126,7 +126,7 @@ exports.getFoto = async (id) => {
     const { containerName, blobName } = await getContainerAndBlobName(url);
     const blob = await downloadBlob(blobServiceClient, containerName, blobName);
     const file = await blobToFile(blob, 'filename.jpg');
-    return file;
+    return blob;
   } catch (error) {
     throw error;
   }

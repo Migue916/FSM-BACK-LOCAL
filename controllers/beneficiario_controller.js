@@ -27,7 +27,6 @@ exports.putEgresado= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
-
 exports.postFoto = async (req, res, next) => {
   try {
     const result = {
@@ -45,7 +44,10 @@ exports.postFoto = async (req, res, next) => {
     console.error(error.message);
     response.error(req, res, result, 400, "error");
   }
+  // add the following line to send a success response
+  res.status(200).json({ message: "File upload successful" });
 };
+
   
 
 exports.postConsulta= async (req, res, next) => {

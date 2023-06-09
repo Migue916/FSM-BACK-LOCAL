@@ -11,7 +11,7 @@ const { fileURLToPath } = require('url');
 exports.postFoto = async (req) => {
   
   const id = req.body.id; 
-  const pathToUploadedFile = req.file;
+  const pathToUploadedFile = req.file.path;
 
   const containerName = 'profilephotos';
   const containerClient = blobServiceClient.getContainerClient(containerName);

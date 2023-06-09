@@ -7,11 +7,9 @@ const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs710032002
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 const { Blob } = require('buffer');
 const { fileURLToPath } = require('url');
-
 exports.postFoto = async (req) => {
   
-  const id = req.body.id; 
-  const pathToUploadedFile = req.file.path;
+  const id = req.body.id;
 
   const containerName = 'profilephotos';
   const containerClient = blobServiceClient.getContainerClient(containerName);
@@ -19,10 +17,9 @@ exports.postFoto = async (req) => {
 
   const blobName = Date.now() + '_' + req.file.originalname;
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  const stream = fs.createReadStream(pathToUploadedFile);
 
   const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
-  await blockBlobClient.uploadStream(stream, undefined, undefined, options);
+  await blockBlobClient.uploadData(req.file.buffer, options);
 
   const storageUrl = blockBlobClient.url;
 
@@ -36,23 +33,12 @@ exports.postFoto = async (req) => {
     const results = [];
     results.push(postFoto);
 
-    fs.unlink(pathToUploadedFile, (err) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log('File deleted successfully');
-    });
-
     return(results);
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
   }
 };
-
-
-
 exports.postConsultas = async(consulta) =>{
     containter = consulta.id_beneficiario + consulta.id_modulo
     const containerClient = blobServiceClient.getContainerClient(container);
@@ -695,12 +681,18 @@ exports.getBeneficiarios = async (page) => {
     const isLastPage = Math.ceil(filtredData.length / 10) === +page.page;
     const recordsToTake = isLastPage ? Math.min(remainingRecords, 10) : 10;
 
-    const firstTenRecords = filtredData.slice((+page.page - 1) * 10, (+page.page - 1) * 10 + recordsToTake);
+    let firstTenRecords;
+    if(remainingRecords !== 0){
+      firstTenRecords = filtredData.slice((+page.page - 1) * 10, (+page.page - 1) * 10 + recordsToTake);
+    }else{
+      firstTenRecords = filtredData.slice((+page.page * 10) - 10, (+page.page) * 10);
+    }
     
     const filtrados = {
         Cantidad_filtrada : filtredData.length, 
         Numero_de_paginas : filtredData.length/10
     };
+    
     firstTenRecords.push(filtrados);
 
     return firstTenRecords;

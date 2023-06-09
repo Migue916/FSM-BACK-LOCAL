@@ -7,6 +7,7 @@ const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs710032002
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 const { Blob } = require('buffer');
 const { fileURLToPath } = require('url');
+
 exports.postFoto = async (req) => {
   
   const id = req.body.id;
@@ -660,6 +661,21 @@ exports.getBeneficiarios = async (page) => {
       results.push(result);
     }
     let filtredData = results;
+
+    if (page.EdadIn !== undefined && page.EdadFn !== undefined){
+      filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
+    }
+
+    const FecInDate = new Date(page.FecIn);
+    const FecFnDate = new Date(page.FecFn);
+    
+    if (FecInDate !== undefined && FecFnDate !== undefined) {
+      filtredData = filtredData.filter(beneficiario => {
+        const FechaIngresoDate = new Date(beneficiario.Fecha_ingreso);
+        return FechaIngresoDate >= FecInDate && FechaIngresoDate <= FecFnDate;
+      });
+    }
+    
 
     if (page.Genero !== undefined){
       filtredData = filtredData.filter(beneficiario => beneficiario.Genero === page.Genero);

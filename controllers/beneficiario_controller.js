@@ -39,7 +39,7 @@ exports.postFoto = async (req, res, next) => {
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
-      status: false,
+      status: false,  
       message: error.message,
     };
     console.error(error.message);

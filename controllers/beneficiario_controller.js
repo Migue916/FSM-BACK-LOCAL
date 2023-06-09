@@ -539,9 +539,15 @@ exports.getFoto = async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    id = req.query.Id;
-    result.getFoto =
-      await beneficiarioServices.getFoto(id);
+    const id = req.query.Id;
+    const file = await beneficiarioServices.getFoto(id);
+
+    console.log(file);
+
+    res.setHeader('Content-Disposition', `attachment; filename=${file.name}`);
+    res.setHeader('Content-Type', file.type);
+
+    res.send(file);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

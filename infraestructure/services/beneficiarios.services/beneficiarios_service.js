@@ -5,7 +5,7 @@ const queries_Empleados = require("../../queries/empleados/empleados_QueriesModu
 const { BlobServiceClient } = require('@azure/storage-blob');
 const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs7100320029bb315a8;AccountKey=9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==;EndpointSuffix=core.windows.net';
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
-
+const { Blob } = require('buffer');
 
 exports.postFoto = async (req) => {
   
@@ -43,7 +43,7 @@ exports.postFoto = async (req) => {
       console.log('File deleted successfully');
     });
 
-    res.json(results);
+    return(results);
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
@@ -80,18 +80,58 @@ exports.postConsultas = async(consulta) =>{
   }
 };
 
+async function getBlobUrl(id) {
+  const foto = await queries_General.get_Foto(id);
+  return foto[0].hex;
+};
+
+async function streamToBlob(stream) {
+  const data = await new Response(stream).arrayBuffer();
+  return new Blob([data]);
+}
+
+
+async function downloadBlob(blobServiceClient, containerName, blobName) {
+  try {
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    const response = await blockBlobClient.download();
+    const blob = await streamToBlob(response.readableStreamBody);
+    return blob;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function blobToFile(blob, filename) {
+  const buffer = Buffer.from(await blob.arrayBuffer());
+  buffer.name = filename;
+  buffer.type = blob.type;
+  console.log(buffer);
+  return buffer;
+};
+
+async function getContainerAndBlobName(url) {
+  const urlParts = new URL(url);
+  const pathParts = urlParts.pathname.split('/');
+  const containerName = pathParts[1];
+  const blobName = pathParts.slice(2).join('/');
+  return { containerName, blobName };
+}
+
+
 exports.getFoto = async (id) => {
   try { 
-    const getFoto = await queries_General.get_Foto(id);
-        const result = {
-          id: getFoto.id_persona,
-          ruta: getFoto.hex
-        };
-        return result;
-} catch (error) {
-  throw error;
-}
+    const url = await getBlobUrl(id);
+    const { containerName, blobName } = await getContainerAndBlobName(url);
+    const blob = await downloadBlob(blobServiceClient, containerName, blobName);
+    const file = await blobToFile(blob, 'filename.jpg');
+    return file;
+  } catch (error) {
+    throw error;
+  }
 };
+
 
 exports.getOrientacionList = async (orientacion) => {
   try { 

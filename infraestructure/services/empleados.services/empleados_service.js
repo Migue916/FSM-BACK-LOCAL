@@ -139,12 +139,14 @@ exports.nombreEmpleado = async(id) =>{
 
     const nombreEmpleado = await queries_Empleados.get_nombre(id);
     const cargo = await queries_Empleados.get_Cargo(nombreEmpleado[0].id_cargo);
+    const modulo = await queries_General.get_Modulo(nombreEmpleado[0].pertenencia_de_modulo);
 
     const result = {
       id: id.id,
       Nombre: nombreEmpleado[0].p_nombre + " " + nombreEmpleado[0].s_nombre,
       Apellido: nombreEmpleado[0].p_apellido + " " + nombreEmpleado[0].s_apellido,
-      Cargo: cargo[0].cargo
+      Cargo: cargo[0].cargo, 
+      Modulo: modulo[0].modulo
     };
     
     return result;

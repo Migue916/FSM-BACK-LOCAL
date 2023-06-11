@@ -29,7 +29,7 @@ exports.getNombre = async (req, res, next) => {
       message: "successful",
     };
     id = req.query.id;
-    result.Nombre =
+    result.Saludo =
       await empleadosServices.nombreEmpleado(id);
 
     response.success(req, res, result, 200, "success");

@@ -69,4 +69,6 @@ module.exports = {
     put_Medicamento: require("./put_Medicamento"),
     delete_Medicamento: require("./delete_Medicamento"),
     
+    put_consulta: require("./put_consulta"),
+    
 };

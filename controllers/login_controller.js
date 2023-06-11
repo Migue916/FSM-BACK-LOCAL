@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const queries_General = require("../infraestructure/queries/general/general_QueriesModule");
+const empleadosServices = require("../infraestructure/services/empleados.services/empleados_service");
 
 exports.ingresar = async (req, res, next) => {
   try {
@@ -28,11 +29,13 @@ exports.ingresar = async (req, res, next) => {
         const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
 
         if (isPasswordValid){
-
+          const empleado = await empleadosServices.nombreEmpleado(getUser[0].id);
           jwt.sign({getUser}, 'S3cr3tK3yF$M', {expiresIn: '10h'}, (err, token) =>{
             res.json({
-              token, 
-              id: getUser[0].id, 
+                id: getUser[0].id,
+                Administrador: getUser[0].cargo, 
+                Modulo: empleado.Modulo,
+                token 
               });
             });
 

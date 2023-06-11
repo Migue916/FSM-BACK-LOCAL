@@ -35,7 +35,8 @@ exports.postFoto = async (req, res, next) => {
       message: "successful",
     };
 
-    result.postFoto = await beneficiarioServices.postFoto(req);
+    result.postFoto = 
+      await beneficiarioServices.postFoto(req);
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
@@ -47,23 +48,14 @@ exports.postFoto = async (req, res, next) => {
   }
 };
 
-
 exports.postConsulta= async (req, res, next) => {
   try {
     const result = {
       status: true,
       message: "successful",
     };
-
-    const consulta  = {
-      id_empleado: req.body.id_empleado, 
-      id_beneficiario: req.body.id_beneficiario, 
-      id_modulo: req.body.id_modulo,
-      consulta: req.file.consulta 
-    };
-
     result.postConsultas = 
-      await beneficiarioServices.postConsulta(consulta);
+      await beneficiarioServices.postConsulta(req);
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
@@ -75,6 +67,24 @@ exports.postConsulta= async (req, res, next) => {
   }
 };
 
+exports.putConsulta= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    result.putConsulta = 
+      await beneficiarioServices.putConsulta(req);
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
 
 exports.deleteAlergias= async (req, res, next) => {
   try {
@@ -651,15 +661,19 @@ exports.getFoto = async (req, res, next) => {
 };
 
 
-exports.getConsulta= async (req, res, next) => {
+exports.getConsultaBuffer = async (req, res, next) => {
   try {
     const result = {
       status: true,
       message: "successful",
     };
-    id = req.query.Id;
-    result.getConsulta =
-      await beneficiarioServices.getConsulta(id);
+    const hex = req.body.hex;
+    const file = await beneficiarioServices.getConsultaBuffer(hex);
+
+    result.archivo = file;
+
+    res.setHeader('Content-Disposition', `attachment; filename=${file.name}`);
+    res.setHeader('Content-Type', file.type);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -671,6 +685,7 @@ exports.getConsulta= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
 
 exports.getEpsList= async (req, res, next) => {
   try {
@@ -813,6 +828,27 @@ exports.getRiesgosList= async (req, res, next) => {
 
     result.getRiesgosList =
       await beneficiarioServices.getRiesgosList(req.query.Riesgos);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.getConsulta= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    result.getConsulta =
+      await beneficiarioServices.getConsulta(req.query.Id);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

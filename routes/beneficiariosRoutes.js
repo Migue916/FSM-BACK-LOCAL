@@ -1669,48 +1669,6 @@ router.delete('/delete/riesgos', getBeneficiarioController.deleteRiesgos);
  */
 router.delete('/delete/alergias', getBeneficiarioController.deleteAlergias);
 
-
-/**
- * @swagger
- * /beneficiarios/consulta/:
- *   get:
- *     summary: Consulta de beneficiario
- *     description: Obtiene información del beneficiario basándose en el ID proporcionado.
- *     parameters:
- *       - in: query
- *         name: Id
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID del beneficiario
- *     responses:
- *       200:
- *         description: Información del beneficiario
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 getConsulta:
- *                   type: object
- *       400:
- *         description: Error al obtener la información del beneficiario
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                 message:
- *                   type: string
- */
-router.get('/consulta/', getBeneficiarioController.getConsulta);
-
 /**
  * @swagger
  * /beneficiarios/perfil-foto/:
@@ -2019,12 +1977,167 @@ router.put('/edit/medicamento', getBeneficiarioController.putMedicamento);
  */
 router.delete('/delete/medicamento', getBeneficiarioController.deleteMedicamento);
 
-/*
-router.post('/new/consulta', getBeneficiarioController.postConsulta);
+/**
+ * @swagger
+ * /beneficiarios/new/consulta:
+ *   post:
+ *     summary: Subir un archivo y crear una nueva consulta
+ *     description: Esta ruta permite subir un archivo y crear una nueva consulta asociada a un beneficiario, empleado y módulo específicos.
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *             id_beneficiario:
+ *                 type: integer
+ *             id_empleado:
+ *                 type: integer
+ *             id_modulo:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Consulta creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 postConsultas:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Consulta'
+ *       400:
+ *         description: Error al crear la consulta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.post('/new/consulta', upload.single('file'), getBeneficiarioController.postConsulta);
+
+   /**
+    * @swagger
+    * components:
+    *   schemas:
+    *     Consulta:
+    *       type: object
+    *       properties:
+    *         id_beneficiario:
+    *           type: integer
+    *         id_empleado:
+    *           type: integer
+    *         rutaAnt:
+    *           type: string
+    *         rutaNew:
+    *           type: string
+    *       required:
+    *         - id_beneficiario
+    *         - id_empleado
+    *         - rutaAnt
+    *         - rutaNew
+    *
+    * /beneficiarios/edit/consulta:
+    *   put:
+    *     summary: Update a Consulta
+    *     description: Update a Consulta with the given id_beneficiario and id_empleado
+    *     tags:
+    *       - Beneficiarios
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             $ref: '#/components/schemas/Consulta'
+    *     responses:
+    *       200:
+    *         description: OK
+    *       400:
+    *         description: Bad Request
+    *       404:
+    *         description: Not Found
+    *       500:
+    *         description: Internal Server Error
+    */
+
 router.put('/edit/consulta', getBeneficiarioController.putConsulta);
-router.put('/list/consulta', getBeneficiarioController.putConsulta);
-router.put('/download/consulta', getBeneficiarioController.getConsulta);
-*/
+
+/**
+ * @swagger
+ * tags:
+ *   name: Beneficiarios
+ *   description: API para consultar beneficiarios
+ * /beneficiarios/list/consulta:
+ *   get:
+ *     summary: Consulta la lista de beneficiarios
+ *     tags: [Beneficiarios]
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Lista de beneficiarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   url:
+ *                     type: string
+ *                   modulo:
+ *                     type: string
+ *                   responsable:
+ *                     type: string
+ *                   fecha:
+ *                     type: string
+ *                   id:
+ *                     type: integer
+ */
+router.get('/list/consulta', getBeneficiarioController.getConsulta);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Beneficiarios
+ *   description: API para la gestión de beneficiarios
+ * /beneficiarios/download/consulta:
+ *   get:
+ *     summary: Descarga un archivo asociado a un beneficiario
+ *     tags: [Beneficiarios]
+ *     parameters:
+ *       - in: query
+ *         name: hex
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Identificador hexadecimal del beneficiario
+ *     responses:
+ *       200:
+ *         description: Archivo descargado correctamente
+ *         content:
+ *           application/octet-stream:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Parámetros incorrectos o faltantes
+ *       500:
+ *         description: Error del servidor
+ */
+router.get('/download/consulta', getBeneficiarioController.getConsultaBuffer);
 
 
 module.exports = router;

@@ -15,6 +15,9 @@ const sqlQueries = {
 
     GET_BENEFICIARIO_CONSULTA_URL:
         "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1",
+    
+    PUT_CONSULTA:
+        "UPDATE public.reporte_modulo SET id_empleado = \$1, hex = \$4, fecha = CURRENT_DATE WHERE id_beneficiario = \$2 AND hex = \$3",
 
     POST_CONSULTA:
         "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE)",

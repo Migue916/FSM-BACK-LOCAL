@@ -40,33 +40,75 @@ exports.postFoto = async (req) => {
     res.status(500).send('Server error');
   }
 };
-exports.postConsultas = async (consulta) => {
-  containter = consulta.id_beneficiario + consulta.id_modulo
-  const containerClient = blobServiceClient.getContainerClient(container);
+
+exports.putConsulta = async (req) => {
+
+  const containerName = 'consultas';
+  const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();
-
-  const blockBlobClient = containerClient.getBlockBlobClient(consulta.consulta);
-  const data = fs.readFileSync(consulta.consulta);
-  await blockBlobClient.uploadData(data);
-
+  
+  const blobName = Date.now() + '_' + req.file.originalname;
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  
+  const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
+  await blockBlobClient.uploadData(req.file.buffer, options);
+  
   const storageUrl = blockBlobClient.url;
-
+  
   const Consulta = {
-    id_beneficiario: consulta.id_beneficiario,
-    id_empleado: consulta.id_empleado,
-    id_modulo: consulta.id_modulo,
+    id_beneficiario: req.id_beneficiario,
+    id_empleado: req.id_empleado,
+    rutaAnt: req.hex,
+    rutaNew: storageUrl
+  };
+
+  try {
+    const putConsulta = await queries_Beneficiarios.put_consulta(Consulta);
+    const results = [];
+
+    results.push(putConsulta);
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+exports.postConsulta = async (req) => {
+
+  const containerName = 'consultas';
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  await containerClient.createIfNotExists();
+  
+  const blobName = Date.now() + '_' + req.file.originalname;
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  
+  const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
+  await blockBlobClient.uploadData(req.file.buffer, options);
+  
+  const storageUrl = blockBlobClient.url;
+  
+  const Consulta = {
+    id_beneficiario: req.id_beneficiario,
+    id_empleado: req.id_empleado,
+    id_modulo: req.id_modulo,
     ruta: storageUrl
   };
 
   try {
     const postConsulta = await queries_Beneficiarios.post_consulta(Consulta);
     const results = [];
+
     results.push(postConsulta);
+
     return results;
   } catch (error) {
     throw error;
   }
 };
+
+
 
 async function getBlobUrl(id) {
   const foto = await queries_General.get_Foto(id);
@@ -120,6 +162,16 @@ exports.getFoto = async (id) => {
   }
 };
 
+exports.getConsultaBuffer = async (hex) => {
+  try {
+    const { containerName, blobName } = await getContainerAndBlobName(hex);
+    const blob = await downloadBlob(blobServiceClient, containerName, blobName);
+    const file = await blobToFile(blob, blobName);
+    return file;
+  } catch (error) {
+    throw error;
+  }
+};
 
 exports.getOrientacionList = async (orientacion) => {
   try {
@@ -151,7 +203,8 @@ exports.getConsulta = async (id) => {
         url: row.hex,
         modulo: modulo[0].modulo,
         responsable: empleado.Nombre + " " + empleado.Apellido,
-        fecha: row.fecha
+        fecha: row.fecha, 
+        id: row.id
       };
       results.push(result);
     }

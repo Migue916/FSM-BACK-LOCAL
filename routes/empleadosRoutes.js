@@ -241,32 +241,40 @@ router.get('/ten/', getEmpleadoController.getEmpleadosPorNombre);
 
 /**
  * @swagger
- * /empleados/saludo:
+ * tags:
+ *   name: Empleados
+ *   description: API para obtener información de empleados
+ * /empleados/saludo/:
  *   get:
- *     summary: Obtiene el nombre del empleado por ID
- *     description: Retorna el nombre del empleado correspondiente al ID proporcionado como parámetro de consulta.
+ *     summary: Obtener el nombre completo y cargo del empleado
+ *     tags: [Empleados]
  *     parameters:
  *       - in: query
  *         name: id
  *         schema:
  *           type: integer
- *         description: El ID del empleado
+ *         required: true
+ *         description: ID del empleado
  *     responses:
  *       200:
- *         description: Solicitud exitosa, retorna el nombre del empleado
+ *         description: Información del empleado obtenida correctamente
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: boolean
- *                 message:
- *                   type: string
+ *                 id:
+ *                   type: integer
  *                 Nombre:
  *                   type: string
+ *                 Apellido:
+ *                   type: string
+ *                 Cargo:
+ *                   type: string
+ *                 Modulo:
+ *                   type: string
  *       400:
- *         description: Error en la solicitud, retorna un mensaje de error
+ *         description: Error en la solicitud
  *         content:
  *           application/json:
  *             schema:
@@ -278,6 +286,7 @@ router.get('/ten/', getEmpleadoController.getEmpleadosPorNombre);
  *                   type: string
  */
 router.get('/saludo/', getEmpleadoController.getNombre);
+
 
 /**
  * @swagger

@@ -22,26 +22,26 @@ exports.getEmpleadosLastTen= async (req, res, next) => {
   }
 };
 
-exports.getNombre = async (req, res, next) => {
-  try {
-    const result = {
-      status: true,
-      message: "successful",
-    };
-    id = req.query.id;
-    result.Saludo =
-      await empleadosServices.nombreEmpleado(id);
+  exports.getNombre = async (req, res, next) => {
+    try {
+      const result = {
+        status: true,
+        message: "successful",
+      };
+      id = req.query.id;
+      result.Saludo =
+        await empleadosServices.nombreEmpleado(id);
 
-    response.success(req, res, result, 200, "success");
-  } catch (error) {
-    const result = {
-      status: false,
-      message: error.message,
-    };
-    console.error(error.message);
-    response.error(req, res, result, 400, "error");
-  }
-};
+      response.success(req, res, result, 200, "success");
+    } catch (error) {
+      const result = {
+        status: false,
+        message: error.message,
+      };
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+  };
 
 exports.getStatisticsEmpleados = async (req, res, next) => {
     try {

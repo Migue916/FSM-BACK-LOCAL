@@ -11,6 +11,9 @@ const sqlQueries = {
     POST_GENERO:
         "INSERT INTO genero (genero) VALUES (\$1);",
 
+    POST_MEDICAMENTO:
+        "INSERT INTO medicamento (medicamento) VALUES (\$1);",
+
     GET_EPS_LIST_BUSQUEDA:
         "select * from (SELECT *, SIMILARITY(eps, \$1) AS similitud FROM eps) as sc where similitud > 0.07",
 

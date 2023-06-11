@@ -1,4 +1,9 @@
 const sqlQueries = {
+    GET_BENEFICIARIO_MEDICAMENTOS_LIST:
+        "SELECT * FROM medicamento WHERE id = \$1",
+
+    GET_BENEFICIARIOS_MEDICAMENTO:
+        "SELECT * from beneficiario_rel_medicamento where id_beneficiario = \$1",
 
     GET_BENEFICIARIOS_ORIENTACION:
         "SELECT DISTINCT id_orientacion FROM beneficiario",
@@ -20,6 +25,9 @@ const sqlQueries = {
     DELETE_RIESGOS:
         "DELETE FROM public.beneficiario_rel_riesgo WHERE id_beneficiario = \$1 AND id_riesgo = \$2;",
 
+    DELETE_MEDICAMENTO:
+        "DELETE FROM public.beneficiario_rel_medicamento WHERE id_beneficiario = \$1 AND id_medicamento = \$2;",
+
     DELETE_DIAGNOSTICO: 
         "DELETE FROM public.enfermedad_rel_beneficiario WHERE id_beneficiario = \$1 AND id_enfermedad  = \$2 AND id_empleado = \$3;", 
 
@@ -34,6 +42,9 @@ const sqlQueries = {
 
     PUT_SEDE:
         "UPDATE public.beneficiario SET id_sede=\$2 WHERE id = \$1;",
+
+    PUT_MEDICAMENTO:
+        "INSERT INTO public.beneficiario_rel_medicamento( id_medicamento, id_beneficiario, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",
 
     PUT_DIAGNOSTICO:
         "INSERT INTO public.enfermedad_rel_beneficiario( id_enfermedad, id_beneficiario, id_empleado, fecha, tipo, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE,\$4, \$5);",
@@ -55,6 +66,12 @@ const sqlQueries = {
     
     GET_RIESGO_LIST:
         "select * from RIESGOS",
+
+    GET_MEDICAMENTO_LIST:
+        "SELECT * FROM medicamento",
+
+    GET_MEDICAMENTO_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(sede, \$1) AS similitud FROM medicamento) as sc where similitud > 0.07",
 
     GET_SEDE_LIST_BUSQUEDA:
         "select * from (SELECT *, SIMILARITY(sede, \$1) AS similitud FROM sede) as sc where similitud > 0.07",

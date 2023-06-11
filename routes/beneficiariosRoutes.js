@@ -1669,63 +1669,6 @@ router.delete('/delete/riesgos', getBeneficiarioController.deleteRiesgos);
  */
 router.delete('/delete/alergias', getBeneficiarioController.deleteAlergias);
 
-/**
- * @swagger
- * /beneficiarios/consulta:
- *   post:
- *     summary: Realiza una consulta de beneficiario
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id_empleado:
- *                 type: integer
- *                 description: El ID del empleado que realiza la consulta
- *               id_beneficiario:
- *                 type: integer
- *                 description: El ID del beneficiario consultado
- *               id_modulo:
- *                 type: integer
- *                 description: El ID del módulo en el que se realiza la consulta
- *               consulta:
- *                 type: file
- *                 description: La consulta realizada por el empleado
- *     responses:
- *       200:
- *         description: Consulta realizada con éxito
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Estado de éxito de la consulta
- *                 message:
- *                   type: string
- *                   description: Mensaje de resultado de la consulta
- *                 postConsultas:
- *                   type: object
- *                   description: Resultado de la consulta realizada
- *       400:
- *         description: Error al realizar la consulta
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Estado de error de la consulta
- *                 message:
- *                   type: string
- *                   description: Mensaje de error de la consulta
- */
-router.post('/consulta', getBeneficiarioController.postConsulta);
-
 
 /**
  * @swagger
@@ -1906,6 +1849,184 @@ router.get('/perfil-foto/', getBeneficiarioController.getFoto);
  *                   type: string
  */
 router.get('/list/tipo-doc', getBeneficiarioController.getTipoDocList);
+
+/**
+ * @swagger
+ * /list/medicamento:
+ *   get:
+ *     summary: Obtener la lista de medicamentos
+ *     description: Retorna una lista de medicamentos disponibles para los beneficiarios
+ *     responses:
+ *       200:
+ *         description: Lista de medicamentos obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getMedicamentoList:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       400:
+ *         description: Error al obtener la lista de medicamentos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.get('/list/medicamento', getBeneficiarioController.getMedicamentoList);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Beneficiarios
+ *   description: API para gestionar beneficiarios
+ * /beneficiarios/new/medicamento:
+ *   post:
+ *     summary: Añadir un nuevo medicamento a un beneficiario
+ *     tags: [Beneficiarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               medicamento:
+ *                 type: string
+ *                 description: Nombre del medicamento
+ *                 example: Aspirina
+ *     responses:
+ *       200:
+ *         description: Medicamento añadido con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *       400:
+ *         description: Error en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ */
+router.post('/new/medicamento', getBeneficiarioController.postMedicamento);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/medicamento:
+ *   put:
+ *     summary: Actualiza un medicamento
+ *     tags: [Beneficiarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *               id_medicamento:
+ *                 type: integer
+ *               id_empleado:
+ *                 type: integer
+ *               observacion:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Medicamento actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 putMedicamento:
+ *                   type: object
+ *       400:
+ *         description: Error al actualizar el medicamento
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ * */
+router.put('/edit/medicamento', getBeneficiarioController.putMedicamento);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Beneficiarios
+ *   description: API para gestionar medicamentos de beneficiarios
+ * /beneficiarios/delete/medicamento:
+ *   delete:
+ *     summary: Eliminar un medicamento de un beneficiario
+ *     tags: [Beneficiarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *               id_medicamento:
+ *                 type: integer
+ *               id_empleado:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Medicamento eliminado con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al eliminar el medicamento
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.delete('/delete/medicamento', getBeneficiarioController.deleteMedicamento);
+
+/*
+router.post('/new/consulta', getBeneficiarioController.postConsulta);
+router.put('/edit/consulta', getBeneficiarioController.putConsulta);
+router.put('/list/consulta', getBeneficiarioController.putConsulta);
+router.put('/download/consulta', getBeneficiarioController.getConsulta);
+*/
+
+
 module.exports = router;
 
 

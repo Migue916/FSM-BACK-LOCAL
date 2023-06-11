@@ -63,4 +63,10 @@ module.exports = {
     get_Beneficiarios_Riesgos: require("./get_Beneficiarios_Riesgos"),  
     get_Beneficiarios_Orientacion: require("./get_Beneficiarios_Orientacion"),
     
+    get_medicamentos: require("./get_medicamentos"),
+    get_medicamentos_list: require("./get_medicamentos_list"),
+    get_MedicamentoList: require("./get_MedicamentoList"),
+    put_Medicamento: require("./put_Medicamento"),
+    delete_Medicamento: require("./delete_Medicamento"),
+    
 };

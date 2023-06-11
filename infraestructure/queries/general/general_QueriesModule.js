@@ -22,4 +22,5 @@ module.exports = {
     post_Genero: require("./post_Genero"),
     post_Eps: require("./post_Eps"),
     post_Foto: require("./post_Foto"),
+    post_Medicamento: require("./post_Medicamento"),
 };

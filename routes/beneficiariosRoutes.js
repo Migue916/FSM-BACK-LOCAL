@@ -1981,23 +1981,26 @@ router.delete('/delete/medicamento', getBeneficiarioController.deleteMedicamento
  * @swagger
  * /beneficiarios/new/consulta:
  *   post:
- *     summary: Subir un archivo y crear una nueva consulta
- *     description: Esta ruta permite subir un archivo y crear una nueva consulta asociada a un beneficiario, empleado y módulo específicos.
+ *     summary: Crea una nueva consulta
+ *     description: Crea una nueva consulta para un beneficiario
  *     requestBody:
+ *       required: true
  *       content:
  *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *               id_empleado:
+ *                 type: integer
+ *               id_modulo:
+ *                 type: integer
+ *               nombre:
+ *                 type: string
  *               file:
  *                 type: string
  *                 format: binary
- *             id_beneficiario:
- *                 type: integer
- *             id_empleado:
- *                 type: integer
- *             id_modulo:
- *                 type: integer
  *     responses:
  *       200:
  *         description: Consulta creada exitosamente
@@ -2013,7 +2016,10 @@ router.delete('/delete/medicamento', getBeneficiarioController.deleteMedicamento
  *                 postConsultas:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Consulta'
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
  *       400:
  *         description: Error al crear la consulta
  *         content:
@@ -2026,85 +2032,122 @@ router.delete('/delete/medicamento', getBeneficiarioController.deleteMedicamento
  *                 message:
  *                   type: string
  */
+
 router.post('/new/consulta', upload.single('file'), getBeneficiarioController.postConsulta);
 
-   /**
-    * @swagger
-    * components:
-    *   schemas:
-    *     Consulta:
-    *       type: object
-    *       properties:
-    *         id_beneficiario:
-    *           type: integer
-    *         id_empleado:
-    *           type: integer
-    *         rutaAnt:
-    *           type: string
-    *         rutaNew:
-    *           type: string
-    *       required:
-    *         - id_beneficiario
-    *         - id_empleado
-    *         - rutaAnt
-    *         - rutaNew
-    *
-    * /beneficiarios/edit/consulta:
-    *   put:
-    *     summary: Update a Consulta
-    *     description: Update a Consulta with the given id_beneficiario and id_empleado
-    *     tags:
-    *       - Beneficiarios
-    *     requestBody:
-    *       required: true
-    *       content:
-    *         application/json:
-    *           schema:
-    *             $ref: '#/components/schemas/Consulta'
-    *     responses:
-    *       200:
-    *         description: OK
-    *       400:
-    *         description: Bad Request
-    *       404:
-    *         description: Not Found
-    *       500:
-    *         description: Internal Server Error
-    */
-
+/**
+ * @swagger
+ * /beneficiarios/edit/consulta:
+ *   put:
+ *     summary: Actualizar consulta
+ *     description: Actualiza la información de una consulta específica
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_consulta:
+ *                 type: integer
+ *                 description: El ID de la consulta
+ *               id_empleado:
+ *                 type: integer
+ *                 description: El ID del empleado
+ *               hex:
+ *                 type: string
+ *                 description: La ruta hexadecimal de la consulta
+ *     responses:
+ *       200:
+ *         description: Consulta actualizada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de éxito
+ *       400:
+ *         description: Error al actualizar la consulta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
 router.put('/edit/consulta', getBeneficiarioController.putConsulta);
 
 /**
  * @swagger
- * tags:
- *   name: Beneficiarios
- *   description: API para consultar beneficiarios
  * /beneficiarios/list/consulta:
  *   get:
- *     summary: Consulta la lista de beneficiarios
- *     tags: [Beneficiarios]
- *     produces:
- *       - application/json
+ *     summary: Obtiene la información de consulta de un beneficiario
+ *     description: Obtiene la información de consulta de un beneficiario por Id
+ *     tags:
+ *       - Beneficiarios
+ *     parameters:
+ *       - in: query
+ *         name: Id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Id del beneficiario
  *     responses:
  *       200:
- *         description: Lista de beneficiarios
+ *         description: Consulta de beneficiario obtenida con éxito
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   url:
- *                     type: string
- *                   modulo:
- *                     type: string
- *                   responsable:
- *                     type: string
- *                   fecha:
- *                     type: string
- *                   id:
- *                     type: integer
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getConsulta:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       url:
+ *                         type: string
+ *                       modulo:
+ *                         type: string
+ *                       responsable:
+ *                         type: string
+ *                       fecha:
+ *                         type: string
+ *                       id:
+ *                         type: integer
+ *                       nombre:
+ *                         type: string
+ *                       adjuntos:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *       400:
+ *         description: Error al obtener la consulta de beneficiario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
  */
 router.get('/list/consulta', getBeneficiarioController.getConsulta);
 
@@ -2139,6 +2182,126 @@ router.get('/list/consulta', getBeneficiarioController.getConsulta);
  */
 router.get('/download/consulta', getBeneficiarioController.getConsultaBuffer);
 
+
+/**
+ * @swagger
+ * /beneficiarios/new/consulta/adjuntos:
+ *   post:
+ *     summary: Subir archivos adjuntos para una consulta de beneficiario
+ *     description: Esta ruta permite subir archivos adjuntos relacionados a una consulta de beneficiario específica.
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: file
+ *         type: file
+ *         description: Archivo adjunto a subir
+ *         required: true
+ *       - in: formData
+ *         name: id_reporte
+ *         type: integer
+ *         description: ID del reporte al que pertenece el archivo adjunto
+ *         required: true
+ *       - in: formData
+ *         name: nombre
+ *         type: string
+ *         description: Nombre del archivo adjunto
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Archivos adjuntos subidos correctamente
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *               description: Estado de la operación
+ *             message:
+ *               type: string
+ *               description: Mensaje descriptivo del resultado
+ *             postAdjuntos:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_reporte:
+ *                     type: integer
+ *                     description: ID del reporte al que pertenece el archivo adjunto
+ *                   nombre:
+ *                     type: string
+ *                     description: Nombre del archivo adjunto
+ *                   ruta:
+ *                     type: string
+ *                     description: URL del archivo adjunto almacenado
+ *       400:
+ *         description: Error al subir los archivos adjuntos
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *               description: Estado de la operación
+ *             message:
+ *               type: string
+ *               description: Mensaje descriptivo del error
+ */
+router.post('/new/consulta/adjuntos', upload.array('file'), getBeneficiarioController.postAdjuntos);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/consulta/adjuntos:
+ *   post:
+ *     summary: Actualiza los adjuntos de una consulta de beneficiario
+ *     description: Actualiza los adjuntos de una consulta de beneficiario
+ *     tags:
+ *       - beneficiarios
+ *     consumes:
+ *       - multipart/form-data
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: formData
+ *         name: file
+ *         type: file
+ *         description: Archivo adjunto
+ *         required: true
+ *       - in: formData
+ *         name: id_consulta
+ *         type: string
+ *         description: ID de la consulta
+ *         required: true
+ *       - in: formData
+ *         name: hex
+ *         type: string
+ *         description: Ruta hexadecimal del archivo adjunto anterior
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Adjunto actualizado con éxito
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *             putAdjuntos:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       400:
+ *         description: Error al actualizar el adjunto
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ */
+router.post('/edit/consulta/adjuntos', upload.single('file'), getBeneficiarioController.putAdjuntos);
+
+router.put('/perfil-foto/', upload.single('file'), getBeneficiarioController.getPerfil);
 
 module.exports = router;
 

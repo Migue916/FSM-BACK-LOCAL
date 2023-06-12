@@ -70,5 +70,7 @@ module.exports = {
     delete_Medicamento: require("./delete_Medicamento"),
     
     put_consulta: require("./put_consulta"),
-    
+    post_Adjuntos: require("./post_Adjuntos"),    
+    put_Adjuntos: require("./put_Adjuntos"),
+    get_Adjuntos_url: require("./get_Adjuntos_url"),
 };

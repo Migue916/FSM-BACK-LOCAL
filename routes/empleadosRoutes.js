@@ -2,6 +2,9 @@ const express = require("express");
 const getEmpleadoController = require("../controllers/empleado_controller");
 const router = express.Router();
 
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 /**
  * @swagger
@@ -455,7 +458,23 @@ router.get('/desplegables', getEmpleadoController.getDesplegables);
  *       400:
  *         description: Error al obtener el perfil del empleado
  */
-router.get('/perfil/', getEmpleadoController.getPerfil);
+router.get('/perfil/', getEmpleadoController.getPerfil);////revisar
+
+router.get('/perfil-foto/', getEmpleadoController.getPerfil);
+router.post('/perfil-foto/',upload.single('file'), getEmpleadoController.getPerfil);
+router.put('/perfil-foto/',upload.single('file'), getEmpleadoController.getPerfil);
+
+router.get('/list/modulo', getEmpleadoController.getPerfil);
+router.get('/list/cargo', getEmpleadoController.getPerfil);
+router.get('/list/profesion', getEmpleadoController.getPerfil);
+
+router.put('/edit/modulo', getEmpleadoController.getPerfil);
+router.put('/edit/cargo', getEmpleadoController.getPerfil);
+router.put('/edit/profesion', getEmpleadoController.getPerfil);
+
+router.post('/new/modulo', getEmpleadoController.getPerfil);
+router.post('/new/cargo', getEmpleadoController.getPerfil);
+router.post('/new/profesion', getEmpleadoController.getPerfil);
 
 
 module.exports = router;

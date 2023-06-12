@@ -15,12 +15,21 @@ const sqlQueries = {
 
     GET_BENEFICIARIO_CONSULTA_URL:
         "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1",
+
+    GET_BENEFICIARIO_ADJUNTOS_URL:
+        "SELECT * FROM public.reporteS_ADJUNTOS WHERE id_reporte = \$1",
     
     PUT_CONSULTA:
-        "UPDATE public.reporte_modulo SET id_empleado = \$1, hex = \$4, fecha = CURRENT_DATE WHERE id_beneficiario = \$2 AND hex = \$3",
+        "UPDATE public.reporte_modulo SET id_empleado = \$2, hex = \$3, fecha = CURRENT_DATE WHERE id = \$1",
+
+    PUT_ADJUNTOS:
+        "UPDATE public.reporte_modulo SET hex = \$2, fecha = CURRENT_DATE WHERE id = \$1",
+
+    POST_ADJUNTOS:
+        "INSERT INTO public.reportes_adjuntos( id_reporte, nombre, hex) VALUES (\$1, \$3, \$2);",
 
     POST_CONSULTA:
-        "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE)",
+        "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha, nombre) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE, \$5) RETURNING id",
 
     DELETE_ALERGIA:
         "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1 AND id_tipo_alergia  = \$2 AND id_empleado = \$3;",

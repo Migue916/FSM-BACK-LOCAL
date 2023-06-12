@@ -67,6 +67,25 @@ exports.postConsulta= async (req, res, next) => {
   }
 };
 
+exports.postAdjuntos= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    result.postAdjuntos = 
+      await beneficiarioServices.postAdjuntos(req);
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 exports.putConsulta= async (req, res, next) => {
   try {
     const result = {
@@ -75,6 +94,25 @@ exports.putConsulta= async (req, res, next) => {
     };
     result.putConsulta = 
       await beneficiarioServices.putConsulta(req);
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putAdjuntos= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    result.putAdjuntos = 
+      await beneficiarioServices.putAdjuntos(req);
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

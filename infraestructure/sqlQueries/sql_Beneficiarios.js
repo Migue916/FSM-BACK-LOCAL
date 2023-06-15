@@ -14,7 +14,7 @@ const sqlQueries = {
         "SELECT DISTINCT id_genero from beneficiario where estado = true",
 
     GET_BENEFICIARIO_CONSULTA_URL:
-        "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1",
+        "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1 AND isFormat = \$2",
 
     GET_BENEFICIARIO_ADJUNTOS_URL:
         "SELECT * FROM public.reporteS_ADJUNTOS WHERE id_reporte = \$1",
@@ -29,7 +29,7 @@ const sqlQueries = {
         "INSERT INTO public.reportes_adjuntos( id_reporte, nombre, hex) VALUES (\$1, \$3, \$2);",
 
     POST_CONSULTA:
-        "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha, nombre) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE, \$5) RETURNING id",
+        "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha, nombre, isFormat) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE, \$5, \$6) RETURNING id",
 
     DELETE_ALERGIA:
         "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1 AND id_tipo_alergia  = \$2 AND id_empleado = \$3;",

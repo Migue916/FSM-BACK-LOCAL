@@ -23,4 +23,6 @@ module.exports = {
     post_Eps: require("./post_Eps"),
     post_Foto: require("./post_Foto"),
     post_Medicamento: require("./post_Medicamento"),
+
+    delete_foto: require("./delete_foto"),
 };

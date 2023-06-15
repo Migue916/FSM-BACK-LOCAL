@@ -421,14 +421,14 @@ router.get('/desplegables', getEmpleadoController.getDesplegables);
  * /empleados/perfil:
  *   get:
  *     summary: Obtener el perfil de un empleado
- *     description: Retorna el perfil de un empleado basado en su Id.
+ *     description: Retorna el perfil de un empleado dado su identificador (Id).
  *     parameters:
  *       - in: query
  *         name: Id
  *         schema:
  *           type: integer
  *         required: true
- *         description: Identificación del empleado
+ *         description: Identificador único del empleado
  *     responses:
  *       200:
  *         description: Perfil del empleado obtenido exitosamente
@@ -437,44 +437,376 @@ router.get('/desplegables', getEmpleadoController.getDesplegables);
  *             schema:
  *               type: object
  *               properties:
- *                 Nombre:
+ *                 status:
+ *                   type: boolean
+ *                 message:
  *                   type: string
- *                 Apellido:
- *                   type: string
- *                 Identificacion:
- *                   type: integer
- *                 Fecha_nacimiento:
- *                   type: string
- *                 Edad:
- *                   type: integer
- *                 Fecha_ingreso:
- *                   type: string
- *                 Num_consultas:
- *                   type: string
- *                 Cargo:
- *                   type: string
- *                 Modulo:
- *                   type: string
+ *                 getPerfil:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       Nombre:
+ *                         type: string
+ *                       Apellido:
+ *                         type: string
+ *                       Identificacion:
+ *                         type: integer
+ *                       Genero:
+ *                         type: string
+ *                       Fecha_nacimiento:
+ *                         type: string
+ *                         format: date
+ *                       Edad:
+ *                         type: integer
+ *                       Fecha_ingreso:
+ *                         type: string
+ *                         format: date
+ *                       Num_consultas:
+ *                         type: integer
+ *                       Cargo:
+ *                         type: string
+ *                       Modulo:
+ *                         type: string
+ *                       Admin:
+ *                         type: boolean
  *       400:
  *         description: Error al obtener el perfil del empleado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
  */
-router.get('/perfil/', getEmpleadoController.getPerfil);////revisar
+router.get('/perfil/', getEmpleadoController.getPerfil);
 
-router.get('/perfil-foto/', getEmpleadoController.getPerfil);
-router.post('/perfil-foto/',upload.single('file'), getEmpleadoController.getPerfil);
-router.put('/perfil-foto/',upload.single('file'), getEmpleadoController.getPerfil);
+/**
+ * @swagger
+ * /empleados/egresar/:
+ *   put:
+ *     summary: Actualiza el estado de un empleado a egresado.
+ *     description: Actualiza el estado de un empleado a egresado y registra el egreso en la base de datos.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_persona:
+ *                 type: string
+ *                 description: El ID de la persona asociada al empleado.
+ *               observacion:
+ *                 type: string
+ *                 description: Observaciones adicionales sobre el egreso.
+ *     responses:
+ *       200:
+ *         description: Respuesta exitosa.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la solicitud.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje descriptivo de la solicitud.
+ *                 postEgreso:
+ *                   type: object
+ *                   description: Resultado del registro de egreso.
+ *       400:
+ *         description: Error en la solicitud.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la solicitud.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error descriptivo.
+ */
 
-router.get('/list/modulo', getEmpleadoController.getPerfil);
-router.get('/list/cargo', getEmpleadoController.getPerfil);
-router.get('/list/profesion', getEmpleadoController.getPerfil);
+router.put('/egresar/', getEmpleadoController.putEgresado);
 
-router.put('/edit/modulo', getEmpleadoController.getPerfil);
-router.put('/edit/cargo', getEmpleadoController.getPerfil);
-router.put('/edit/profesion', getEmpleadoController.getPerfil);
+/**
+ * @swagger
+ * /empleados/perfil-foto/:
+ *   get:
+ *     summary: Obtener foto de perfil de un empleado.
+ *     description: Endpoint para obtener la foto de perfil de un empleado.
+ *     parameters:
+ *       - in: query
+ *         name: Id
+ *         description: ID del empleado.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: OK. La foto se ha obtenido correctamente.
+ *         content:
+ *           image/*:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Error. No se pudo obtener la foto de perfil.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 
-router.post('/new/modulo', getEmpleadoController.getPerfil);
-router.post('/new/cargo', getEmpleadoController.getPerfil);
-router.post('/new/profesion', getEmpleadoController.getPerfil);
+router.get('/perfil-foto/', getEmpleadoController.getFoto);
+
+/**
+ * @swagger
+ * /empleados/perfil-foto/:
+ *   post:
+ *     summary: Sube una foto de perfil de empleado.
+ *     description: Sube una foto de perfil de empleado y la guarda en el servidor.
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: file
+ *         type: file
+ *         required: true
+ *         description: Archivo de imagen a subir (formato JPEG).
+ *     responses:
+ *       200:
+ *         description: Foto de perfil subida exitosamente.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *               description: Estado de la respuesta.
+ *             message:
+ *               type: string
+ *               description: Mensaje de la respuesta.
+ *             postFoto:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_persona:
+ *                     type: string
+ *                     description: ID de la persona.
+ *                   ruta:
+ *                     type: string
+ *                     format: uri
+ *                     description: URL de la foto de perfil.
+ *       400:
+ *         description: Error al subir la foto de perfil.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *               description: Estado de la respuesta.
+ *             message:
+ *               type: string
+ *               description: Mensaje de error.
+ *       500:
+ *         description: Error del servidor.
+ */
+
+router.post('/perfil-foto/',upload.single('file'), getEmpleadoController.postFoto);
 
 
+
+/**
+ * @swagger
+ * /empleados/list/modulo:
+ *   get:
+ *     summary: Obtiene la lista de módulos de empleados.
+ *     description: Devuelve una lista de módulos de empleados.
+ *     responses:
+ *       200:
+ *         description: Respuesta exitosa.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la solicitud.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de la solicitud.
+ *                 getModulosList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: number
+ *                         description: ID del módulo.
+ *                       modulo:
+ *                         type: string
+ *                         description: Nombre del módulo.
+ *       400:
+ *         description: Error en la solicitud.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la solicitud.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error.
+ */
+
+router.get('/list/modulo', getEmpleadoController.getModulosList);
+
+/**
+ * @swagger
+ * /empleados/list/cargo:
+ *   get:
+ *     summary: Obtener la lista de cargos de empleados.
+ *     description: Devuelve una lista de los cargos de empleados disponibles.
+ *     responses:
+ *       200:
+ *         description: Respuesta exitosa.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica el estado de la solicitud.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de la respuesta.
+ *                 getCargosList:
+ *                   type: array
+ *                   description: Lista de cargos de empleados.
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         description: ID del cargo.
+ *                       cargo:
+ *                         type: string
+ *                         description: Nombre del cargo.
+ *       400:
+ *         description: Error en la solicitud.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica el estado de la solicitud.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error.
+ */
+router.get('/list/cargo', getEmpleadoController.getCargosList);
+
+/**
+ * @swagger
+ * /empleados/list/profesion:
+ *   get:
+ *     summary: Obtener lista de profesiones de empleados
+ *     description: Obtiene la lista de profesiones de los empleados.
+ *     tags:
+ *       - Empleados
+ *     responses:
+ *       200:
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: successful
+ *                 getProfesionList:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       profesion:
+ *                         type: string
+ *                         example: Médico
+ *       400:
+ *         description: Error en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener la lista de profesiones
+ */
+
+router.get('/empleados/list/profesion', getEmpleadoController.getProfesionList);
+
+/**
+ * @swagger
+ * /empleados/edit/modulo:
+ *   put:
+ *     summary: Actualiza el módulo de un empleado
+ *     tags: [Empleados]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_empleado:
+ *                 type: string
+ *                 description: ID del empleado
+ *               id_new_modulo:
+ *                 type: string
+ *                 description: ID del nuevo módulo
+ *     responses:
+ *       200:
+ *         description: Éxito. El módulo del empleado ha sido actualizado correctamente.
+ *       400:
+ *         description: Error. No se pudo actualizar el módulo del empleado.
+ */
+router.put('/edit/modulo', getEmpleadoController.putEmpleadoModulo);
+
+/*router.put('/edit/cargo', getEmpleadoController.putEmpleadoCargo);
+router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
+router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
+
+router.post('/new/modulo', getEmpleadoController.postModulo);
+router.post('/new/cargo', getEmpleadoController.postCargo);
+router.post('/new/profesion', getEmpleadoController.postProfesion);
+
+router.get('/list/consultas', getEmpleadoController.getConsultas);
+router.get('/download/consulta', getEmpleadoController.getConsultaBuffer);
+*/
 module.exports = router;

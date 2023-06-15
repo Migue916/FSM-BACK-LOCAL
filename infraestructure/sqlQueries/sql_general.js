@@ -1,4 +1,8 @@
 const sqlQueries = {
+
+    DELETE_FOTO:
+        "DELETE FROM public.profilePhoto WHERE id_persona = \$1",
+
     GET_FOTO: 
         "SELECT * FROM public.profilePhoto WHERE id_persona = \$1",
 

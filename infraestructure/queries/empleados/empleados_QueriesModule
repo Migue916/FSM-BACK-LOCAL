@@ -21,4 +21,14 @@ module.exports = {
     get_EmpleadosModulos: require("./get_EmpleadosModulos"),
 
     get_Perfil: require("./get_Perfil"),
+    get_Tipo_Cargo: require("./get_Tipo_Cargo"),
+
+    put_Empleado: require("./put_Empleado"),
+    post_Egreso: require("./post_Egreso"),
+
+    get_ModulosList: require("./get_ModulosList"),
+    get_CargosList: require("./get_CargosList"),
+    get_ProfesionList: require("./get_ProfesionList"),
+
+    put_EmpleadoModulo: require("./put_EmpleadoModulo"),
 };

@@ -67,6 +67,26 @@ exports.postConsulta= async (req, res, next) => {
   }
 };
 
+exports.postFormat = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    result.postFormat = 
+      await beneficiarioServices.postFormat(req);
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 exports.postAdjuntos= async (req, res, next) => {
   try {
     const result = {
@@ -104,6 +124,7 @@ exports.putConsulta= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
 
 exports.putAdjuntos= async (req, res, next) => {
   try {
@@ -705,14 +726,18 @@ exports.getConsultaBuffer = async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    const hex = req.body.hex;
-    const file = await beneficiarioServices.getConsultaBuffer(hex);
+    const info = {
+     hex: req.body.hex,
+     isFormat: req.body.isFormat,
+    }
+    const file = await beneficiarioServices.getConsultaBuffer(info);
 
-    result.archivo = file;
+    result.reporte = file;
 
-    res.setHeader('Content-Disposition', `attachment; filename=${file.name}`);
-    res.setHeader('Content-Type', file.type);
-
+    if(!req.body.isFormat){
+      res.setHeader('Content-Disposition', `attachment; filename=${file.name}`);
+      res.setHeader('Content-Type', file.type);
+    }
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
@@ -885,8 +910,13 @@ exports.getConsulta= async (req, res, next) => {
       message: "successful",
     };
 
+    const list = {
+        id: req.query.Id, 
+        isFormat: req.query.isFormat
+    };
+
     result.getConsulta =
-      await beneficiarioServices.getConsulta(req.query.Id);
+      await beneficiarioServices.getConsulta(list);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

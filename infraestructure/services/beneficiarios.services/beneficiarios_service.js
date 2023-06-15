@@ -1,4 +1,3 @@
-const fs = require('fs');
 const queries_Beneficiarios = require("../../queries/beneficiarios/beneficiarios_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
@@ -6,7 +5,6 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs7100320029bb315a8;AccountKey=9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==;EndpointSuffix=core.windows.net';
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 const { Blob } = require('buffer');
-const { fileURLToPath } = require('url');
 
 exports.postFoto = async (req) => {
 
@@ -24,6 +22,13 @@ exports.postFoto = async (req) => {
 
   const storageUrl = blockBlobClient.url;
 
+  const getFoto = getBlobUrl(id);
+  if(getFoto.length === 0){
+    const { containerName, blobName } = await getContainerAndBlobName(getFoto);
+    deleteBlob(containerName, blobName);
+    await queries_General.delete_foto(id);
+  }
+
   const Foto = {
     id_persona: id,
     ruta: storageUrl,
@@ -32,7 +37,6 @@ exports.postFoto = async (req) => {
   try {
     const postFoto = await queries_General.post_Foto(Foto);
     const results = [];
-    results.push(results);
 
     return (results);
   } catch (error) {
@@ -40,6 +44,7 @@ exports.postFoto = async (req) => {
     res.status(500).send('Server error');
   }
 };
+
 
 async function deleteBlob(containerName, blobName){
   const containerClient = blobServiceClient.getContainerClient(containerName);
@@ -49,7 +54,7 @@ async function deleteBlob(containerName, blobName){
 
 exports.putAdjuntos = async (req) => {
 
-  const storageUrl = upload(req);
+  const storageUrl = upload(req.file);
   const { containerName, blobName } = await getContainerAndBlobName(req.hex);
   deleteBlob(containerName, blobName);
   
@@ -73,10 +78,16 @@ exports.putAdjuntos = async (req) => {
 
 exports.putConsulta = async (req) => {
 
-  const storageUrl = upload(req);
-  const { containerName, blobName } = await getContainerAndBlobName(req.hex);
-  deleteBlob(containerName, blobName);
-  
+  let storageUrl = null;
+  if(!req.body.isFormat){
+    storageUrl = upload(req.file);
+    const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
+    deleteBlob(containerName, blobName);
+  }else{
+    const formato = await format(req);
+    console.log(formato);
+    storageUrl = JSON.stringify(formato);
+  }
   const Consulta = {
     id_consulta: req.body.id_consulta,
     id_empleado: req.body.id_empleado,
@@ -87,9 +98,6 @@ exports.putConsulta = async (req) => {
   try {
     const putConsulta = await queries_Beneficiarios.put_consulta(Consulta);
     const results = [];
-
-    results.push(results);
-
     return results;
   } catch (error) {
     throw error;
@@ -101,7 +109,7 @@ async function upload(req){
   const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();
   
-  const blobName = Date.now() + '_' + req.file.originalname;
+  const blobName = Date.now() + '_' + req.originalname;
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   
   const options = { blobHTTPHeaders: { blobContentType: req.mimetype } };
@@ -120,14 +128,17 @@ exports.postConsulta = async (req) => {
       id_empleado: req.body.id_empleado,
       id_modulo: req.body.id_modulo,
       nombre: req.body.nombre,
-      ruta: storageUrl
+      hex: storageUrl,
+      isFormat: false
     };
 
     const postConsulta = await queries_Beneficiarios.post_consulta(Consulta);
-    const results = {
+    const result = {
       id: postConsulta[0].id
     };
-
+    const results = []; 
+    
+    results.push(result);
     results.push(results);
 
     return results;
@@ -136,6 +147,91 @@ exports.postConsulta = async (req) => {
   }
 };
 
+const format = async(req) => {
+  const Empleado = await nombreEmpleado(req.body.id_empleado);
+
+  const fechaActual = new Date();
+
+  const year = fechaActual.getFullYear();
+  const month = fechaActual.getMonth() + 1;
+  const day = fechaActual.getDate();
+  const hours = fechaActual.getHours();
+  const minutes = fechaActual.getMinutes();
+
+  const fechaFormateada = `${year}-${month}-${day}`;
+  const horaFormateada = `${hours}:${minutes}`;
+
+  let Interdependencia = null;
+
+  if(req.body.Interdependencia){
+    const Empleado_Intervencion = await nombreEmpleado(req.body.id_empleado_intervencion)
+    Interdependencia = {      
+      Area: Empleado_Intervencion.Modulo,
+      Nombre_Profesional: Empleado_Intervencion.Nombre + " " + Empleado_Intervencion.Apellido,
+      Fecha_notificacion: req.body.Fecha_notificacion
+    }
+  }
+
+  let Material = null;
+  if(req.body.Material){
+    Material = {      
+      Videos: req.body.Videos,
+      Posters: req.body.Posters,
+      Juegos: req.body.Juegos,
+      Otro: req.body.Otro,
+      Descripcion: req.body.Descripcion
+    }
+  }
+
+  const Formato = {
+    Area: Empleado.Modulo,
+    Fecha: fechaFormateada,
+    Hora: horaFormateada,
+    Nombre_Profesional: Empleado.Nombre + " " + Empleado.Apellido,
+    No_Tarjeta_profesional: Empleado.No_Tarjeta_profesional,
+    Objetivo_intervencion: req.body.Objetivo_intervencion,
+    Desarrollo_intervencion: req.body.Desarrollo_intervencion,
+    Interdependencia: Interdependencia,
+    Material: Material, 
+    Percepcion_beneficiario: req.body.Percepcion_beneficiario,
+    Recomendaciones: req.body.Recomendaciones,
+    Fecha_proxima_intervencion: req.body.Fecha_proxima_intervencion,
+  };
+  
+  return Formato;
+
+};
+
+exports.postFormat = async (req) => {
+  try {
+
+    const formato = await format(req);
+    const Empleado = await nombreEmpleado(req.body.id_empleado);
+
+    const Consulta = {
+      id_beneficiario: req.body.id_beneficiario,
+      id_empleado: req.body.id_empleado,
+      id_modulo: Empleado.id_modulo,
+      nombre: req.body.nombre,
+      hex: JSON.stringify(formato),
+      isFormat: true
+    };
+
+    console.log(Consulta);
+
+    const postConsulta = await queries_Beneficiarios.post_consulta(Consulta);
+    const result = {
+      id: postConsulta[0].id
+    };
+    const results = []; 
+    
+    results.push(result);
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
 
 exports.postAdjuntos = async (req) => {
   try {
@@ -212,15 +308,20 @@ exports.getFoto = async (id) => {
   }
 };
 
-exports.getConsultaBuffer = async (hex) => {
+exports.getConsultaBuffer = async (info) => {
   try {
-    const { containerName, blobName } = await getContainerAndBlobName(hex);
-    const blob = await downloadBlob(blobServiceClient, containerName, blobName);
-    const file = await blobToFile(blob, blobName);
+    let file = [];
+    if(!info.isFormat){
+      const { containerName, blobName } = await getContainerAndBlobName(info.hex);
+      const blob = await downloadBlob(blobServiceClient, containerName, blobName);
+      file = await blobToFile(blob, blobName);
+    }{
+      file = JSON.parse(info.hex);
+    }
     return file;
   } catch (error) {
     throw error;
-  }
+  } 
 };
 
 exports.getOrientacionList = async (orientacion) => {
@@ -240,17 +341,17 @@ exports.getOrientacionList = async (orientacion) => {
   }
 };
 
-exports.getConsulta = async (id) => {
+exports.getConsulta = async (list) => {
   try {
-    const getConsulta = await queries_Beneficiarios.get_Consultas_url(id);
+    const getConsulta = await queries_Beneficiarios.get_Consultas_url(list);
     const results = [];
     for (const row of getConsulta) {
 
       const modulo = await queries_General.get_Modulo(row.id_modulo);
-      const empleado = await nombreEmpleado(+row.id_empleado);
+      const empleado = await nombreEmpleado(row.id_empleado);
 
       const result = {
-        url: row.hex,
+        hex: row.hex,
         modulo: modulo[0].modulo,
         responsable: empleado.Nombre + " " + empleado.Apellido,
         fecha: row.fecha, 
@@ -287,13 +388,19 @@ async function getAdjuntos(id){
 
 const nombreEmpleado = async (id) => {
   try {
-    const nombreEmpleado = await queries_Empleados.get_nombre(+id);
+    const nombreEmpleado = await queries_Empleados.get_nombre(id);
+
+    const cargo = await queries_Empleados.get_Cargo(nombreEmpleado[0].id_cargo);
+    const modulo = await queries_General.get_Modulo(nombreEmpleado[0].pertenencia_de_modulo);
 
     const result = {
-      id: id,
+      id: id.id,
       Nombre: nombreEmpleado[0].p_nombre + " " + nombreEmpleado[0].s_nombre,
       Apellido: nombreEmpleado[0].p_apellido + " " + nombreEmpleado[0].s_apellido,
-      Cargo: nombreEmpleado[0].id_cargo
+      No_Tarjeta_profesional: nombreEmpleado[0].tarjeta_profesional,
+      Cargo: cargo[0].cargo,
+      id_modulo: nombreEmpleado[0].pertenencia_de_modulo, 
+      Modulo: modulo[0].modulo
     };
 
     return result;

@@ -2039,55 +2039,65 @@ router.post('/new/consulta', upload.single('file'), getBeneficiarioController.po
  * @swagger
  * /beneficiarios/edit/consulta:
  *   put:
- *     summary: Actualizar consulta
- *     description: Actualiza la información de una consulta específica
- *     tags:
+ *     summary: Actualiza una consulta de beneficiarios.
+ *     tags: 
  *       - Beneficiarios
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
+ *               file:
+ *                 type: file
  *               id_consulta:
- *                 type: integer
- *                 description: El ID de la consulta
+ *                 type: string
  *               id_empleado:
- *                 type: integer
- *                 description: El ID del empleado
+ *                 type: string
  *               hex:
  *                 type: string
- *                 description: La ruta hexadecimal de la consulta
+ *               isFormat:
+ *                 type: boolean
+ *               id_empleado_intervencion:
+ *                 type: string
+ *               Fecha_notificacion:
+ *                 type: string
+ *               Videos:
+ *                 type: string
+ *               Posters:
+ *                 type: string
+ *               Juegos:
+ *                 type: string
+ *               Otro:
+ *                 type: string
+ *               Descripcion:
+ *                 type: string
+ *               Objetivo_intervencion:
+ *                 type: string
+ *               Desarrollo_intervencion:
+ *                 type: string
+ *               Percepcion_beneficiario:
+ *                 type: string
+ *               Recomendaciones:
+ *                 type: string
+ *               Fecha_proxima_intervencion:
+ *                 type: string
+ *             required:
+ *               - file
+ *               - id_consulta
+ *               - id_empleado
+ *               - hex
  *     responses:
  *       200:
- *         description: Consulta actualizada correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Estado de la operación
- *                 message:
- *                   type: string
- *                   description: Mensaje de éxito
+ *         description: OK
  *       400:
- *         description: Error al actualizar la consulta
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Estado de la operación
- *                 message:
- *                   type: string
- *                   description: Mensaje de error
+ *         description: Bad Request
+ *       500:
+ *         description: Internal Server Error
  */
-router.put('/edit/consulta', getBeneficiarioController.putConsulta);
+
+router.put('/edit/consulta', upload.single('file'), getBeneficiarioController.putConsulta);
 
 /**
  * @swagger
@@ -2098,12 +2108,18 @@ router.put('/edit/consulta', getBeneficiarioController.putConsulta);
  *     tags:
  *       - Beneficiarios
  *     parameters:
- *       - in: query
- *         name: Id
- *         schema:
- *           type: integer
+ *       - name: Id
+ *         in: query
+ *         description: The ID parameter
  *         required: true
- *         description: Id del beneficiario
+ *         schema:
+ *           type: string
+ *       - name: isFormat
+ *         in: query
+ *         description: The isFormat parameter
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: Consulta de beneficiario obtenida con éxito
@@ -2153,34 +2169,121 @@ router.get('/list/consulta', getBeneficiarioController.getConsulta);
 
 /**
  * @swagger
- * tags:
- *   name: Beneficiarios
- *   description: API para la gestión de beneficiarios
  * /beneficiarios/download/consulta:
  *   get:
- *     summary: Descarga un archivo asociado a un beneficiario
- *     tags: [Beneficiarios]
- *     parameters:
- *       - in: query
- *         name: hex
- *         schema:
- *           type: string
- *         required: true
- *         description: Identificador hexadecimal del beneficiario
+ *     summary: Download the consulta file for beneficiarios
+ *     description: Download the consulta file for beneficiarios. This endpoint requires the `hex` and `isFormat` parameters in the request body.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               hex:
+ *                 type: string
+ *                 description: The hex value
+ *               isFormat:
+ *                 type: boolean
+ *                 description: Specify if the file needs to be in a specific format
+ *           example:
+ *             hex: "..."
+ *             isFormat: true
  *     responses:
  *       200:
- *         description: Archivo descargado correctamente
+ *         description: Successful operation
  *         content:
- *           application/octet-stream:
+ *           application/json:
  *             schema:
- *               type: string
- *               format: binary
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: The status of the operation
+ *                 message:
+ *                   type: string
+ *                   description: The message of the operation
+ *                 reporte:
+ *                   type: object
+ *                   description: The consulta file
+ *                   properties:
+ *                     Area:
+ *                       type: string
+ *                       description: The area of the consulta
+ *                     Fecha:
+ *                       type: string
+ *                       description: The fecha of the consulta
+ *                     Hora:
+ *                       type: string
+ *                       description: The hora of the consulta
+ *                     Nombre_Profesional:
+ *                       type: string
+ *                       description: The nombre profesional of the consulta
+ *                     No_Tarjeta_profesional:
+ *                       type: string
+ *                       description: The no tarjeta profesional of the consulta
+ *                     Objetivo_intervencion:
+ *                       type: string
+ *                       description: The objetivo intervencion of the consulta
+ *                     Desarrollo_intervencion:
+ *                       type: string
+ *                       description: The desarrollo intervencion of the consulta
+ *                     Interdependencia:
+ *                       type: object
+ *                       description: The interdependencia of the consulta
+ *                       properties:
+ *                         Area:
+ *                           type: string
+ *                           description: The area of the interdependencia
+ *                         Nombre_Profesional:
+ *                           type: string
+ *                           description: The nombre profesional of the interdependencia
+ *                         Fecha_notificacion:
+ *                           type: string
+ *                           description: The fecha notificacion of the interdependencia
+ *                     Material:
+ *                       type: object
+ *                       description: The material of the consulta
+ *                       properties:
+ *                         Videos:
+ *                           type: number
+ *                           description: The number of videos
+ *                         Posters:
+ *                           type: number
+ *                           description: The number of posters
+ *                         Juegos:
+ *                           type: number
+ *                           description: The number of juegos
+ *                         Otro:
+ *                           type: string
+ *                           description: The other material
+ *                         Descripcion:
+ *                           type: string
+ *                           description: The descripcion of the material
+ *                     Percepcion_beneficiario:
+ *                       type: string
+ *                       description: The percepcion beneficiario of the consulta
+ *                     Recomendaciones:
+ *                       type: string
+ *                       description: The recomendaciones of the consulta
+ *                     Fecha_proxima_intervencion:
+ *                       type: string
+ *                       description: The fecha proxima intervencion of the consulta
  *       400:
- *         description: Parámetros incorrectos o faltantes
- *       500:
- *         description: Error del servidor
+ *         description: Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: The status of the operation
+ *                 message:
+ *                   type: string
+ *                   description: The error message
  */
 router.get('/download/consulta', getBeneficiarioController.getConsultaBuffer);
+
 
 
 /**
@@ -2301,7 +2404,86 @@ router.post('/new/consulta/adjuntos', upload.array('file'), getBeneficiarioContr
  */
 router.post('/edit/consulta/adjuntos', upload.single('file'), getBeneficiarioController.putAdjuntos);
 
-router.put('/perfil-foto/', upload.single('file'), getBeneficiarioController.getPerfil);
+/**
+ * @swagger
+ * /beneficiarios/new/consulta/formato:
+ *   post:
+ *     summary: Crear una nueva consulta de formato para beneficiarios
+ *     description: Crea una nueva consulta de formato para un beneficiario.
+ *     tags:
+ *       - Beneficiarios
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: Datos de la consulta de formato
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id_beneficiario:
+ *               type: string
+ *               description: ID del beneficiario
+ *             id_empleado:
+ *               type: string
+ *               description: ID del empleado
+ *             nombre:
+ *               type: string
+ *               description: Nombre del beneficiario
+ *             id_empleado_intervencion:
+ *               type: string
+ *               description: ID del empleado de intervención (opcional)
+ *             Fecha_notificacion:
+ *               type: string
+ *               format: date
+ *               description: Fecha de notificación (opcional)
+ *             Material:
+ *               type: object
+ *               properties:
+ *                 Videos:
+ *                   type: string
+ *                   description: Videos (opcional)
+ *                 Posters:
+ *                   type: string
+ *                   description: Posters (opcional)
+ *                 Juegos:
+ *                   type: string
+ *                   description: Juegos (opcional)
+ *                 Otro:
+ *                   type: string
+ *                   description: Otro (opcional)
+ *                 Descripcion:
+ *                   type: string
+ *                   description: Descripción (opcional)
+ *             Objetivo_intervencion:
+ *               type: string
+ *               description: Objetivo de la intervención
+ *             Desarrollo_intervencion:
+ *               type: string
+ *               description: Desarrollo de la intervención
+ *             Percepcion_beneficiario:
+ *               type: string
+ *               description: Percepción del beneficiario
+ *             Recomendaciones:
+ *               type: string
+ *               description: Recomendaciones
+ *             Fecha_proxima_intervencion:
+ *               type: string
+ *               format: date
+ *               description: Fecha de próxima intervención
+ *     responses:
+ *       200:
+ *         description: Consulta de formato creada exitosamente
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               description: ID de la consulta de formato creada
+ */
+
+router.post('/new/consulta/formato', getBeneficiarioController.postFormat);
+
+
 
 module.exports = router;
 

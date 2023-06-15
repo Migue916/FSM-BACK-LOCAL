@@ -3,7 +3,7 @@ const sqlQueries = require("../../sqlQueries/sql_Beneficiarios");
 
 const post_consulta = async (consulta) => {
     try {
-    const result = await pool.DBConnection.query(sqlQueries.POST_CONSULTA, [consulta.id_empleado, consulta.id_beneficiario, consulta.id_modulo, consulta.ruta, consulta.nombre]);
+    const result = await pool.DBConnection.query(sqlQueries.POST_CONSULTA, [consulta.id_empleado, consulta.id_beneficiario, consulta.id_modulo, consulta.hex, consulta.nombre, consulta.isFormat]);
     return result.rows;
       } catch (err) {
       console.error(err);

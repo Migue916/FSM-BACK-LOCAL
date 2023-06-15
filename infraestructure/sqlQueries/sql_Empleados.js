@@ -1,4 +1,31 @@
 const sqlQueries = {
+    PUT_EMPLEADO_MODULO: 
+        "UPDATE empleado SET pertenencia_de_modulo = \$2 WHERE id = \$1",
+
+    GET_PROFESION_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(profesion, \$1) AS similitud FROM profesion) as sc where similitud > 0.07",
+
+    GET_PROFESION_LIST:
+        "select * from profesion",
+
+    GET_CARGO_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(cargo, \$1) AS similitud FROM cargo) as sc where similitud > 0.07",
+
+    GET_CARGO_LIST:
+        "select * from cargo",
+
+    GET_MODULO_LIST_BUSQUEDA:
+        "select * from (SELECT *, SIMILARITY(modulo, \$1) AS similitud FROM modulo) as sc where similitud > 0.07",
+
+    GET_MODULO_LIST:
+        "select * from modulo",
+
+    PUT_ESTADO_EMPLEADO:
+        "UPDATE empleados SET activo = false WHERE id=\$1",
+
+    GET_TIPO_CARGO:
+        "SELECT cargo FROM users WHERE id = \$1",
+
     GET_EMPLEADOS_PERFIL:
         "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE id = \$1",
 

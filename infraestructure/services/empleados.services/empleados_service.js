@@ -1,5 +1,9 @@
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
+const { BlobServiceClient } = require('@azure/storage-blob');
+const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs7100320029bb315a8;AccountKey=9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==;EndpointSuffix=core.windows.net';
+const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+const { Blob } = require('buffer');
 
 exports.getEmpleadosPorCargo = async (info) => {
   try { 
@@ -11,6 +15,8 @@ exports.getEmpleadosPorCargo = async (info) => {
 
       const cargo = await queries_Empleados.get_Cargo(row.id_cargo);
       const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
+      const genero = await queries_General.get_genero(row.id_genero);
+
 
       const result = {
         Nombre: row.p_nombre + " " +
@@ -19,6 +25,7 @@ exports.getEmpleadosPorCargo = async (info) => {
                 row.s_apellido,
 
         Identificacion: row.id,
+        Genero: genero[0].genero,
         Cargo: cargo[0].cargo,
         Modulo: modulo[0].modulo,
       };
@@ -51,6 +58,7 @@ exports.getEmpleadosLastTen = async () => {
       const consultas = await queries_Empleados.get_Consultas(row.id);
       const cargo = await queries_Empleados.get_Cargo(row.id_cargo);
       const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
+      const genero = await queries_General.get_genero(row.id_genero);
 
       if (consultas.length === 0){
         consultas.push(
@@ -68,6 +76,7 @@ exports.getEmpleadosLastTen = async () => {
 
         Identificacion: row.id,
         Edad: row.edad,
+        Genero: genero[0].genero,
         Consultas_realizadas: consultas[0].cant,
         Cargo: cargo[0].cargo,
         Modulo: modulo[0].modulo,
@@ -91,6 +100,8 @@ exports.getEmpleados = async (page) => {
       const consultas = await queries_Empleados.get_Consultas(row.id);
       const cargo = await queries_Empleados.get_Cargo(row.id_cargo);
       const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
+      const genero = await queries_General.get_genero(row.id_genero);
+
 
       if (consultas.length === 0){
         consultas.push(
@@ -107,6 +118,7 @@ exports.getEmpleados = async (page) => {
                 row.s_apellido,
 
         Identificacion: row.id,
+        Genero: genero[0].genero,
         Edad: row.edad,
         Consultas_realizadas: consultas[0].cant,
         Cargo: cargo[0].cargo,
@@ -166,6 +178,7 @@ exports.getEmpleadosPorNombre = async (nombre) => {
       const cant = await queries_Empleados.get_Consultas(row.id);
       const cargo = await queries_Empleados.get_Cargo(row.id_cargo);
       const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
+      const genero = await queries_General.get_genero(row.id_genero);
 
       if (cant.length === 0){
           cant.push(
@@ -180,6 +193,7 @@ exports.getEmpleadosPorNombre = async (nombre) => {
                   row.p_apellido + " " +
                   row.s_apellido,
         Identificacion: row.id,
+        Genero: genero[0].genero,
         Cargo: cargo[0].cargo,
         Modulo: modulo[0].modulo,
         Consultas: cant[0].cant,
@@ -224,7 +238,6 @@ exports.getEmpleadosModulo = async () => {
 
 exports.getEmpleadosGenero = async () => {
     try {
-      // Segunda forma si va a hacer los calculos desde javascript
       
       const estadistica = 
         await queries_Empleados.get_EmpleadosGeneros();
@@ -245,7 +258,7 @@ exports.getEmpleadosGenero = async () => {
 
 exports.getEmpleadosActuales = async () => {
     try {
-      // Segunda forma si va a hacer los calculos desde javascript
+
       const actual =
         await queries_Empleados.get_EmpleadosActuales();
       const pasado =
@@ -330,6 +343,8 @@ exports.getPerfil = async (id) => {
       const consultas = await queries_Empleados.get_Consultas(id);
       const cargo = await queries_Empleados.get_Cargo(getPerfil[0].id_cargo);
       const modulo = await queries_General.get_Modulo(getPerfil[0].pertenencia_de_modulo);
+      const genero = await queries_General.get_genero(getPerfil[0].id_genero);
+      const user = await queries_Empleados.get_Tipo_Cargo(id);
 
       if (consultas.length === 0){
         consultas.push(
@@ -342,16 +357,192 @@ exports.getPerfil = async (id) => {
           Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
           Apellido: getPerfil[0].p_apellido + " " + getPerfil[0].s_apellido,
           Identificacion: getPerfil[0].id,
+          Genero: genero[0].genero,
           Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
           Edad: getPerfil[0].edad,
           Fecha_ingreso: getPerfil[0].fecha_ingreso, 
           Num_consultas: consultas[0].cant,
           Cargo: cargo[0].cargo, 
-          Modulo: modulo[0].modulo
+          Modulo: modulo[0].modulo,
+          Admin: user[0].cargo
         };   
         results.push(result);
         return results;
 } catch (error) {
   throw error;
 }
+};
+
+exports.putEgreso = async (egreso) => {
+  try {
+    const camposLlenos = Object.values(egreso).every((campo) => campo !== null && campo !== undefined);
+    if (camposLlenos) {
+      await queries_Empleados.put_Empleado(egreso);
+      await queries_Empleados.post_Egreso(egreso);
+    }
+    else
+      res.status(400);
+  } catch (error) {
+    throw error;
+  }
+};
+
+async function getBlobUrl(id) {
+  const foto = await queries_General.get_Foto(id);
+  return foto[0].hex;
+};
+
+async function streamToBlob(stream) {
+  const data = await new Response(stream).arrayBuffer();
+  return new Blob([data]);
+}
+
+
+async function downloadBlob(blobServiceClient, containerName, blobName) {
+  try {
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    const response = await blockBlobClient.download();
+    const blob = await streamToBlob(response.readableStreamBody);
+    return blob;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function blobToFile(blob, filename) {
+  const buffer = Buffer.from(await blob.arrayBuffer());
+  buffer.name = filename;
+  buffer.type = blob.type;
+
+  return buffer;
+};
+
+async function getContainerAndBlobName(url) {
+  const urlParts = new URL(url);
+  const pathParts = urlParts.pathname.split('/');
+  const containerName = pathParts[1];
+  const blobName = pathParts.slice(2).join('/');
+  return { containerName, blobName };
+}
+
+exports.getFoto = async (id) => {
+  try {
+    const url = await getBlobUrl(id);
+    const { containerName, blobName } = await getContainerAndBlobName(url);
+    const blob = await downloadBlob(blobServiceClient, containerName, blobName);
+    const file = await blobToFile(blob, 'filename.jpg');
+    return file;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.postFoto = async (req) => {
+
+  const id = req.body.id;
+
+  const containerName = 'profilephotos';
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  await containerClient.createIfNotExists();
+
+  const blobName = Date.now() + '_' + req.file.originalname;
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+  const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
+  await blockBlobClient.uploadData(req.file.buffer, options);
+
+  const storageUrl = blockBlobClient.url;
+
+  const getFoto = getBlobUrl(id);
+  if(getFoto.length === 0){
+    const { containerName, blobName } = await getContainerAndBlobName(getFoto);
+    deleteBlob(containerName, blobName);
+    await queries_General.delete_foto(id);
+  }
+
+  const Foto = {
+    id_persona: id,
+    ruta: storageUrl,
+  };
+
+  try {
+    const postFoto = await queries_General.post_Foto(Foto);
+    const results = [];
+    results.push(results);
+
+    return (results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+
+async function deleteBlob(containerName, blobName){
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  await blockBlobClient.deleteIfExists();
+}
+
+exports.getModulosList = async (modulo) => {
+  try {
+    const getModulosList = await queries_Empleados.get_ModulosList(modulo);
+    const results = [];
+    for (const row of getModulosList) {
+      const result = {
+        id: row.id,
+        modulo: row.modulo
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.getCargosList = async (cargo) => {
+  try {
+    const getCargosList = await queries_Empleados.get_CargosList(cargo);
+    const results = [];
+    for (const row of getCargosList) {
+      const result = {
+        id: row.id,
+        cargo: row.cargo
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.getProfesionList = async (profesion) => {
+  try {
+    const getProfesionList = await queries_Empleados.get_ProfesionList(profesion);
+    const results = [];
+    for (const row of getProfesionList) {
+      const result = {
+        id: row.id,
+        profesion: row.profesion
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putEmpleadoModulo = async (modulo) => {
+  try {
+    const putEmpleadoModulo = await queries_Beneficiarios.put_EmpleadoModulo(modulo);
+    const results = [];
+    results.push(results);
+    return results;
+  } catch (error) {
+    throw error;
+  }
 };

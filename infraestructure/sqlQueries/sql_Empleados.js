@@ -1,4 +1,7 @@
 const sqlQueries = {
+    PUT_EMPLEADO_CARGO: 
+        "UPDATE empleado SET id_cargo = \$2 WHERE id = \$1",
+
     PUT_EMPLEADO_MODULO: 
         "UPDATE empleado SET pertenencia_de_modulo = \$2 WHERE id = \$1",
 

@@ -2348,7 +2348,7 @@ router.get('/download/consulta', getBeneficiarioController.getConsultaBuffer);
  *               type: string
  *               description: Mensaje descriptivo del error
  */
-router.post('/new/consulta/adjuntos', upload.array('file'), getBeneficiarioController.postAdjuntos);
+router.post('/new/consulta/adjuntos', upload.single('file'), getBeneficiarioController.postAdjuntos);
 
 /**
  * @swagger

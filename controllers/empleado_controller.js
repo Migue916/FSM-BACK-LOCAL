@@ -373,11 +373,43 @@ exports.putEmpleadoModulo = async (req, res, next) => {
       id_new_modulo: req.body.id_new_modulo
     };
 
-    const camposLlenos = Object.values(sede).every((value) => value !== undefined && value !== '');
+    const camposLlenos = Object.values(modulo).every((value) => value !== undefined && value !== '');
     
     if (camposLlenos){
       result.putEmpleadoModulo = 
-        await beneficiarioServices.putEmpleadoModulo(modulo);
+        await empleadosServices.putEmpleadoModulo(modulo);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putEmpleadoCargo = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const cargo = {
+      id_empleado: req.body.id_empleado, 
+      id_new_cargo: req.body.id_new_cargo
+    };
+
+    const camposLlenos = Object.values(cargo).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putEmpleadoCargo = 
+        await empleadosServices.putEmpleadoCargo(cargo);
     }else{
       console.error(error.message);
       response.error(req, res, result, 400, "error");

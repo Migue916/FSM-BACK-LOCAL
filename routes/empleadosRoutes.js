@@ -341,7 +341,7 @@ router.get('/listAll/', getEmpleadoController.getEmpleados);
 
 /**
  * @swagger
- * /empleados/filtarCargo:
+ * /empleados/filtrarCargo-Modulo:
  *   get:
  *     summary: Obtiene una lista de empleados por cargo
  *     description: Obtiene una lista de empleados filtrada por cargo y/o módulo.
@@ -381,7 +381,7 @@ router.get('/listAll/', getEmpleadoController.getEmpleados);
  *       400:
  *         description: Error en la solicitud
  */
-router.get('/filtarCargo/', getEmpleadoController.getEmpleadosPorCargo);
+router.get('/filtrarCargo-Modulo/', getEmpleadoController.getEmpleadosPorCargo);
 
 /**
  * @swagger
@@ -798,8 +798,8 @@ router.get('/empleados/list/profesion', getEmpleadoController.getProfesionList);
  */
 router.put('/edit/modulo', getEmpleadoController.putEmpleadoModulo);
 
-/*router.put('/edit/cargo', getEmpleadoController.putEmpleadoCargo);
-router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
+router.put('/edit/cargo', getEmpleadoController.putEmpleadoCargo);
+/*router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
 router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
 
 router.post('/new/modulo', getEmpleadoController.postModulo);

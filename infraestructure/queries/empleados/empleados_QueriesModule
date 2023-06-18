@@ -31,4 +31,5 @@ module.exports = {
     get_ProfesionList: require("./get_ProfesionList"),
 
     put_EmpleadoModulo: require("./put_EmpleadoModulo"),
+    put_EmpleadoCargo: require("./put_EmpleadoCargo"),
 };

@@ -179,10 +179,11 @@ const format = async(req) => {
       Posters: req.body.Posters,
       Juegos: req.body.Juegos,
       Otro: req.body.Otro,
+      Cual: req.body.Cual,
       Descripcion: req.body.Descripcion
     }
   }
-
+  
   const Formato = {
     Area: Empleado.Modulo,
     Fecha: fechaFormateada,
@@ -235,20 +236,19 @@ exports.postFormat = async (req) => {
 
 exports.postAdjuntos = async (req) => {
   try {
-    const storageUrls = await Promise.all(req.files.map(upload));
+    const storageUrls = upload(req.file);
 
-    const consultas = storageUrls.map((url) => ({
+    const consulta = {
       id_reporte: req.body.id_reporte,
       nombre: req.body.nombre,
-      ruta: url,
-    }));
+      ruta: storageUrls,
+      isFormat: false
+    };
 
     const results = [];
 
-    for (const consulta of consultas) {
-      const postAdjunto = await queries_Beneficiarios.post_Adjuntos(consulta);
-      results.push(results);
-    }
+    const postAdjunto = await queries_Beneficiarios.post_Adjuntos(consulta);
+    results.push(results);
 
     return results;
   } catch (error) {
@@ -353,6 +353,7 @@ exports.getConsulta = async (list) => {
       const result = {
         hex: row.hex,
         modulo: modulo[0].modulo,
+        id_responsable: row.id_empleado,
         responsable: empleado.Nombre + " " + empleado.Apellido,
         fecha: row.fecha, 
         id: row.id, 

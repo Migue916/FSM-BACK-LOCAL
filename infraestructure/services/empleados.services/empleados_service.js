@@ -538,7 +538,18 @@ exports.getProfesionList = async (profesion) => {
 
 exports.putEmpleadoModulo = async (modulo) => {
   try {
-    const putEmpleadoModulo = await queries_Beneficiarios.put_EmpleadoModulo(modulo);
+    const putEmpleadoModulo = await queries_Empleados.put_EmpleadoModulo(modulo);
+    const results = [];
+    results.push(results);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putEmpleadoCargo = async (cargo) => {
+  try {
+    const putEmpleadoCargo = await queries_Empleados.put_EmpleadoCargo(cargo);
     const results = [];
     results.push(results);
     return results;

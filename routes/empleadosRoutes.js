@@ -293,21 +293,19 @@ router.get('/saludo/', getEmpleadoController.getNombre);
 
 /**
  * @swagger
- * /empleados/listAll:
+ * empleados/listAll/:
  *   get:
  *     summary: Obtiene una lista de empleados
- *     description: Devuelve una lista de empleados con información detallada
- *     tags:
- *       - Empleados
+ *     description: Obtiene una lista de empleados con información detallada
  *     parameters:
  *       - in: query
- *         name: page
+ *         name: Identificador
  *         schema:
- *           type: integer
- *         description: Número de la página a mostrar
+ *           type: string
+ *         description: Identificación del empleado
  *     responses:
  *       200:
- *         description: Lista de empleados
+ *         description: Lista de empleados obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -315,10 +313,13 @@ router.get('/saludo/', getEmpleadoController.getNombre);
  *               properties:
  *                 status:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                 paginas:
+ *                   example: successful
+ *                 Total:
  *                   type: integer
+ *                   example: 10
  *                 empleados:
  *                   type: array
  *                   items:
@@ -327,16 +328,28 @@ router.get('/saludo/', getEmpleadoController.getNombre);
  *                       Nombre:
  *                         type: string
  *                       Identificacion:
- *                         type: integer
- *                       Edad:
- *                         type: integer
- *                       Consultas_realizadas:
- *                         type: integer
+ *                         type: string
+ *                       Genero:
+ *                         type: string
  *                       Cargo:
  *                         type: string
  *                       Modulo:
  *                         type: string
+ *       400:
+ *         description: Error al obtener la lista de empleados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: error_message
  */
+
 router.get('/listAll/', getEmpleadoController.getEmpleados);
 
 /**
@@ -387,11 +400,11 @@ router.get('/filtrarCargo-Modulo/', getEmpleadoController.getEmpleadosPorCargo);
  * @swagger
  * /empleados/desplegables:
  *   get:
- *     summary: Obtiene información desplegable para empleados
- *     description: Obtiene información desplegable para empleados, como cargos y módulos.
+ *     summary: Obtener desplegables de empleados.
+ *     description: Obtiene los desplegables relacionados con los empleados, como los cargos, módulos y géneros.
  *     responses:
  *       200:
- *         description: Información desplegable obtenida con éxito
+ *         description: Respuesta exitosa.
  *         content:
  *           application/json:
  *             schema:
@@ -399,20 +412,38 @@ router.get('/filtrarCargo-Modulo/', getEmpleadoController.getEmpleadosPorCargo);
  *               properties:
  *                 status:
  *                   type: boolean
- *                   description: Estado de la operación
+ *                   description: Indica el estado de la solicitud.
  *                 message:
  *                   type: string
- *                   description: Mensaje de éxito o error
+ *                   description: Mensaje de estado.
  *                 getEmpleadosCargos:
  *                   type: array
+ *                   description: Array de cargos de empleados.
  *                   items:
- *                     type: object
- *                     description: Información de cargos de empleados
+ *                     type: string
  *                 getEmpleadosModulos:
  *                   type: array
+ *                   description: Array de módulos de empleados.
  *                   items:
- *                     type: object
- *                     description: Información de módulos de empleados
+ *                     type: string
+ *                 getEmpleadosGeneros:
+ *                   type: array
+ *                   description: Array de géneros de empleados.
+ *                   items:
+ *                     type: string
+ *       400:
+ *         description: Error en la solicitud.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica el estado de la solicitud.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error.
  */
 router.get('/desplegables', getEmpleadoController.getDesplegables);
 

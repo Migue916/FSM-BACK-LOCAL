@@ -25,4 +25,5 @@ module.exports = {
     post_Medicamento: require("./post_Medicamento"),
 
     delete_foto: require("./delete_foto"),
+    new_Password: require("./new_Password"),
 };

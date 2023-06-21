@@ -141,6 +141,56 @@ router.post('/user', login.ingresar);
  */
 router.post('/create', login.user_create);
 
+/**
+ * @swagger
+ * /login/newPassword:
+ *   put:
+ *     tags:
+ *       - Login
+ *     summary: Cambiar contraseña de un empleado
+ *     description: Permite cambiar la contraseña de un empleado existente.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - contrasena
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: El correo electrónico del empleado.
+ *               contrasena:
+ *                 type: string
+ *                 description: La nueva contraseña del empleado.
+ *     responses:
+ *       200:
+ *         description: Contraseña cambiada exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error al cambiar la contraseña (campos faltantes o error interno).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.put('/newPassword', login.new_Password);
+
+
 
 module.exports = router;
 

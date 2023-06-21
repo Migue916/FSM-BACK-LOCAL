@@ -11,7 +11,7 @@ const get_Beneficiarios = async (page) => {
               break;
             default:
               result = await pool.DBConnection.query((sqlQueries.GET_BENEFICIARIO), []);
-          }          
+          }             
         return result.rows;
     } catch (error) {
         throw error;

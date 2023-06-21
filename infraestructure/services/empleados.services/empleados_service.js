@@ -1,4 +1,5 @@
 const queries_Empleados = require("../../queries/empleados/empleados_QueriesModule");
+const queries_Beneficiarios = require("../../queries/beneficiarios/beneficiarios_QueriesModule");
 const queries_General = require("../../queries/general/general_QueriesModule");
 const { BlobServiceClient } = require('@azure/storage-blob');
 const connectionString = 'DefaultEndpointsProtocol=https;AccountName=cs7100320029bb315a8;AccountKey=9PkVAwI5INo9uZZmOqoFPNN+yoypiOaMbR+q2Wa0zO0Qe4xPlUfv9qfMqzHrO7HU1BJzqnX2fltd+AStYdf8KA==;EndpointSuffix=core.windows.net';
@@ -128,6 +129,10 @@ exports.getEmpleados = async (page) => {
     }
     var filtredData = results;
 
+    if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
+      filtredData = filtredData.filter(empleado => empleado.Edad >= page.EdadIn && empleado.Edad <= page.EdadFn);
+    }
+
     if (page.Cargo !== undefined){
       filtredData = filtredData.filter(empleado => empleado.Cargo === page.Cargo);
     }
@@ -139,7 +144,29 @@ exports.getEmpleados = async (page) => {
         empleado.Consultas_realizadas >= page.ConsultasIn && empleado.Consultas_realizadas <= page.ConsultasFn
       );
     }
-    return filtredData;
+    if (page.Genero !== undefined) {
+      filtredData = filtredData.filter(empleado => empleado.Genero === page.Genero);
+    }
+    const remainingRecords = filtredData.length % 10;
+    const isLastPage = Math.ceil(filtredData.length / 10) === +page.page;
+    const recordsToTake = isLastPage ? Math.min(remainingRecords, 10) : 10;
+
+    let firstTenRecords;
+    if (remainingRecords !== 0) {
+      firstTenRecords = filtredData.slice((+page.page - 1) * 10, (+page.page - 1) * 10 + recordsToTake);
+    } else {
+      firstTenRecords = filtredData.slice((+page.page * 10) - 10, (+page.page) * 10);
+    }
+
+    const filtrados = {
+      Cantidad_filtrada: filtredData.length,
+      Numero_de_paginas: filtredData.length / 10
+    };
+
+    firstTenRecords.push(filtrados);
+
+    return(firstTenRecords);
+
   } catch (error) {
     throw error;
   }
@@ -325,6 +352,23 @@ exports.getEmpleadosActuales = async () => {
             const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
             const result = {
               modulos: modulo[0].modulo,
+            };
+            results.push(result);
+          }
+          return results;
+  } catch (error) {
+    throw error;
+  }
+  };
+
+  exports.getEmpleadosGeneros = async () => {
+    try { 
+      const getEmpleadosGeneros = await queries_Empleados.get_Empleados_Generos();
+        const results = [];
+          for (const row of getEmpleadosGeneros) { 
+            const genero = await queries_General.get_genero(row.id_genero);
+            const result = {
+              generos: genero[0].genero,
             };
             results.push(result);
           }
@@ -552,6 +596,112 @@ exports.putEmpleadoCargo = async (cargo) => {
     const putEmpleadoCargo = await queries_Empleados.put_EmpleadoCargo(cargo);
     const results = [];
     results.push(results);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putInfo = async (info) => {
+  try {
+    const putInfo = await queries_Empleados.put_Info(info);
+    const results = [];
+    results.push(putInfo);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.getConsulta = async (list) => {
+  try {
+    const getConsulta = await queries_Empleados.get_Consultas_url(list);
+    const results = [];
+    for (const row of getConsulta) {
+
+      const modulo = await queries_General.get_Modulo(row.id_modulo);
+      const empleado = await nombreBeneficiario(row.id_beneficiario);
+
+      const result = {
+        hex: row.hex,
+        modulo: modulo[0].modulo,
+        id_beneficiario: row.id_beneficiario,
+        beneficiario: empleado.Nombre + " " + empleado.Apellido,
+        fecha: row.fecha, 
+        id: row.id, 
+        nombre: row.nombre,
+        adjuntos: await getAdjuntos(row.id),
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+async function getAdjuntos(id){
+  try {
+    const getAdjuntos = await queries_Beneficiarios.get_Adjuntos_url(id);
+    const results = [];
+    for (const row of getAdjuntos) {
+
+      const result = {
+        url: row.hex,
+        id: row.id, 
+        nombre: row.nombre
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+const nombreBeneficiario = async (id) => {
+  try {
+    const nombreBeneficiario = await queries_Beneficiarios.get_nombre(id);
+    const tipo_doc = await queries_General.get_tipo_doc(nombreBeneficiario[0].id_tipo_doc);
+
+    const result = {
+      id: id,
+      Nombre: nombreBeneficiario[0].p_nombre + " " + nombreBeneficiario[0].s_nombre,
+      Apellido: nombreBeneficiario[0].p_apellido + " " + nombreBeneficiario[0].s_apellido,
+      Edad: nombreBeneficiario[0].edad,
+      Tipo_doc: tipo_doc[0].abreviacion
+    };
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.getBeneficiariosUltimoMes = async (id) => {
+  try {
+    const getBeneficiariosUltimoMes = await queries_Empleados.get_Beneficiarios_Ultimo_Mes(id);
+    const results = [];
+    for (const row of getBeneficiariosUltimoMes) {
+
+      const modulo = await queries_General.get_Modulo(row.id_modulo);
+      const empleado = await nombreBeneficiario(row.id_beneficiario);
+
+      const result = {
+        hex: row.hex,
+        modulo: modulo[0].modulo,
+        id_beneficiario: row.id_beneficiario,
+        beneficiario: empleado.Nombre + " " + empleado.Apellido,
+        edad: empleado.Edad,
+        fecha: row.fecha, 
+        id: row.id, 
+        nombre: row.nombre,
+        isFormat: row.isFormat,
+        adjuntos: await getAdjuntos(row.id),
+      };
+      results.push(result);
+    }
     return results;
   } catch (error) {
     throw error;

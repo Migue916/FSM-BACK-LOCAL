@@ -120,3 +120,45 @@ exports.user_create = async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
+
+exports.new_Password = async (req, res, next) => {
+  let result = [];
+  try {
+    const employee = {
+      email: req.body.email,
+      contrasena: await bcrypt.hash(req.body.contrasena, saltRounds)
+    };
+    const todosLosCamposLlenos = Object.values(employee).every((value) => value !== undefined && value !== '');
+
+    if (todosLosCamposLlenos) {
+
+      const getUser = await queries_General.get_user(originalUser.email);
+      user =  getUser.length > 0;
+
+      if(user){
+        await queries_General.new_Password(employee);
+      }
+      result = {
+        status: true,
+        message: "successful",
+      };
+
+    } else {
+      res.status(400);
+      result = {
+        status: false,
+        message: "Faltan campos por llenar",
+      };
+      res.send(result);
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    console.error(error.message);
+    result = {
+      status: false,
+      message: error.message,
+    };
+    response.error(req, res, result, 400, "error");
+  }
+};

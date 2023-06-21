@@ -1246,7 +1246,7 @@ router.post('/new/eps', getBeneficiarioController.postEps);
 /**
  * @swagger
  * /beneficiarios/edit/diagnostico:
- *   post:
+ *   put:
  *     summary: Actualizar el diagnóstico de un beneficiario
  *     description: Actualiza el diagnóstico de un beneficiario con los datos proporcionados en el cuerpo de la solicitud.
  *     requestBody:
@@ -1308,7 +1308,7 @@ router.post('/new/eps', getBeneficiarioController.postEps);
  *                   description: Mensaje de error.
  *                   example: "error"
  */
-router.post('/edit/diagnostico', getBeneficiarioController.putDiagnostico);
+router.put('/edit/diagnostico', getBeneficiarioController.putDiagnostico);
 
 /**
  * @swagger
@@ -1361,7 +1361,7 @@ router.put('/edit/sede', getBeneficiarioController.putSede);
 /**
  * @swagger
  * /beneficiarios/edit/riesgos:
- *   post:
+ *   put:
  *     summary: Actualiza la información de riesgos de un beneficiario
  *     tags: [Riesgos]
  *     requestBody:
@@ -1416,12 +1416,12 @@ router.put('/edit/sede', getBeneficiarioController.putSede);
  *                   type: string
  *                   example: error
  */
-router.post('/edit/riesgos', getBeneficiarioController.putRiesgos);
+router.put('/edit/riesgos', getBeneficiarioController.putRiesgos);
 
 /**
  * @swagger
  * /beneficiarios/edit/alergias:
- *   post:
+ *   put:
  *     summary: Actualiza las alergias del beneficiario
  *     description: Actualiza las alergias del beneficiario con el ID proporcionado
  *     tags:
@@ -1470,7 +1470,7 @@ router.post('/edit/riesgos', getBeneficiarioController.putRiesgos);
  *                 message:
  *                   type: string
  */
-router.post('/edit/alergias', getBeneficiarioController.putAlergias);
+router.put('/edit/alergias', getBeneficiarioController.putAlergias);
 
 /**
  * @swagger
@@ -2353,7 +2353,7 @@ router.post('/new/consulta/adjuntos', upload.single('file'), getBeneficiarioCont
 /**
  * @swagger
  * /beneficiarios/edit/consulta/adjuntos:
- *   post:
+ *   put:
  *     summary: Actualiza los adjuntos de una consulta de beneficiario
  *     description: Actualiza los adjuntos de una consulta de beneficiario
  *     tags:
@@ -2402,7 +2402,7 @@ router.post('/new/consulta/adjuntos', upload.single('file'), getBeneficiarioCont
  *             message:
  *               type: string
  */
-router.post('/edit/consulta/adjuntos', upload.single('file'), getBeneficiarioController.putAdjuntos);
+router.put('/edit/consulta/adjuntos', upload.single('file'), getBeneficiarioController.putAdjuntos);
 
 /**
  * @swagger
@@ -2483,6 +2483,38 @@ router.post('/edit/consulta/adjuntos', upload.single('file'), getBeneficiarioCon
 
 router.post('/new/consulta/formato', getBeneficiarioController.postFormat);
 
+/**
+ * @swagger
+ * /beneficiarios/edit/info:
+ *   put:
+ *     summary: Actualiza la información de un beneficiario.
+ *     description: Permite actualizar la información de un beneficiario identificado por su ID.
+ *     parameters:
+ *       - in: body
+ *         name: info
+ *         description: Información del beneficiario a actualizar.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id_beneficiario:
+ *               type: string
+ *             p_nombre:
+ *               type: string
+ *             s_nombre:
+ *               type: string
+ *             p_apellido:
+ *               type: string
+ *             s_apellido:
+ *               type: string
+ *             id_tipo_doc:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Respuesta exitosa.
+ *       400:
+ *         description: Error en la solicitud.
+ */
+router.put('/edit/info', getBeneficiarioController.putInfo);
 
 
 module.exports = router;

@@ -769,7 +769,7 @@ router.get('/list/cargo', getEmpleadoController.getCargosList);
  *                   example: Error al obtener la lista de profesiones
  */
 
-router.get('/empleados/list/profesion', getEmpleadoController.getProfesionList);
+router.get('/list/profesion', getEmpleadoController.getProfesionList);
 
 /**
  * @swagger
@@ -798,6 +798,29 @@ router.get('/empleados/list/profesion', getEmpleadoController.getProfesionList);
  */
 router.put('/edit/modulo', getEmpleadoController.putEmpleadoModulo);
 
+/**
+ * @swagger
+ * /empleados/edit/cargo:
+ *   put:
+ *     summary: Actualiza el cargo de un empleado
+ *     tags: [Empleados]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_empleado:
+ *                 type: string
+ *               id_new_cargo:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Actualización exitosa
+ *       400:
+ *         description: Error en la solicitud
+ */
 router.put('/edit/cargo', getEmpleadoController.putEmpleadoCargo);
 /*router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
 router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
@@ -806,7 +829,196 @@ router.post('/new/modulo', getEmpleadoController.postModulo);
 router.post('/new/cargo', getEmpleadoController.postCargo);
 router.post('/new/profesion', getEmpleadoController.postProfesion);
 
-router.get('/list/consultas', getEmpleadoController.getConsultas);
-router.get('/download/consulta', getEmpleadoController.getConsultaBuffer);
 */
+
+/**
+ * @swagger
+ * /empleados/edit/info:
+ *   put:
+ *     summary: Actualiza la información de un empleado
+ *     description: Permite editar la información de un empleado.
+ *     parameters:
+ *       - name: id_empleado
+ *         in: body
+ *         description: ID del empleado
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: p_nombre
+ *         in: body
+ *         description: Primer nombre del empleado
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: s_nombre
+ *         in: body
+ *         description: Segundo nombre del empleado
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: p_apellido
+ *         in: body
+ *         description: Primer apellido del empleado
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: s_apellido
+ *         in: body
+ *         description: Segundo apellido del empleado
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: id_tipo_doc
+ *         in: body
+ *         description: ID del tipo de documento del empleado
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Éxito en la actualización de la información del empleado
+ *       400:
+ *         description: Error en la solicitud
+ */
+router.put('/edit/info', getEmpleadoController.putInfo);
+
+/**
+ * @swagger
+ * /empleados/list/consultas:
+ *   get:
+ *     summary: Obtiene la lista de consultas de empleados.
+ *     description: Endpoint para obtener la lista de consultas de empleados.
+ *     parameters:
+ *       - in: query
+ *         name: Id
+ *         schema:
+ *           type: string
+ *         description: El ID de la consulta.
+ *       - in: query
+ *         name: isFormat
+ *         schema:
+ *           type: boolean
+ *         description: Indica si el resultado debe ser formateado.
+ *     responses:
+ *       '200':
+ *         description: Respuesta exitosa.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getConsulta:
+ *                   type: object
+ *                   properties:
+ *                     // Propiedades de la respuesta de getConsulta
+ *       '400':
+ *         description: Error en la solicitud.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.get('/list/consultas', getEmpleadoController.getConsultas);
+
+/**
+ * @swagger
+ * /empleados/download/consulta:
+ *   get:
+ *     summary: Descargar consulta de empleado
+ *     description: Descarga un archivo de consulta de empleado en formato especificado.
+ *     parameters:
+ *       - in: query
+ *         name: hex
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Valor hexadecimal para la consulta de empleado.
+ *       - in: query
+ *         name: isFormat
+ *         required: true
+ *         schema:
+ *           type: boolean
+ *         description: Indica si el formato del archivo debe ser procesado.
+ *     responses:
+ *       200:
+ *         description: Archivo de consulta descargado exitosamente.
+ *       400:
+ *         description: Error al procesar la solicitud.
+ */
+router.get('/download/consulta', getEmpleadoController.getConsultaBuffer);
+
+/**
+ * @swagger
+ * /empleados/consultas/ultimo-mes:
+ *   get:
+ *     summary: Obtener beneficiarios del último mes
+ *     description: Obtén la lista de beneficiarios del último mes para un empleado.
+ *     parameters:
+ *       - in: query
+ *         name: id_empleado
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del empleado
+ *     responses:
+ *       '200':
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 getBeneficiariosUltimoMes:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       hex:
+ *                         type: string
+ *                       modulo:
+ *                         type: string
+ *                       id_beneficiario:
+ *                         type: integer
+ *                       beneficiario:
+ *                         type: string
+ *                       edad:
+ *                         type: integer
+ *                       fecha:
+ *                         type: string
+ *                       id:
+ *                         type: integer
+ *                       nombre:
+ *                         type: string
+ *                       isFormat:
+ *                         type: boolean
+ *                       adjuntos:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *     '400':
+ *       description: Error en la solicitud
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: boolean
+ *               message:
+ *                 type: string
+ */
+router.get('/consultas/ultimo-mes', getEmpleadoController.getBeneficiariosUltimoMes);
 module.exports = router;

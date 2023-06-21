@@ -14,6 +14,7 @@ module.exports = {
     get_EmpleadosPorNombre: require("./get_EmpleadosPorNombre"),
     get_nombre: require("./get_nombre"),
     get_Empleados: require("./get_Empleados"),
+    get_Empleados_Generos: require("./get_Empleados_Generos"),
 
     get_Empleados_Por_Cargo: require("./get_Empleados_Por_Cargo"),
 
@@ -32,4 +33,8 @@ module.exports = {
 
     put_EmpleadoModulo: require("./put_EmpleadoModulo"),
     put_EmpleadoCargo: require("./put_EmpleadoCargo"),
+    put_Info: require("./put_Info"),
+    get_Consultas_url: require("./get_Consultas_url"),
+    get_Beneficiarios_Ultimo_Mes: require("./get_Beneficiarios_Ultimo_Mes"),
+
 };

@@ -1,4 +1,10 @@
 const sqlQueries = {
+    GET_NOMBRE_BENEFICIARIO:
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND id = \$1",
+
+    PUT_INFO:
+        "UPDATE beneficiario SET p_nombre = \$2, s_nombre = \$3, p_apellido = \$4, s_apellido = \$5, id_tipo_doc = \$6 WHERE id = \$1",
+
     GET_BENEFICIARIO_MEDICAMENTOS_LIST:
         "SELECT * FROM medicamento WHERE id = \$1",
 
@@ -14,7 +20,7 @@ const sqlQueries = {
         "SELECT DISTINCT id_genero from beneficiario where estado = true",
 
     GET_BENEFICIARIO_CONSULTA_URL:
-        "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1 AND isFormat = \$2",
+        "SELECT * FROM public.reporte_modulo WHERE id_beneficiario = \$1 AND isFormat = \$2  ORDER BY fecha DESC ",
 
     GET_BENEFICIARIO_ADJUNTOS_URL:
         "SELECT * FROM public.reporteS_ADJUNTOS WHERE id_reporte = \$1",
@@ -176,7 +182,7 @@ const sqlQueries = {
         "SELECT DISTINCT fecha_ingreso from beneficiario WHERE ESTADO = TRUE",
     
     GET_BENEFICIARIO_IDENTITY:
-        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM beneficiario WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$1) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda;",
+        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM beneficiario WHERE estado = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$1) > 0.07 OR SIMILARITY(CAST(id AS TEXT), \$1) > 0.8) ) AS busqueda;",
 
     CREATE_BENEFICIARIO:
         "INSERT INTO public.beneficiario(id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_sede, fecha_nacimiento, id_genero, id_orientacion, fecha_ingreso, id_eps, id_psicologo, id_trabajador_social, estado) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, CURRENT_DATE, \$11, \$12, \$13, \$14)",

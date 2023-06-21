@@ -347,6 +347,42 @@ exports.putAlergias= async (req, res, next) => {
   }
 };
 
+exports.putInfo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const info = {
+      id_beneficiario: req.body.id_beneficiario,
+      p_nombre: req.body.p_nombre, 
+      s_nombre: req.body.s_nombre, 
+      p_apellido: req.body.p_apellido,
+      s_apellido: req.body.s_apellido,
+      id_tipo_doc: req.body.id_tipo_doc
+    };
+
+    const camposLlenos = Object.values(info).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putInfo = 
+        await beneficiarioServices.putInfo(info);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 
 exports.putRiesgos= async (req, res, next) => {
   try {

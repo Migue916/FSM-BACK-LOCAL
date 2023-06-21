@@ -1,4 +1,16 @@
 const sqlQueries = {
+    GET_EMPLEADOS_GENEROS:
+        "SELECT DISTINCT id_genero FROM EMPLEADO WHERE ACTIVO = TRUE",
+
+    GET_EMPLEADOS_CONSULTA_ULTIMO_MES:
+        "SELECT * FROM reporte_modulo WHERE id_empleado = \$1 AND EXTRACT(MONTH FROM fecha) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE);",
+
+    GET_EMPLEADOS_CONSULTA_URL:
+        "SELECT * FROM public.reporte_modulo WHERE id_empleado = \$1 AND isFormat = \$2 ORDER BY fecha DESC",
+
+    PUT_INFO:
+        "UPDATE empleado SET p_nombre = \$2, s_nombre = \$3, p_apellido = \$4, s_apellido = \$5, id_tipo_doc = \$6 WHERE id = \$1",
+
     PUT_EMPLEADO_CARGO: 
         "UPDATE empleado SET id_cargo = \$2 WHERE id = \$1",
 
@@ -48,10 +60,10 @@ const sqlQueries = {
         "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true AND EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) BETWEEN \$3 AND \$4 OFFSET \$1 LIMIT \$2",
 
     GET_EMPLEADO:
-        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true OFFSET \$1 LIMIT \$2", 
+        "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true", 
 
     GET_EMPLEADO_IDENTITY:
-        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$3) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda OFFSET \$1 LIMIT \$2;",
+        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$3) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda",
 
     GET_NOMBRE: 
         "SELECT * FROM empleado WHERE id = \$1",

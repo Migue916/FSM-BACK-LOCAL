@@ -1,5 +1,8 @@
 const sqlQueries = {
 
+    PUT_CONTRASENA:
+        "UPDATE users SET contrasena = \$2 WHERE email = \$1",
+
     DELETE_FOTO:
         "DELETE FROM public.profilePhoto WHERE id_persona = \$1",
 

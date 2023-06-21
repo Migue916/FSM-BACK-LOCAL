@@ -54,7 +54,7 @@ async function deleteBlob(containerName, blobName){
 
 exports.putAdjuntos = async (req) => {
 
-  const storageUrl = upload(req.file);
+  const storageUrl = upload(req);
   const { containerName, blobName } = await getContainerAndBlobName(req.hex);
   deleteBlob(containerName, blobName);
   
@@ -80,7 +80,7 @@ exports.putConsulta = async (req) => {
 
   let storageUrl = null;
   if(!req.body.isFormat){
-    storageUrl = upload(req.file);
+    storageUrl = upload(req);
     const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
     deleteBlob(containerName, blobName);
   }else{
@@ -109,11 +109,11 @@ async function upload(req){
   const containerClient = blobServiceClient.getContainerClient(containerName);
   await containerClient.createIfNotExists();
   
-  const blobName = Date.now() + '_' + req.originalname;
+  const blobName = Date.now() + '_' + req.file.originalname;
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   
-  const options = { blobHTTPHeaders: { blobContentType: req.mimetype } };
-  await blockBlobClient.uploadData(req.buffer, options);
+  const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
+  await blockBlobClient.uploadData(req.file.buffer, options);
   
   return blockBlobClient.url;
 }
@@ -121,7 +121,7 @@ async function upload(req){
 exports.postConsulta = async (req) => {
   try {
 
-    const storageUrl = upload(req.file);
+    const storageUrl = upload(req);
   
     const Consulta = {
       id_beneficiario: req.body.id_beneficiario,
@@ -236,13 +236,11 @@ exports.postFormat = async (req) => {
 
 exports.postAdjuntos = async (req) => {
   try {
-    const storageUrls = upload(req.file);
-
+    const storageUrls = upload(req);
     const consulta = {
       id_reporte: req.body.id_reporte,
       nombre: req.body.nombre,
       ruta: storageUrls,
-      isFormat: false
     };
 
     const results = [];
@@ -569,6 +567,18 @@ exports.putDiagnostico = async (diagnostico) => {
     throw error;
   }
 };
+
+exports.putInfo = async (info) => {
+  try {
+    const putInfo = await queries_Beneficiarios.put_Info(info);
+    const results = [];
+    results.push(putInfo);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 exports.postOrientacion = async (orientacion) => {
   try {
@@ -1323,7 +1333,7 @@ exports.getBeneficiariosLastTen = async () => {
       const id_orientacion = row.id_orientacion;
       const fecha_ingreso = row.fecha_ingreso;
 
-      const tipo_doc = await queries_General.get_tipo_doc(+id_tipo_doc);
+      const tipo_doc = await queries_General.get_tipo_doc(id_tipo_doc);
       const sede = await queries_General.get_sede(+id_sede);
       const orientacion = await queries_General.get_orientacion(+id_orientacion);
 

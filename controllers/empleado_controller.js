@@ -1,5 +1,8 @@
 const response = require("./responses/response");
 const empleadosServices = require("../infraestructure/services/empleados.services/empleados_service");
+const beneficiarioServices = require("../infraestructure/services/beneficiarios.services/beneficiarios_service");
+const e = require("express");
+
 
 exports.getEmpleadosLastTen= async (req, res, next) => {
   try {
@@ -115,10 +118,8 @@ exports.getStatisticsEmpleados = async (req, res, next) => {
             message: "successful",
           };
           const page = req.query;
-          const total_paginas =
-            await empleadosServices.getEmpleadosActuales();
       
-          result.paginas = (total_paginas.value)/10;
+          result.Total = (await (empleadosServices.getEmpleadosActuales())).value;
 
           result.empleados =
             await empleadosServices.getEmpleados(page);
@@ -192,6 +193,8 @@ exports.getDesplegables= async (req, res, next) => {
       await empleadosServices.getEmpleadosCargos();
     result.getEmpleadosModulos =
       await empleadosServices.getEmpleadosModulos();
+    result.getEmpleadosGeneros =
+      await empleadosServices.getEmpleadosGeneros();
     
       
     response.success(req, res, result, 200, "success");
@@ -414,6 +417,118 @@ exports.putEmpleadoCargo = async (req, res, next) => {
       console.error(error.message);
       response.error(req, res, result, 400, "error");
     }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putInfo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const info = {
+      id_empleado: req.body.id_empleado,
+      p_nombre: req.body.p_nombre, 
+      s_nombre: req.body.s_nombre, 
+      p_apellido: req.body.p_apellido,
+      s_apellido: req.body.s_apellido,
+      id_tipo_doc: req.body.id_tipo_doc
+    };
+
+    const camposLlenos = Object.values(info).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putInfo = 
+        await empleadosServices.putInfo(info);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.getConsultas = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const list = {
+        id: req.query.Id, 
+        isFormat: req.query.isFormat
+    };
+
+    result.getConsulta =
+      await empleadosServices.getConsulta(list);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.getConsultaBuffer = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    const info = {
+     hex: req.body.hex,
+     isFormat: req.body.isFormat,
+    }
+    const file = await beneficiarioServices.getConsultaBuffer(info);
+
+    result.reporte = file;
+
+    if(!req.body.isFormat){
+      res.setHeader('Content-Disposition', `attachment; filename=${file.name}`);
+      res.setHeader('Content-Type', file.type);
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.getBeneficiariosUltimoMes= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    result.getBeneficiariosUltimoMes =
+      await empleadosServices.getBeneficiariosUltimoMes(req.query.id_empleado);
+    
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

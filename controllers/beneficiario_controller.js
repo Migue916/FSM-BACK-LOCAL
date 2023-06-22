@@ -37,6 +37,7 @@ exports.postFoto = async (req, res, next) => {
 
     result.postFoto = 
       await beneficiarioServices.postFoto(req);
+
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {
@@ -993,8 +994,8 @@ exports.getDiagnosticoList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getDiagnosticoList =
-      await beneficiarioServices.getDiagnosticoList(req.query.Diagnostico);
+    result.getList =
+      await beneficiarioServices.getDiagnosticoList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

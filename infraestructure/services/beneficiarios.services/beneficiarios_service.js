@@ -109,20 +109,23 @@ async function upload(req) {
     const containerName = 'consultas';
     const containerClient = blobServiceClient.getContainerClient(containerName);
     await containerClient.createIfNotExists();
-  
+
     const blobName = Date.now() + '_' + req.file.originalname;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  
-    const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
+
+    const contentType = require('mime-types').lookup(req.file.originalname);
+    const options = { blobHTTPHeaders: { blobContentType: contentType } };
     await blockBlobClient.uploadData(req.file.buffer, options);
-  
+
     const storageUrl = blockBlobClient.url;
 
     return storageUrl;
   } catch (error) {
+    console.error('Error al cargar el archivo:', error);
     throw error;
   }
 }
+
 
 exports.postConsulta = async (req) => {
   try {
@@ -645,12 +648,12 @@ exports.postDiagnostico = async (diagnostico) => {
 
 exports.getDiagnosticoList = async (diagnostico) => {
   try {
-    const getDiagnosticoList = await queries_Beneficiarios.get_DiagnosticoList(diagnostico);
+    const getList = await queries_Beneficiarios.get_DiagnosticoList(diagnostico);
     const results = [];
-    for (const row of getDiagnosticoList) {
+    for (const row of getList) {
       const result = {
         id: row.id,
-        Diagnostico: row.enfermedad
+        Values: row.enfermedad
       };
       results.push(result);
     }

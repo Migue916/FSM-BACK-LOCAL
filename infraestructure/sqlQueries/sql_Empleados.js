@@ -63,7 +63,7 @@ const sqlQueries = {
         "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM empleado WHERE activo = true", 
 
     GET_EMPLEADO_IDENTITY:
-        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$3) > 0.07 OR SIMILARITY(CAST(id AS TEXT), '1') > 0.8) ) AS busqueda",
+        "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM empleado WHERE activo = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$1) > 0.07 OR SIMILARITY(CAST(id AS TEXT), \$1) > 0.8) ) AS busqueda",
 
     GET_NOMBRE: 
         "SELECT * FROM empleado WHERE id = \$1",

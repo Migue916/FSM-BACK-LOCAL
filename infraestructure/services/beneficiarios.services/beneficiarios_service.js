@@ -104,18 +104,24 @@ exports.putConsulta = async (req) => {
   }
 };
 
-async function upload(req){
-  const containerName = 'consultas';
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  await containerClient.createIfNotExists();
+async function upload(req) {
+  try {
+    const containerName = 'consultas';
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    await containerClient.createIfNotExists();
   
-  const blobName = Date.now() + '_' + req.file.originalname;
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    const blobName = Date.now() + '_' + req.file.originalname;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   
-  const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
-  await blockBlobClient.uploadData(req.file.buffer, options);
+    const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
+    await blockBlobClient.uploadData(req.file.buffer, options);
   
-  return blockBlobClient.url;
+    const storageUrl = blockBlobClient.url;
+
+    return storageUrl;
+  } catch (error) {
+    throw error;
+  }
 }
 
 exports.postConsulta = async (req) => {

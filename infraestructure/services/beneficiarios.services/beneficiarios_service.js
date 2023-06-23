@@ -130,11 +130,12 @@ exports.postConsulta = async (req) => {
   try {
 
     const storageUrl = upload(req);
+    const Empleado = await nombreEmpleado(req.body.id_empleado);
   
     const Consulta = {
       id_beneficiario: req.body.id_beneficiario,
       id_empleado: req.body.id_empleado,
-      id_modulo: req.body.id_modulo,
+      id_modulo: Empleado.id_modulo,
       nombre: req.body.nombre,
       hex: storageUrl,
       isFormat: false

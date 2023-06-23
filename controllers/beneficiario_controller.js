@@ -35,6 +35,8 @@ exports.postFoto = async (req, res, next) => {
       message: "successful",
     };
 
+    console.log(req.file);
+
     result.postFoto = 
       await beneficiarioServices.postFoto(req);
 
@@ -94,6 +96,7 @@ exports.postAdjuntos= async (req, res, next) => {
       status: true,
       message: "successful",
     };
+    console.log(req.body.file);
     result.postAdjuntos = 
       await beneficiarioServices.postAdjuntos(req);
     response.success(req, res, result, 200, "success");
@@ -133,6 +136,7 @@ exports.putAdjuntos= async (req, res, next) => {
       status: true,
       message: "successful",
     };
+
     result.putAdjuntos = 
       await beneficiarioServices.putAdjuntos(req);
     response.success(req, res, result, 200, "success");
@@ -155,8 +159,7 @@ exports.deleteAlergias= async (req, res, next) => {
 
     const Alergia = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_alergia: req.body.id_alergia,
-      id_empleado: req.body.id_empleado
+      id_alergia: req.body.id_value
     };
 
     const camposLlenos = Object.values(Alergia).every((value) => value !== undefined && value !== '');
@@ -189,8 +192,7 @@ exports.deleteMedicamento= async (req, res, next) => {
 
     const Medicamento = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_medicamento: req.body.id_medicamento,
-      id_empleado: req.body.id_empleado,
+      id_medicamento: req.body.id_value
     };
 
     const camposLlenos = Object.values(Medicamento).every((value) => value !== undefined && value !== '');
@@ -223,7 +225,7 @@ exports.deleteRiesgos= async (req, res, next) => {
 
     const Riesgos = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_riesgo: req.body.id_riesgo
+      id_riesgo: req.body.id_value
     };
 
     const camposLlenos = Object.values(Riesgos).every((value) => value !== undefined && value !== '');
@@ -255,8 +257,7 @@ exports.deleteDiagnostico= async (req, res, next) => {
 
     const Diagnostico = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_diagnostico: req.body.id_diagnostico,
-      id_empleado: req.body.id_empleado
+      id_diagnostico: req.body.id_value
     };
 
     const camposLlenos = Object.values(Diagnostico).every((value) => value !== undefined && value !== '');
@@ -290,7 +291,7 @@ exports.putOrientacion= async (req, res, next) => {
 
     const orientacion = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_orientacion: req.body.id_orientacion,
+      id_orientacion: req.body.id_value,
     };
 
     const camposLlenos = Object.values(orientacion).every((value) => value !== undefined && value !== '');
@@ -323,7 +324,7 @@ exports.putAlergias= async (req, res, next) => {
 
     const alergia = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_alergia: req.body.id_alergia,
+      id_alergia: req.body.id_value,
       id_empleado: req.body.id_empleado, 
       observacion: req.body.observacion
     };
@@ -394,7 +395,7 @@ exports.putRiesgos= async (req, res, next) => {
 
     const riesgo = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_riesgo: req.body.id_riesgo,
+      id_riesgo: req.body.id_value,
       id_empleado: req.body.id_empleado,
       observacion: req.body.observacion
     };
@@ -429,7 +430,7 @@ exports.putMedicamento= async (req, res, next) => {
 
     const medicamento = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_medicamento: req.body.id_medicamento,
+      id_medicamento: req.body.id_value,
       id_empleado: req.body.id_empleado,
       observacion: req.body.observacion
     };
@@ -463,7 +464,7 @@ exports.putSede= async (req, res, next) => {
 
     const sede = {
       id_beneficiario: req.body.id_beneficiario, 
-      id_sede_proxima: req.body.id_sede_proxima
+      id_sede_proxima: req.body.id_value
     };
 
     const camposLlenos = Object.values(sede).every((value) => value !== undefined && value !== '');
@@ -495,7 +496,7 @@ exports.putDiagnostico= async (req, res, next) => {
     };
 
     const diagnostico = {
-      id_enfermedad: req.body.id_enfermedad, 
+      id_enfermedad: req.body.id_value, 
       id_beneficiario: req.body.id_beneficiario, 
       id_empleado: req.body.id_empleado,
       tipo: req.body.tipo, 
@@ -528,7 +529,7 @@ exports.postOrientacion= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    const orientacion = req.body.Orientacion;
+    const orientacion = req.body.value;
 
     if (orientacion.length !== 0){
       result.postOrientacion = 
@@ -554,7 +555,7 @@ exports.postAlergias= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    const alergia = req.body.alergia;
+    const alergia = req.body.value;
 
     if (alergia.length !== 0){
       result.postAlergias = 
@@ -580,7 +581,7 @@ exports.postRiesgos= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    const riesgo = req.body.riesgo;
+    const riesgo = req.body.value;
 
     if (riesgo.length !== 0){
       result.postRiesgos = 
@@ -606,7 +607,7 @@ exports.postMedicamento= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    const medicamento = req.body.medicamento;
+    const medicamento = req.body.value;
 
     if (medicamento.length !== 0){
       result.postMedicamento = 
@@ -661,7 +662,7 @@ exports.postEps= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    eps = req.body.Eps;
+    eps = req.body.value;
     if (eps.length !== 0){
       result.postEps = 
         await beneficiarioServices.postEps(eps);
@@ -686,7 +687,7 @@ exports.postGenero= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    genero = req.body.Genero;
+    genero = req.body.value;
     if (genero.length !== 0){
       result.postGenero = 
         await beneficiarioServices.postGenero(genero);
@@ -712,7 +713,7 @@ exports.postDiagnostico= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    diagnostico = req.body.Diagnostico;
+    diagnostico = req.body.value;
     if (diagnostico.length !== 0){
       result.postDiagnostico = 
         await beneficiarioServices.postDiagnostico(diagnostico);
@@ -793,7 +794,7 @@ exports.getEpsList= async (req, res, next) => {
       status: true,
       message: "successful",
     };
-    eps = req.query.Eps;
+    eps = req.query.Search;
     result.getEpsList =
       await beneficiarioServices.getEpsList(eps);
 
@@ -816,7 +817,7 @@ exports.getGeneroList= async (req, res, next) => {
       message: "successful",
     };
 
-    genero = req.query.Genero;
+    genero = req.query.Search;
 
     result.getGeneroList =
       await beneficiarioServices.getGeneroList(genero);
@@ -839,7 +840,7 @@ exports.getTipoDocList= async (req, res, next) => {
       message: "successful",
     };
 
-    tipoDoc = req.query.TipoDoc;
+    tipoDoc = req.query.Search;
 
     result.getTipoDocList =
       await beneficiarioServices.getTipoDocList(tipoDoc);
@@ -864,7 +865,7 @@ exports.getAlergiasList= async (req, res, next) => {
     };
 
     result.getAlergiasList =
-      await beneficiarioServices.getAlergiasList(req.query.Alergias);
+      await beneficiarioServices.getAlergiasList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -885,7 +886,7 @@ exports.getOrientacionList= async (req, res, next) => {
     };
 
     result.getOrientacionList =
-      await beneficiarioServices.getOrientacionList(req.query.Orientacion);
+      await beneficiarioServices.getOrientacionList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -906,7 +907,7 @@ exports.getMedicamentoList= async (req, res, next) => {
     };
 
     result.getMedicamentoList =
-      await beneficiarioServices.getMedicamentoList(req.query.Medicamentos);
+      await beneficiarioServices.getMedicamentoList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -927,7 +928,7 @@ exports.getRiesgosList= async (req, res, next) => {
     };
 
     result.getRiesgosList =
-      await beneficiarioServices.getRiesgosList(req.query.Riesgos);
+      await beneficiarioServices.getRiesgosList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -974,7 +975,7 @@ exports.getSedeList= async (req, res, next) => {
     };
 
     result.getSedeList =
-      await beneficiarioServices.getSedeList(req.query.Sede);
+      await beneficiarioServices.getSedeList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

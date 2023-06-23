@@ -3,7 +3,7 @@ const sqlQueries = require("../../sqlQueries/sql_Beneficiarios");
 
 const delete_Diagnostico = async (Diagnostico) => {
     try{
-        const result = await pool.DBConnection.query(sqlQueries.DELETE_DIAGNOSTICO, [Diagnostico.id_beneficiario, Diagnostico.id_diagnostico, Diagnostico.id_empleado]);
+        const result = await pool.DBConnection.query(sqlQueries.DELETE_DIAGNOSTICO, [Diagnostico.id_beneficiario, Diagnostico.id_diagnostico]);
         return result.rows;
     } catch(error){
         throw error;

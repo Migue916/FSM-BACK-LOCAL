@@ -38,7 +38,7 @@ const sqlQueries = {
         "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha, nombre, isFormat) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE, \$5, \$6) RETURNING id",
 
     DELETE_ALERGIA:
-        "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1 AND id_tipo_alergia  = \$2 AND id_empleado = \$3;",
+        "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1 AND id_tipo_alergia  = \$2;",
 
     DELETE_RIESGOS:
         "DELETE FROM public.beneficiario_rel_riesgo WHERE id_beneficiario = \$1 AND id_riesgo = \$2;",
@@ -47,7 +47,7 @@ const sqlQueries = {
         "DELETE FROM public.beneficiario_rel_medicamento WHERE id_beneficiario = \$1 AND id_medicamento = \$2;",
 
     DELETE_DIAGNOSTICO: 
-        "DELETE FROM public.enfermedad_rel_beneficiario WHERE id_beneficiario = \$1 AND id_enfermedad  = \$2 AND id_empleado = \$3;", 
+        "DELETE FROM public.enfermedad_rel_beneficiario WHERE id_beneficiario = \$1 AND id_enfermedad  = \$2;", 
 
     PUT_ORIENTACION:
         "UPDATE public.beneficiario SET id_orientacion=\$2 WHERE id = \$1",
@@ -97,8 +97,11 @@ const sqlQueries = {
     GET_SEDE_LIST:
         "select * from SEDE",
 
-    GET_DIAGNOSTICOS_LIST:
+    GET_DIAGNOSTICOS_LIST_BUSQUEDA:
         "select * from (SELECT *, SIMILARITY(enfermedad, \$1) AS similitud FROM enfermedades) as sc where similitud > 0.07",
+    
+    GET_DIAGNOSTICOS_LIST:
+        "select * from enfermedades",
 
     GET_BENEFICIARIO_DIAGNOSTICOS_SECUNDARIOS:
         "SELECT * FROM enfermedad_rel_beneficiario WHERE id_beneficiario=\$1 AND tipo = false",

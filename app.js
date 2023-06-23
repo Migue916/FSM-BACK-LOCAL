@@ -5,6 +5,7 @@ const http = require('http');
 const db = require('./infraestructure/postgresDB');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const cors = require('cors');
 
 // Configuración de Swagger
 const options = {
@@ -38,15 +39,20 @@ db.initPoolDB();
 app.use(express.json()); // application/json
 
 // Inicializando los headers
+
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-        'Access-Control-Allow-Methods',
-        'OPTIONS, GET, POST, PUT, PATCH, DELETE'
-    );
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+      'Access-Control-Allow-Methods',
+      'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
 });
+
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));
 
 app.use(allRoutes);
 app.use(function (req, res, next) {

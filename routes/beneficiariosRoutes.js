@@ -4,69 +4,69 @@ const router = express.Router();
 
 const multer = require('multer');
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
+const upload = multer({ storage: storage }).single('file');
 
-/**
- * @swagger
- * /beneficiarios/egresar:
- *   post:
- *     summary: Actualizar información de un egresado
- *     description: Actualiza la información de un egresado en la base de datos.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id_persona:
- *                 type: integer
- *                 description: El ID de la persona.
- *                 example: 1
- *               observacion:
- *                 type: string
- *                 description: Observación del egresado.
- *                 example: "Observación de prueba"
- *               tipo_usuario:
- *                 type: boolean
- *                 description: Tipo de usuario (true = egresado, false = otro tipo).
- *                 example: true
- *     responses:
- *       200:
- *         description: Egresado actualizado con éxito
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Indica si la operación fue exitosa.
- *                   example: true
- *                 message:
- *                   type: string
- *                   description: Mensaje de éxito.
- *                   example: "successful"
- *                 postEgreso:
- *                   type: object
- *                   description: Detalles del egresado actualizado.
- *       400:
- *         description: Error al actualizar el egresado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Indica si la operación fue exitosa.
- *                   example: false
- *                 message:
- *                   type: string
- *                   description: Mensaje de error.
- *                   example: "Error al actualizar el egresado"
- */
+    /**
+     * @swagger
+     * /beneficiarios/egresar:
+     *   post:
+     *     summary: Actualizar información de un egresado
+     *     description: Actualiza la información de un egresado en la base de datos.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               id_persona:
+     *                 type: integer
+     *                 description: El ID de la persona.
+     *                 example: 1
+     *               observacion:
+     *                 type: string
+     *                 description: Observación del egresado.
+     *                 example: "Observación de prueba"
+     *               tipo_usuario:
+     *                 type: boolean
+     *                 description: Tipo de usuario (true = egresado, false = otro tipo).
+     *                 example: true
+     *     responses:
+     *       200:
+     *         description: Egresado actualizado con éxito
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: boolean
+     *                   description: Indica si la operación fue exitosa.
+     *                   example: true
+     *                 message:
+     *                   type: string
+     *                   description: Mensaje de éxito.
+     *                   example: "successful"
+     *                 postEgreso:
+     *                   type: object
+     *                   description: Detalles del egresado actualizado.
+     *       400:
+     *         description: Error al actualizar el egresado
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: boolean
+     *                   description: Indica si la operación fue exitosa.
+     *                   example: false
+     *                 message:
+     *                   type: string
+     *                   description: Mensaje de error.
+     *                   example: "Error al actualizar el egresado"
+     */
 
 router.post('/egresar', getBeneficiarioController.putEgresado);
 
@@ -601,40 +601,58 @@ router.get('/desplegables', getBeneficiarioController.getDesplegables);
 
 router.get('/perfil/', getBeneficiarioController.getPerfil);
 
-
 /**
  * @swagger
- * /beneficiarios/list/diagnostico/:
+ * /beneficiarios/list/diagnostico:
  *   get:
- *     tags:
- *       - Diagnostico
- *     description: Obtiene la lista de diagnósticos
- *     produces:
- *       - application/json
+ *     summary: Obtiene una lista de diagnósticos de beneficiarios
+ *     description: Obtiene una lista de diagnósticos de beneficiarios según los parámetros proporcionados.
  *     parameters:
- *       - name: Diagnostico
- *         description: Filtra la lista de diagnósticos por el valor de Diagnostico
- *         in: query
- *         required: false
- *         type: string
- *     responses:
- *       200:
- *         description: Lista de diagnósticos obtenida exitosamente
+ *       - in: query
+ *         name: Search
  *         schema:
- *           type: object
- *           properties:
- *             status:
- *               type: boolean
- *             message:
- *               type: string
- *             getDiagnosticoList:
- *               type: array
- *               items:
- *                 type: object
- *       400:
- *         description: Error al obtener la lista de diagnósticos
+ *           type: string
+ *         description: Parámetro de búsqueda opcional para filtrar los diagnósticos por una cadena específica.
+ *     responses:
+ *       '200':
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de la respuesta
+ *                 getList:
+ *                   type: array
+ *                   description: Lista de diagnósticos
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: number
+ *                         description: ID del diagnóstico
+ *                       Values:
+ *                         type: string
+ *                         description: Valores del diagnóstico
+ *       '400':
+ *         description: Error en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la respuesta
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error
  */
-
 router.get('/list/diagnostico/', getBeneficiarioController.getDiagnosticoList);
 
 /**
@@ -911,7 +929,10 @@ router.get('/list/eps', getBeneficiarioController.getEpsList);
  * @swagger
  * /beneficiarios/new/diagnostico:
  *   post:
- *     summary: Añadir un nuevo diagnóstico
+ *     summary: Crear un nuevo diagnóstico para beneficiarios.
+ *     description: Crea un nuevo diagnóstico para beneficiarios según los parámetros proporcionados.
+ *     tags:
+ *       - Beneficiarios
  *     requestBody:
  *       required: true
  *       content:
@@ -919,12 +940,12 @@ router.get('/list/eps', getBeneficiarioController.getEpsList);
  *           schema:
  *             type: object
  *             properties:
- *               Diagnostico:
+ *               value:
  *                 type: string
- *                 example: "Diabetes"
+ *                 description: Valor del diagnóstico.
  *     responses:
  *       200:
- *         description: Diagnóstico añadido con éxito
+ *         description: Diagnóstico creado exitosamente.
  *         content:
  *           application/json:
  *             schema:
@@ -932,14 +953,15 @@ router.get('/list/eps', getBeneficiarioController.getEpsList);
  *               properties:
  *                 status:
  *                   type: boolean
- *                   example: true
+ *                   description: Indica si el diagnóstico se creó correctamente.
  *                 message:
  *                   type: string
- *                   example: "successful"
+ *                   description: Mensaje de éxito.
  *                 postDiagnostico:
  *                   type: object
+ *                   description: Resultado del diagnóstico creado.
  *       400:
- *         description: Error al añadir el diagnóstico
+ *         description: Error al crear el diagnóstico.
  *         content:
  *           application/json:
  *             schema:
@@ -947,10 +969,10 @@ router.get('/list/eps', getBeneficiarioController.getEpsList);
  *               properties:
  *                 status:
  *                   type: boolean
- *                   example: false
+ *                   description: Indica si se produjo un error al crear el diagnóstico.
  *                 message:
  *                   type: string
- *                   example: "Error message"
+ *                   description: Mensaje de error.
  */
 
 router.post('/new/diagnostico', getBeneficiarioController.postDiagnostico);
@@ -1247,66 +1269,51 @@ router.post('/new/eps', getBeneficiarioController.postEps);
  * @swagger
  * /beneficiarios/edit/diagnostico:
  *   put:
- *     summary: Actualizar el diagnóstico de un beneficiario
- *     description: Actualiza el diagnóstico de un beneficiario con los datos proporcionados en el cuerpo de la solicitud.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id_enfermedad:
- *                 type: integer
- *                 description: El ID de la enfermedad.
- *                 example: 1
- *               id_beneficiario:
- *                 type: integer
- *                 description: El ID del beneficiario.
- *                 example: 1
- *               id_empleado:
- *                 type: integer
- *                 description: El ID del empleado.
- *                 example: 1
- *               tipo:
- *                 type: string
- *                 description: El tipo de diagnóstico.
- *                 example: "agudo"
- *               observacion:
- *                 type: string
- *                 description: La observación del diagnóstico.
- *                 example: "Paciente con síntomas leves"
+ *     summary: Actualiza el diagnóstico de un beneficiario.
+ *     description: Actualiza el diagnóstico de un beneficiario según los parámetros proporcionados.
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: Datos del diagnóstico a actualizar.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id_beneficiario:
+ *               type: string
+ *               description: ID del beneficiario.
+ *             id_value:
+ *               type: string
+ *               description: ID del valor.
+ *             id_empleado:
+ *               type: string
+ *               description: ID del empleado.
+ *             observacion:
+ *               type: string
+ *               description: Observación del diagnóstico.
  *     responses:
  *       200:
- *         description: Diagnóstico actualizado con éxito
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Estado de la operación.
- *                   example: true
- *                 message:
- *                   type: string
- *                   description: Mensaje de la operación.
- *                   example: "successful"
+ *         description: Diagnóstico actualizado exitosamente.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *               description: Estado de la operación.
+ *             message:
+ *               type: string
+ *               description: Mensaje de éxito.
  *       400:
- *         description: Error al actualizar el diagnóstico
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: boolean
- *                   description: Estado de la operación.
- *                   example: false
- *                 message:
- *                   type: string
- *                   description: Mensaje de error.
- *                   example: "error"
+ *         description: Error al actualizar el diagnóstico.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *               description: Estado de la operación.
+ *             message:
+ *               type: string
+ *               description: Mensaje de error.
  */
 router.put('/edit/diagnostico', getBeneficiarioController.putDiagnostico);
 
@@ -1522,28 +1529,25 @@ router.put('/edit/orientacion', getBeneficiarioController.putOrientacion);
  * @swagger
  * /beneficiarios/delete/diagnostico:
  *   delete:
- *     summary: Elimina un diagnóstico
- *     description: Elimina un diagnóstico basado en los identificadores proporcionados.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id_beneficiario:
- *                 type: integer
- *               id_diagnostico:
- *                 type: integer
- *               id_empleado:
- *                 type: integer
- *             required:
- *               - id_beneficiario
- *               - id_diagnostico
- *               - id_empleado
+ *     summary: Elimina un diagnóstico de un beneficiario
+ *     tags: [Beneficiarios]
+ *     parameters:
+ *       - in: body
+ *         name: diagnostico
+ *         description: Objeto con los datos del diagnóstico a eliminar
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id_beneficiario:
+ *               type: string
+ *               description: ID del beneficiario
+ *             id_value:
+ *               type: string
+ *               description: ID del diagnóstico a eliminar
  *     responses:
  *       200:
- *         description: Diagnóstico eliminado con éxito
+ *         description: Operación exitosa
  *         content:
  *           application/json:
  *             schema:
@@ -1551,10 +1555,15 @@ router.put('/edit/orientacion', getBeneficiarioController.putOrientacion);
  *               properties:
  *                 status:
  *                   type: boolean
+ *                   description: Estado de la operación
  *                 message:
  *                   type: string
+ *                   description: Mensaje de éxito
+ *                 deleteDiagnostico:
+ *                   type: object
+ *                   description: Resultado de la eliminación del diagnóstico
  *       400:
- *         description: Error al eliminar el diagnóstico
+ *         description: Error en la solicitud
  *         content:
  *           application/json:
  *             schema:
@@ -1562,8 +1571,10 @@ router.put('/edit/orientacion', getBeneficiarioController.putOrientacion);
  *               properties:
  *                 status:
  *                   type: boolean
+ *                   description: Estado de la operación
  *                 message:
  *                   type: string
+ *                   description: Mensaje de error
  */
 router.delete('/delete/diagnostico', getBeneficiarioController.deleteDiagnostico);
 
@@ -1717,7 +1728,7 @@ router.delete('/delete/alergias', getBeneficiarioController.deleteAlergias);
  *                   type: string
  *                   description: Mensaje de error.
  */
-router.post('/perfil-foto', upload.single('file'), getBeneficiarioController.postFoto);
+router.post('/perfil-foto', upload, getBeneficiarioController.postFoto);
 
 /**
  * @swagger
@@ -1810,7 +1821,7 @@ router.get('/list/tipo-doc', getBeneficiarioController.getTipoDocList);
 
 /**
  * @swagger
- * /list/medicamento:
+ * /beneficiarios/list/medicamento  :
  *   get:
  *     summary: Obtener la lista de medicamentos
  *     description: Retorna una lista de medicamentos disponibles para los beneficiarios
@@ -2033,7 +2044,7 @@ router.delete('/delete/medicamento', getBeneficiarioController.deleteMedicamento
  *                   type: string
  */
 
-router.post('/new/consulta', upload.single('file'), getBeneficiarioController.postConsulta);
+router.post('/new/consulta', upload, getBeneficiarioController.postConsulta);
 
 /**
  * @swagger
@@ -2097,7 +2108,7 @@ router.post('/new/consulta', upload.single('file'), getBeneficiarioController.po
  *         description: Internal Server Error
  */
 
-router.put('/edit/consulta', upload.single('file'), getBeneficiarioController.putConsulta);
+router.put('/edit/consulta', upload, getBeneficiarioController.putConsulta);
 
 /**
  * @swagger
@@ -2348,7 +2359,7 @@ router.get('/download/consulta', getBeneficiarioController.getConsultaBuffer);
  *               type: string
  *               description: Mensaje descriptivo del error
  */
-router.post('/new/consulta/adjuntos', upload.single('file'), getBeneficiarioController.postAdjuntos);
+router.post('/new/consulta/adjuntos', upload, getBeneficiarioController.postAdjuntos);
 
 /**
  * @swagger
@@ -2402,7 +2413,7 @@ router.post('/new/consulta/adjuntos', upload.single('file'), getBeneficiarioCont
  *             message:
  *               type: string
  */
-router.put('/edit/consulta/adjuntos', upload.single('file'), getBeneficiarioController.putAdjuntos);
+router.put('/edit/consulta/adjuntos', upload, getBeneficiarioController.putAdjuntos);
 
 /**
  * @swagger
@@ -2516,6 +2527,17 @@ router.post('/new/consulta/formato', getBeneficiarioController.postFormat);
  */
 router.put('/edit/info', getBeneficiarioController.putInfo);
 
+/*
+router.put('/edit/general/riesgos', getBeneficiarioController.putInfo);
+router.put('/edit/general/medicamento', getBeneficiarioController.putInfo);
+router.put('/edit/general/alergias', getBeneficiarioController.putInfo);
+router.put('/edit/general/eps', getBeneficiarioController.putInfo);
+router.put('/edit/eps', getBeneficiarioController.putInfo);
+router.put('/edit/genero', getBeneficiarioController.putInfo);
+router.put('/new/tipo-doc', getBeneficiarioController.putInfo);
+router.put('/edit/tipo-doc', getBeneficiarioController.putInfo);
+router.put('/edit/general/tipo-doc', getBeneficiarioController.putInfo);
+*/
 
 module.exports = router;
 

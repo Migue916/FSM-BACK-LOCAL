@@ -85,7 +85,6 @@ exports.putConsulta = async (req) => {
     deleteBlob(containerName, blobName);
   }else{
     const formato = await format(req);
-    console.log(formato);
     storageUrl = JSON.stringify(formato);
   }
   const Consulta = {
@@ -112,11 +111,11 @@ async function upload(req) {
 
     const blobName = Date.now() + '_' + req.file.originalname;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
+  
     const contentType = require('mime-types').lookup(req.file.originalname);
     const options = { blobHTTPHeaders: { blobContentType: contentType } };
     await blockBlobClient.uploadData(req.file.buffer, options);
-
+  
     const storageUrl = blockBlobClient.url;
 
     return storageUrl;
@@ -227,8 +226,6 @@ exports.postFormat = async (req) => {
       isFormat: true
     };
 
-    console.log(Consulta);
-
     const postConsulta = await queries_Beneficiarios.post_consulta(Consulta);
     const result = {
       id: postConsulta[0].id
@@ -245,7 +242,7 @@ exports.postFormat = async (req) => {
 
 exports.postAdjuntos = async (req) => {
   try {
-    const storageUrls = upload(req);
+    const storageUrls = await upload(req);
     const consulta = {
       id_reporte: req.body.id_reporte,
       nombre: req.body.nombre,
@@ -262,6 +259,7 @@ exports.postAdjuntos = async (req) => {
     throw error;
   }
 };
+
 
 async function getBlobUrl(id) {
   const foto = await queries_General.get_Foto(id);
@@ -338,7 +336,7 @@ exports.getOrientacionList = async (orientacion) => {
     for (const row of getOrientacionList) {
       const result = {
         id: row.id,
-        Orientacion: row.orientacion
+        Values: row.orientacion
       };
       results.push(result);
     }
@@ -424,7 +422,7 @@ exports.getAlergiasList = async (alergias) => {
     for (const row of getAlergiasList) {
       const result = {
         id: row.id,
-        Alergia: row.alergia
+        Values: row.alergia
       };
       results.push(result);
     }
@@ -670,7 +668,7 @@ exports.getMedicamentoList = async (medicamento) => {
     for (const row of getMedicamentoList) {
       const result = {
         id: row.id,
-        medicamento: row.medicamento
+        Values: row.medicamento
       };
       results.push(result);
     }
@@ -687,7 +685,7 @@ exports.getRiesgosList = async (riegos) => {
     for (const row of getRiesgosList) {
       const result = {
         id: row.id,
-        riegos: row.riesgo
+        Values: row.riesgo
       };
       results.push(result);
     }
@@ -704,7 +702,7 @@ exports.getEpsList = async (eps) => {
     for (const row of getEpsList) {
       const result = {
         id: row.id,
-        eps: row.eps
+        Values: row.eps
       };
       results.push(result);
     }
@@ -721,7 +719,7 @@ exports.getGeneroList = async (genero) => {
     for (const row of getGeneroList) {
       const result = {
         id: row.id,
-        genero: row.genero
+        Values: row.genero
       };
       results.push(result);
     }
@@ -738,7 +736,7 @@ exports.getTipoDocList = async (tipoDoc) => {
     for (const row of getTipoDocList) {
       const result = {
         id: row.id,
-        tipoDoc: row.abreviacion
+        Values: row.abreviacion
       };
       results.push(result);
     }
@@ -856,7 +854,6 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
         allDiagnosticos.push(diagnostico);
       }
     }
-    console.log(allDiagnosticos);
     return allDiagnosticos;
   } catch (error) {
     throw error;

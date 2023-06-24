@@ -2527,13 +2527,17 @@ router.post('/new/consulta/formato', getBeneficiarioController.postFormat);
  */
 router.put('/edit/info', getBeneficiarioController.putInfo);
 
+
+router.put('/edit/general/diagnostico', getBeneficiarioController.putGeneralDiagnosticos);
+router.put('/edit/general/riesgos', getBeneficiarioController.putGeneralRiesgos);
+router.put('/edit/general/medicamento', getBeneficiarioController.putGeneralMedicamento);
+router.put('/edit/general/alergias', getBeneficiarioController.putGeneralAlergia);
+router.put('/edit/general/eps', getBeneficiarioController.putGeneralEps);
+router.put('/edit/general/genero', getBeneficiarioController.putGeneralGenero);
 /*
-router.put('/edit/general/riesgos', getBeneficiarioController.putInfo);
-router.put('/edit/general/medicamento', getBeneficiarioController.putInfo);
-router.put('/edit/general/alergias', getBeneficiarioController.putInfo);
-router.put('/edit/general/eps', getBeneficiarioController.putInfo);
+router.put('/edit/general/orientacion', getBeneficiarioController.putInfo);
+
 router.put('/edit/eps', getBeneficiarioController.putInfo);
-router.put('/edit/genero', getBeneficiarioController.putInfo);
 router.put('/new/tipo-doc', getBeneficiarioController.putInfo);
 router.put('/edit/tipo-doc', getBeneficiarioController.putInfo);
 router.put('/edit/general/tipo-doc', getBeneficiarioController.putInfo);

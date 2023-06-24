@@ -80,5 +80,29 @@ const sqlQueries = {
     
     GET_TIPO_DOC_LIST_BUSQUEDA:
         "select * from (SELECT *, SIMILARITY(ABREVIACION, \$1) AS similitud FROM TIPO_DOC) as sc where similitud > 0.07",
+
+    PUT_DIAGNOSTICO: 
+        "UPDATE enfermedad SET enfermedad = \$2 WHERE id = \$1",
+
+    PUT_RIESGO: 
+        "UPDATE riesgos SET riesgo = \$2 WHERE id = \$1",
+
+    PUT_MEDICAMENTO: 
+        "UPDATE medicamento SET medicamento = \$2 WHERE id = \$1",
+
+    PUT_ALERGIA: 
+        "UPDATE tipo_alergia SET alergia = \$2 WHERE id = \$1",
+
+    PUT_EPS: 
+        "UPDATE eps SET eps = \$2 WHERE id = \$1",
+
+    PUT_GENERO: 
+        "UPDATE genero SET genero = \$2 WHERE id = \$1",
+
+    PUT_ORIENTACION: 
+        "UPDATE orientacion SET orientacion = \$2 WHERE id = \$1",
+
+    PUT_TIPO_DOC: 
+        "UPDATE tipo_doc SET tipo_documento = \$2 AND abreviacion = \$3 WHERE id = \$1",
 };
 module.exports = sqlQueries;

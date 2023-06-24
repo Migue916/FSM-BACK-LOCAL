@@ -129,7 +129,7 @@ async function upload(req) {
 exports.postConsulta = async (req) => {
   try {
 
-    const storageUrl = upload(req);
+    const storageUrl = await upload(req);
     const Empleado = await nombreEmpleado(req.body.id_empleado);
   
     const Consulta = {
@@ -1438,6 +1438,72 @@ exports.getBeneficiariosNuevos = async () => {
       percentage: Number(porcentaje).toFixed(2)
     };
     return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralDiagnosticos = async (diagnostico) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Diagnosticos(diagnostico);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralRiesgos = async (riesgo) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Riesgos(riesgo);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralMedicamento = async (medicamento) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Medicamento(medicamento);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralAlergia = async (alergia) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Alergia(alergia);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralEps = async (eps) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Eps(eps);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralGenero = async (genero) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Genero(genero);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
   } catch (error) {
     throw error;
   }

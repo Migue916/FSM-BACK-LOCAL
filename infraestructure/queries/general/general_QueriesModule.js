@@ -26,4 +26,10 @@ module.exports = {
 
     delete_foto: require("./delete_foto"),
     new_Password: require("./new_Password"),
+    put_General_Diagnosticos: require("./put_General_Diagnosticos"),
+    put_General_Riesgos: require("./put_General_Riesgos"),
+    put_General_Medicamento: require("./put_General_Medicamento"),
+    put_General_Alergia: require("./put_General_Alergia"),
+    put_General_Eps: require("./put_General_Eps"),
+    put_General_Genero: require("./put_General_Genero"),
 };

@@ -853,6 +853,8 @@ router.put('/edit/modulo', getEmpleadoController.putEmpleadoModulo);
  *         description: Error en la solicitud
  */
 router.put('/edit/cargo', getEmpleadoController.putEmpleadoCargo);
+
+
 /*router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
 router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
 

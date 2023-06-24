@@ -795,7 +795,7 @@ exports.getEpsList= async (req, res, next) => {
       message: "successful",
     };
     eps = req.query.Search;
-    result.getEpsList =
+    result.getList =
       await beneficiarioServices.getEpsList(eps);
 
     response.success(req, res, result, 200, "success");
@@ -819,7 +819,7 @@ exports.getGeneroList= async (req, res, next) => {
 
     genero = req.query.Search;
 
-    result.getGeneroList =
+    result.getList =
       await beneficiarioServices.getGeneroList(genero);
 
     response.success(req, res, result, 200, "success");
@@ -842,7 +842,7 @@ exports.getTipoDocList= async (req, res, next) => {
 
     tipoDoc = req.query.Search;
 
-    result.getTipoDocList =
+    result.getList =
       await beneficiarioServices.getTipoDocList(tipoDoc);
 
     response.success(req, res, result, 200, "success");
@@ -864,7 +864,7 @@ exports.getAlergiasList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getAlergiasList =
+    result.getList =
       await beneficiarioServices.getAlergiasList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
@@ -885,7 +885,7 @@ exports.getOrientacionList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getOrientacionList =
+    result.getList =
       await beneficiarioServices.getOrientacionList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
@@ -906,7 +906,7 @@ exports.getMedicamentoList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getMedicamentoList =
+    result.getList =
       await beneficiarioServices.getMedicamentoList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
@@ -927,7 +927,7 @@ exports.getRiesgosList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getRiesgosList =
+    result.getList =
       await beneficiarioServices.getRiesgosList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
@@ -1270,6 +1270,201 @@ exports.getStatisticsBeneficiarios = async (req, res, next) => {
     result.beneficiarios_nuevos =
       await beneficiarioServices.getBeneficiariosNuevos();
 
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.putGeneralDiagnosticos= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const diagnostico = {
+      id_diagnostico: req.body.id_value,
+      diagnostico: req.body.value
+    };
+
+    const camposLlenos = Object.values(diagnostico).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putDiagnostico = 
+        await beneficiarioServices.putGeneralDiagnosticos(diagnostico);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.putGeneralRiesgos= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const riesgo = {
+      id_riesgo: req.body.id_value,
+      riesgo: req.body.value
+    };
+
+    const camposLlenos = Object.values(riesgo).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralRiesgos = 
+        await beneficiarioServices.putGeneralRiesgos(riesgo);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.putGeneralMedicamento= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const medicamento = {
+      id_medicamento: req.body.id_value,
+      medicamento: req.body.value
+    };
+
+    const camposLlenos = Object.values(medicamento).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralMedicamento = 
+        await beneficiarioServices.putGeneralMedicamento(medicamento);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putGeneralAlergia= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const alergia = {
+      id_alergia: req.body.id_value,
+      alergia: req.body.value
+    };
+
+    const camposLlenos = Object.values(alergia).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralAlergia = 
+        await beneficiarioServices.putGeneralAlergia(alergia);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putGeneralEps= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const eps = {
+      id_eps: req.body.id_value,
+      eps: req.body.value
+    };
+
+    const camposLlenos = Object.values(eps).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralEps = 
+        await beneficiarioServices.putGeneralEps(eps);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putGeneralGenero= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const genero = {
+      id_genero: req.body.id_value,
+      genero: req.body.value
+    };
+
+    const camposLlenos = Object.values(genero).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralGenero = 
+        await beneficiarioServices.putGeneralGenero(genero);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

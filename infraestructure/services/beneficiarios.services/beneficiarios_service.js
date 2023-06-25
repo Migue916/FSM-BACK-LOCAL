@@ -570,6 +570,17 @@ exports.putSede = async (sede) => {
   }
 };
 
+exports.putTipoDoc = async (tipoDoc) => {
+  try {
+    const putTipoDoc = await queries_Beneficiarios.put_Tipo_Doc(tipoDoc);
+    const results = [];
+    results.push(putTipoDoc);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
 exports.putEps = async (eps) => {
   try {
     const putEps = await queries_Beneficiarios.put_Eps(eps);
@@ -803,11 +814,13 @@ exports.getPerfil = async (id) => {
     const orientacion = await queries_General.get_orientacion(+getPerfil[0].id_orientacion);
     const eps = await queries_General.get_eps(getPerfil[0].id_eps);
     const genero = await queries_General.get_genero(getPerfil[0].id_genero);
+    const tipo_doc = await queries_General.get_tipo_doc(getPerfil[0].id_tipo_doc);
 
     const result = {
       Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
       Apellido: getPerfil[0].p_apellido + " " + getPerfil[0].s_apellido,
       Identificacion: getPerfil[0].id,
+      tipo_doc: tipo_doc[0].abreviacion,
       Genero: genero[0].genero,
       Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
       Edad: getPerfil[0].edad,

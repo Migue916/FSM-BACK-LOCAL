@@ -488,6 +488,38 @@ exports.putSede= async (req, res, next) => {
 };
 
 
+exports.putTipoDoc= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const tipoDoc = {
+      id_beneficiario: req.body.id_beneficiario, 
+      id_TipoDoc_proximo: req.body.id_value
+    };
+
+    const camposLlenos = Object.values(tipoDoc).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putTipoDoc = 
+        await beneficiarioServices.putTipoDoc(tipoDoc);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 
 exports.putEps= async (req, res, next) => {
   try {

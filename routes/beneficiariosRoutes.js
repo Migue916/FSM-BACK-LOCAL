@@ -2293,7 +2293,7 @@ router.get('/list/consulta', getBeneficiarioController.getConsulta);
  *                   type: string
  *                   description: The error message
  */
-router.get('/download/consulta', getBeneficiarioController.getConsultaBuffer);
+router.post('/download/consulta', getBeneficiarioController.getConsultaBuffer);
 
 
 
@@ -2922,8 +2922,10 @@ router.put('/edit/general/tipo-doc', getBeneficiarioController.putGeneralTipoDoc
 router.put('/edit/eps', getBeneficiarioController.putEps);
 
 router.post('/new/tipo-doc', getBeneficiarioController.postTipoDoc);
+
+router.put('/edit/tipo-doc', getBeneficiarioController.putTipoDoc);  
+
 /*
-router.put('/edit/tipo-doc', getBeneficiarioController.putInfo);  
 router.put('/edit/trabajador-social', getBeneficiarioController.putInfo);  
 router.put('/edit/psicologo', getBeneficiarioController.putInfo);  
 */

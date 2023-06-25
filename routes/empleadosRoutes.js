@@ -987,7 +987,7 @@ router.get('/list/consultas', getEmpleadoController.getConsultas);
  *       400:
  *         description: Error al procesar la solicitud.
  */
-router.get('/download/consulta', getEmpleadoController.getConsultaBuffer);
+router.post('/download/consulta', getEmpleadoController.getConsultaBuffer);
 
 /**
  * @swagger

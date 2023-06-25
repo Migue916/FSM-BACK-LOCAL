@@ -389,6 +389,8 @@ exports.getPerfil = async (id) => {
       const modulo = await queries_General.get_Modulo(getPerfil[0].pertenencia_de_modulo);
       const genero = await queries_General.get_genero(getPerfil[0].id_genero);
       const user = await queries_Empleados.get_Tipo_Cargo(id);
+      const tipo_doc = await queries_General.get_tipo_doc(getPerfil[0].id_tipo_doc);
+
 
       if (consultas.length === 0){
         consultas.push(
@@ -401,6 +403,7 @@ exports.getPerfil = async (id) => {
           Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
           Apellido: getPerfil[0].p_apellido + " " + getPerfil[0].s_apellido,
           Identificacion: getPerfil[0].id,
+          tipo_doc: tipo_doc[0].abreviacion,
           Genero: genero[0].genero,
           Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
           Edad: getPerfil[0].edad,

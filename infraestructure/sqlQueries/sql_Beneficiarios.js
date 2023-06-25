@@ -61,6 +61,9 @@ const sqlQueries = {
     PUT_SEDE:
         "UPDATE public.beneficiario SET id_sede = \$2 WHERE id = \$1;",
 
+    PUT_TIPO_DOC:
+        "UPDATE public.beneficiario SET id_tipo_doc = \$2 WHERE id = \$1;",
+
     PUT_EPS:
         "UPDATE public.beneficiario SET id_eps = \$2 WHERE id = \$1;",
 

@@ -855,15 +855,6 @@ router.put('/edit/modulo', getEmpleadoController.putEmpleadoModulo);
 router.put('/edit/cargo', getEmpleadoController.putEmpleadoCargo);
 
 
-/*router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
-router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
-
-router.post('/new/modulo', getEmpleadoController.postModulo);
-router.post('/new/cargo', getEmpleadoController.postCargo);
-router.post('/new/profesion', getEmpleadoController.postProfesion);
-
-*/
-
 /**
  * @swagger
  * /empleados/edit/info:
@@ -1054,4 +1045,15 @@ router.post('/download/consulta', getEmpleadoController.getConsultaBuffer);
  *                 type: string
  */
 router.get('/consultas/ultimo-mes', getEmpleadoController.getBeneficiariosUltimoMes);
+
+
+/*router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
+router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
+
+router.post('/new/modulo', getEmpleadoController.postModulo);
+router.post('/new/cargo', getEmpleadoController.postCargo);
+router.post('/new/profesion', getEmpleadoController.postProfesion);
+
+*/
+
 module.exports = router;

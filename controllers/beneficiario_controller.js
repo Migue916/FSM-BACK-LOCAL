@@ -488,6 +488,71 @@ exports.putSede= async (req, res, next) => {
 };
 
 
+exports.putTrabajadorSocial= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const trabajador_social = {
+      id_beneficiario: req.body.id_beneficiario, 
+      id_trabajador_social: req.body.id_value
+    };
+
+    const camposLlenos = Object.values(trabajador_social).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putTrabajadorSocial = 
+        await beneficiarioServices.putTrabajadorSocial(trabajador_social);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putPsicologo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const psicologo = {
+      id_beneficiario: req.body.id_beneficiario, 
+      id_psicologo: req.body.id_value
+    };
+
+    const camposLlenos = Object.values(psicologo).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putPsicologo = 
+        await beneficiarioServices.putPsicologo(psicologo);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
 exports.putTipoDoc= async (req, res, next) => {
   try {
     const result = {
@@ -724,34 +789,34 @@ exports.postSede= async (req, res, next) => {
 };
 
 
-exports.postTipoDoc= async (req, res, next) => {
-  try {
-    const result = {
-      status: true,
-      message: "successful",
-    };
-    const tipoDoc = {
-      tipoDoc: req.body.tipoDoc, 
-      abreviacion: req.body.abreviacion
-    };
-    const camposLlenos = Object.values(tipoDoc).every((value) => value !== undefined && value !== '');
-    if (camposLlenos){
-      result.postTipoDoc = 
-        await beneficiarioServices.postTipoDoc(tipoDoc);
-    }else{
+  exports.postTipoDoc= async (req, res, next) => {
+    try {
+      const result = {
+        status: true,
+        message: "successful",
+      };
+      const tipoDoc = {
+        tipoDoc: req.body.tipoDoc, 
+        abreviacion: req.body.abreviacion
+      };
+      const camposLlenos = Object.values(tipoDoc).every((value) => value !== undefined && value !== '');
+      if (camposLlenos){
+        result.postTipoDoc = 
+          await beneficiarioServices.postTipoDoc(tipoDoc);
+      }else{
+        console.error(error.message);
+        response.error(req, res, result, 400, "error");
+      }
+      response.success(req, res, result, 200, "success");
+    } catch (error) {
+      const result = {
+        status: false,
+        message: error.message,
+      };
       console.error(error.message);
       response.error(req, res, result, 400, "error");
     }
-    response.success(req, res, result, 200, "success");
-  } catch (error) {
-    const result = {
-      status: false,
-      message: error.message,
-    };
-    console.error(error.message);
-    response.error(req, res, result, 400, "error");
-  }
-};
+  };
 
 
 exports.postEps= async (req, res, next) => {

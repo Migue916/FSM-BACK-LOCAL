@@ -2919,16 +2919,292 @@ router.put('/edit/general/orientacion', getBeneficiarioController.putGeneralOrie
  * */
 router.put('/edit/general/tipo-doc', getBeneficiarioController.putGeneralTipoDoc);
 
+
+/**
+ * @swagger
+ * /beneficiarios/edit/eps:
+ *   put:
+ *     summary: Actualizar la EPS del beneficiario
+ *     description: Permite cambiar la EPS asociada a un beneficiario.
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_beneficiario
+ *               - id_value
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: ID del beneficiario al que se le actualizará la EPS.
+ *               id_value:
+ *                 type: integer
+ *                 description: ID de la nueva EPS a asociar al beneficiario.
+ *     responses:
+ *       200:
+ *         description: La actualización de la EPS del beneficiario se realizó exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje sobre el resultado de la operación.
+ *       400:
+ *         description: Error en la actualización de la EPS del beneficiario.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación.
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje sobre el error en la operación.
+ */
 router.put('/edit/eps', getBeneficiarioController.putEps);
 
+
+/**
+ * @swagger
+ * /beneficiarios/new/tipo-doc:
+ *   post:
+ *     summary: Crea un nuevo tipo de documento de beneficiario
+ *     description: Crea un nuevo tipo de documento de beneficiario y devuelve el resultado de la operación
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tipoDoc:
+ *                 type: string
+ *                 description: El tipo de documento
+ *               abreviacion:
+ *                 type: string
+ *                 description: La abreviación del tipo de documento
+ *     responses:
+ *       200:
+ *         description: Operación exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: El estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de la operación
+ *                 postTipoDoc:
+ *                   type: object
+ *                   description: El objeto del tipo de documento creado
+ *       400:
+ *         description: Error en la operación
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: El estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
 router.post('/new/tipo-doc', getBeneficiarioController.postTipoDoc);
 
+/**
+ * @swagger
+ * /beneficiarios/edit/tipo-doc:
+ *   put:
+ *     summary: Actualizar el tipo de documento para un beneficiario
+ *     description: Actualiza el tipo de documento para un beneficiario específico
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: El ID del beneficiario
+ *               id_value:
+ *                 type: integer
+ *                 description: El ID del nuevo tipo de documento
+ *             required:
+ *               - id_beneficiario
+ *               - id_value
+ *     responses:
+ *       200:
+ *         description: Actualización exitosa del tipo de documento
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de éxito
+ *       400:
+ *         description: Error al actualizar el tipo de documento
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
 router.put('/edit/tipo-doc', getBeneficiarioController.putTipoDoc);  
 
-/*
-router.put('/edit/trabajador-social', getBeneficiarioController.putInfo);  
-router.put('/edit/psicologo', getBeneficiarioController.putInfo);  
-*/
+
+/**
+ * @swagger
+ * /beneficiarios/edit/trabajador-social:
+ *   put:
+ *     summary: Actualizar el trabajador social de un beneficiario
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_beneficiario
+ *               - id_value
+ *             properties:
+ *               id_beneficiario:
+ *                 type: integer
+ *                 description: ID del beneficiario al cual se le asignará el trabajador social
+ *               id_value:
+ *                 type: integer
+ *                 description: ID del trabajador social que se asignará al beneficiario
+ *     responses:
+ *       200:
+ *         description: Trabajador social asignado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de éxito
+ *                 putTrabajadorSocial:
+ *                   type: object
+ *                   description: Datos del trabajador social asignado
+ *       400:
+ *         description: Error al asignar el trabajador social
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado de la operación
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
+router.put('/edit/trabajador-social', getBeneficiarioController.putTrabajadorSocial); 
+
+/**
+ * @swagger
+ * /beneficiarios/edit/psicologo:
+ *   put:
+ *     summary: Actualiza el psicólogo de un beneficiario
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_beneficiario:
+ *                 type: string
+ *                 description: ID del beneficiario
+ *               id_values:
+ *                 type: string
+ *                 description: ID del psicólogo
+ *             example:
+ *               id_beneficiario: 456
+ *               id_values: 123
+ *     responses:
+ *       200:
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica si la operación fue exitosa
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de éxito
+ *                 putPsicologo:
+ *                   type: object
+ *                   description: Resultado de la operación
+ *       400:
+ *         description: Error de solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica si ocurrió un error
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica si ocurrió un error interno
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error interno
+ */
+router.put('/edit/psicologo', getBeneficiarioController.putPsicologo);  
 
 module.exports = router;
 

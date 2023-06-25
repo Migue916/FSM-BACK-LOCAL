@@ -26,16 +26,16 @@ const sqlQueries = {
         "SELECT * FROM public.reporteS_ADJUNTOS WHERE id_reporte = \$1",
     
     PUT_CONSULTA:
-        "UPDATE public.reporte_modulo SET id_empleado = \$2, hex = \$3, fecha = CURRENT_DATE WHERE id = \$1",
+        "UPDATE public.reporte_modulo SET id_empleado = \$2, hex = \$3, fecha = CURRENT_TIMESTAMP WHERE id = \$1",
 
     PUT_ADJUNTOS:
-        "UPDATE public.reporte_modulo SET hex = \$2, fecha = CURRENT_DATE WHERE id = \$1",
+        "UPDATE public.reporte_modulo SET hex = \$2, fecha = CURRENT_TIMESTAMP WHERE id = \$1",
 
     POST_ADJUNTOS:
-        "INSERT INTO public.reportes_adjuntos( id_reporte, nombre, hex) VALUES (\$1, \$3, \$2);",
+        "INSERT INTO public.reportes_adjuntos( id_reporte, nombre, hex, doctype) VALUES (\$1, \$3, \$2, \$4);",
 
     POST_CONSULTA:
-        "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha, nombre, isFormat) VALUES (\$2, \$1, \$3, \$4, CURRENT_DATE, \$5, \$6) RETURNING id",
+        "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha, nombre, isFormat, doctype) VALUES (\$2, \$1, \$3, \$4, CURRENT_TIMESTAMP, \$5, \$6, \$7) RETURNING id",
 
     DELETE_ALERGIA:
         "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1 AND id_tipo_alergia  = \$2;",
@@ -53,13 +53,19 @@ const sqlQueries = {
         "UPDATE public.beneficiario SET id_orientacion=\$2 WHERE id = \$1",
 
     PUT_ALERGIA:
-        "INSERT INTO public.beneficiario_rel_tipo_alergia( id_beneficiario, id_tipo_alergia, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",
+        "INSERT INTO public.beneficiario_rel_tipo_alergia( id_beneficiario, id_tipo_alergia, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_TIMESTAMP, \$4);",
 
     PUT_RIESGOS: 
-        "INSERT INTO public.beneficiario_rel_riesgo( id_beneficiario, id_riesgo, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",
+        "INSERT INTO public.beneficiario_rel_riesgo( id_beneficiario, id_riesgo, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_TIMESTAMP, \$4);",
 
     PUT_SEDE:
         "UPDATE public.beneficiario SET id_sede = \$2 WHERE id = \$1;",
+
+    PUT_PSICOLOGO:
+        "UPDATE public.beneficiario SET id_psicologo = \$2 WHERE id = \$1;",
+
+    PUT_TRABAJADOR_SOCIAL:
+        "UPDATE public.beneficiario SET id_trabajador_social = \$2 WHERE id = \$1;",
 
     PUT_TIPO_DOC:
         "UPDATE public.beneficiario SET id_tipo_doc = \$2 WHERE id = \$1;",
@@ -68,10 +74,10 @@ const sqlQueries = {
         "UPDATE public.beneficiario SET id_eps = \$2 WHERE id = \$1;",
 
     PUT_MEDICAMENTO:
-        "INSERT INTO public.beneficiario_rel_medicamento( id_medicamento, id_beneficiario, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",
+        "INSERT INTO public.beneficiario_rel_medicamento( id_medicamento, id_beneficiario, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_TIMESTAMP, \$4);",
 
     PUT_DIAGNOSTICO:
-        "INSERT INTO public.enfermedad_rel_beneficiario( id_enfermedad, id_beneficiario, id_empleado, fecha, tipo, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE,\$4, \$5);",
+        "INSERT INTO public.enfermedad_rel_beneficiario( id_enfermedad, id_beneficiario, id_empleado, fecha, tipo, observacion) VALUES (\$1, \$2, \$3, CURRENT_TIMESTAMP,\$4, \$5);",
    
     GET_ORIENTACION_LIST:
         "select * from orientacion",
@@ -128,22 +134,22 @@ const sqlQueries = {
         "SELECT *,EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true AND id = \$1",
 
     GET_BENEFICIARIOS_NUEVOS:
-        "SELECT COUNT(*) FROM beneficiario WHERE estado = true AND EXTRACT(MONTH FROM fecha_ingreso) = EXTRACT(MONTH FROM CURRENT_DATE);",
+        "SELECT COUNT(*) FROM beneficiario WHERE estado = true AND EXTRACT(MONTH FROM fecha_ingreso) = EXTRACT(MONTH FROM CURRENT_TIMESTAMP);",
         
     GET_BENEFICIARIOS_NUEVOS_PASADO:
-        "SELECT COUNT(*) FROM beneficiario WHERE estado = true AND EXTRACT(MONTH FROM fecha_ingreso) = EXTRACT(MONTH FROM DATE_TRUNC('month', CURRENT_DATE - interval '1 month'));",
+        "SELECT COUNT(*) FROM beneficiario WHERE estado = true AND EXTRACT(MONTH FROM fecha_ingreso) = EXTRACT(MONTH FROM DATE_TRUNC('month', CURRENT_TIMESTAMP - interval '1 month'));",
 
     GET_BENEFICIARIOS_EGRESADOS:
         "SELECT COUNT(*) FROM egreso WHERE TIPO_USUARIO = TRUE;",
     
     GET_BENEFICIARIOS_EGRESADOS_PASADO:
-        "SELECT COUNT(*) FROM egreso WHERE EXTRACT(MONTH FROM fecha) != EXTRACT(MONTH FROM CURRENT_DATE) AND TIPO_USUARIO = TRUE;",
+        "SELECT COUNT(*) FROM egreso WHERE EXTRACT(MONTH FROM fecha) != EXTRACT(MONTH FROM CURRENT_TIMESTAMP) AND TIPO_USUARIO = TRUE;",
 
     GET_BENEFICIARIOS_ACTUALES:
         "SELECT COUNT(*) FROM beneficiario WHERE estado = true;",
 
     GET_BENEFICIARIOS_ACTUALES_PASADO:
-        "SELECT COUNT(*) FROM beneficiario WHERE estado = true AND EXTRACT(MONTH FROM fecha_ingreso) != EXTRACT(MONTH FROM CURRENT_DATE);",
+        "SELECT COUNT(*) FROM beneficiario WHERE estado = true AND EXTRACT(MONTH FROM fecha_ingreso) != EXTRACT(MONTH FROM CURRENT_TIMESTAMP);",
     
     GET_BENEFICIARIOS_ULTIMOS_DIEZ:
         "SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad FROM beneficiario WHERE estado = true ORDER BY fecha_ingreso DESC LIMIT 10;", 
@@ -194,13 +200,13 @@ const sqlQueries = {
         "SELECT * FROM ( SELECT *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) AS edad FROM beneficiario WHERE estado = true AND (SIMILARITY(CONCAT(p_nombre, ' ', s_nombre, ' ', p_apellido, ' ', s_apellido), \$1) > 0.07 OR SIMILARITY(CAST(id AS TEXT), \$1) > 0.8) ) AS busqueda;",
 
     CREATE_BENEFICIARIO:
-        "INSERT INTO public.beneficiario(id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_sede, fecha_nacimiento, id_genero, id_orientacion, fecha_ingreso, id_eps, id_psicologo, id_trabajador_social, estado) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, CURRENT_DATE, \$11, \$12, \$13, \$14)",
+        "INSERT INTO public.beneficiario(id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_sede, fecha_nacimiento, id_genero, id_orientacion, fecha_ingreso, id_eps, id_psicologo, id_trabajador_social, estado) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, CURRENT_TIMESTAMP, \$11, \$12, \$13, \$14)",
 
     PUT_ESTADO_BENEFICIARIO:
         "UPDATE public.beneficiario SET estado = false WHERE id = \$1",
 
     POST_EGRESO:
-        "INSERT INTO public.egreso( id_persona, fecha, observacion, tipo_usuario) VALUES (\$1, CURRENT_DATE, \$2, \$3);",
+        "INSERT INTO public.egreso( id_persona, fecha, observacion, tipo_usuario) VALUES (\$1, CURRENT_TIMESTAMP, \$2, \$3);",
 }; 
     
 module.exports = sqlQueries;

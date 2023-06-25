@@ -78,4 +78,6 @@ module.exports = {
 
     put_Eps: require("./put_Eps"),
     put_Tipo_Doc: require("./put_Tipo_Doc"),
+    put_Trabajador_Social: require("./put_Trabajador_Social"),
+    put_Psicologo: require("./put_Psicologo"),
 };

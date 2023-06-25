@@ -139,7 +139,8 @@ exports.postConsulta = async (req) => {
     id_modulo: Empleado.id_modulo,
     nombre: req.body.nombre,
     hex: storageUrl,
-    isFormat: false
+    isFormat: false,
+    docType: require('mime-types').lookup(req.file.originalname)
   };
 
   try {
@@ -250,6 +251,7 @@ exports.postAdjuntos = async (req) => {
       id_reporte: req.body.id_reporte,
       nombre: req.body.nombre,
       ruta: storageUrls,
+      docType: require('mime-types').lookup(req.file.originalname)
     };
 
     const results = [];
@@ -363,6 +365,7 @@ exports.getConsulta = async (list) => {
 
       const result = {
         hex: row.hex,
+        docType: row.doctype,
         modulo: modulo[0].modulo,
         id_responsable: row.id_empleado,
         responsable: empleado.Nombre + " " + empleado.Apellido,
@@ -387,6 +390,7 @@ async function getAdjuntos(id){
 
       const result = {
         url: row.hex,
+        docType: row.doctype,
         id: row.id, 
         nombre: row.nombre
       };
@@ -564,6 +568,28 @@ exports.putSede = async (sede) => {
     const putSede = await queries_Beneficiarios.put_Sede(sede);
     const results = [];
     results.push(putSede);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putTrabajadorSocial = async (trabajador_social) => {
+  try {
+    const putTrabajadorSocial = await queries_Beneficiarios.put_Trabajador_Social(trabajador_social);
+    const results = [];
+    results.push(putTrabajadorSocial);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putPsicologo = async (psicologo) => {
+  try {
+    const putPsicologo = await queries_Beneficiarios.put_Psicologo(psicologo);
+    const results = [];
+    results.push(putPsicologo);
     return results;
   } catch (error) {
     throw error;
@@ -815,6 +841,8 @@ exports.getPerfil = async (id) => {
     const eps = await queries_General.get_eps(getPerfil[0].id_eps);
     const genero = await queries_General.get_genero(getPerfil[0].id_genero);
     const tipo_doc = await queries_General.get_tipo_doc(getPerfil[0].id_tipo_doc);
+    const trabajador_social = await nombreEmpleado(getPerfil[0].id_trabajador_social);
+    const psicologo = await nombreEmpleado(getPerfil[0].id_psicologo);
 
     const result = {
       Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
@@ -833,6 +861,10 @@ exports.getPerfil = async (id) => {
       Medicamentos: await medicamentos_beneficiario(id),
       Orientacion: orientacion[0].orientacion,
       eps: eps[0].eps,
+      id_trabajador_social: getPerfil[0].id_trabajador_social,
+      trabajador_social: trabajador_social.Nombre + " " + trabajador_social.Apellido,
+      id_psicologo: getPerfil[0].id_psicologo, 
+      psicologo: psicologo.Nombre + " " + psicologo.Apellido
     };
     results.push(result);
     return results;

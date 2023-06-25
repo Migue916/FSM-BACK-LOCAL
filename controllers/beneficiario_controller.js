@@ -488,6 +488,41 @@ exports.putSede= async (req, res, next) => {
 };
 
 
+
+exports.putEps= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const eps = {
+      id_beneficiario: req.body.id_beneficiario, 
+      id_eps_proxima: req.body.id_value
+    };
+
+    const camposLlenos = Object.values(eps).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putEps = 
+        await beneficiarioServices.putEps(eps);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+
 exports.putDiagnostico= async (req, res, next) => {
   try {
     const result = {
@@ -655,6 +690,37 @@ exports.postSede= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
+
+exports.postTipoDoc= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    const tipoDoc = {
+      tipoDoc: req.body.tipoDoc, 
+      abreviacion: req.body.abreviacion
+    };
+    const camposLlenos = Object.values(tipoDoc).every((value) => value !== undefined && value !== '');
+    if (camposLlenos){
+      result.postTipoDoc = 
+        await beneficiarioServices.postTipoDoc(tipoDoc);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 
 exports.postEps= async (req, res, next) => {
   try {
@@ -1461,6 +1527,71 @@ exports.putGeneralGenero= async (req, res, next) => {
     if (camposLlenos){
       result.putGeneralGenero = 
         await beneficiarioServices.putGeneralGenero(genero);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putGeneralOrientacion= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const orientacion = {
+      id_orientacion: req.body.id_value,
+      orientacion: req.body.value
+    };
+
+    const camposLlenos = Object.values(orientacion).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralOrientacion = 
+        await beneficiarioServices.putGeneralOrientacion(orientacion);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putGeneralTipoDoc= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const tipo_doc = {
+      id_tipo_doc: req.body.id_value,
+      tipo_doc: req.body.value,
+      abreviacion: req.body.complement
+    };
+
+    const camposLlenos = Object.values(tipo_doc).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralTipoDoc = 
+        await beneficiarioServices.putGeneralTipoDoc(tipo_doc);
     }else{
       console.error(error.message);
       response.error(req, res, result, 400, "error");

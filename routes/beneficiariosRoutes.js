@@ -2527,20 +2527,405 @@ router.post('/new/consulta/formato', getBeneficiarioController.postFormat);
  */
 router.put('/edit/info', getBeneficiarioController.putInfo);
 
-
+/**
+ * @swagger
+ * /beneficiarios/edit/general/diagnostico:
+ *   put:
+ *     summary: Actualiza el diagnóstico general de un beneficiario
+ *     tags: [Beneficiarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_value:
+ *                 type: string
+ *                 description: ID del diagnóstico
+ *               value:
+ *                 type: string
+ *                 description: Diagnóstico general del beneficiario
+ *     responses:
+ *       200:
+ *         description: Éxito. El diagnóstico general se actualizó correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: successful
+ *                 putDiagnostico:
+ *                   $ref: '#/components/schemas/DiagnosticoGeneral'
+ *       400:
+ *         description: Error. No se pudo actualizar el diagnóstico general.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Error message
+ */
 router.put('/edit/general/diagnostico', getBeneficiarioController.putGeneralDiagnosticos);
-router.put('/edit/general/riesgos', getBeneficiarioController.putGeneralRiesgos);
-router.put('/edit/general/medicamento', getBeneficiarioController.putGeneralMedicamento);
-router.put('/edit/general/alergias', getBeneficiarioController.putGeneralAlergia);
-router.put('/edit/general/eps', getBeneficiarioController.putGeneralEps);
-router.put('/edit/general/genero', getBeneficiarioController.putGeneralGenero);
-/*
-router.put('/edit/general/orientacion', getBeneficiarioController.putInfo);
 
-router.put('/edit/eps', getBeneficiarioController.putInfo);
-router.put('/new/tipo-doc', getBeneficiarioController.putInfo);
-router.put('/edit/tipo-doc', getBeneficiarioController.putInfo);
-router.put('/edit/general/tipo-doc', getBeneficiarioController.putInfo);
+/**
+ * @swagger
+ * /beneficiarios/edit/general/riesgos:
+ *   put:
+ *     summary: Actualiza el riesgo general de un beneficiario
+ *     tags:
+ *       - Beneficiarios
+ *     parameters:
+ *       - in: body
+ *         name: id_value
+ *         description: ID del riesgo
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: body
+ *         name: value
+ *         description: Valor del riesgo
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Riesgo actualizado con éxito
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *             putGeneralRiesgos:
+ *               type: object
+ *       400:
+ *         description: Error al actualizar el riesgo
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ * */
+router.put('/edit/general/riesgos', getBeneficiarioController.putGeneralRiesgos);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/general/medicamento:
+ *   put:
+ *     summary: Actualiza la información general de un medicamento
+ *     description: Actualiza la información general de un medicamento en la base de datos a través del ID del medicamento y el valor del medicamento.
+ *     tags:
+ *       - beneficiarios
+ *     parameters:
+ *       - in: body
+ *         name: id_value
+ *         description: ID del medicamento a actualizar
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: body
+ *         name: value
+ *         description: Valor del medicamento a actualizar
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Medicamento actualizado exitosamente
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *       400:
+ *         description: Error al actualizar el medicamento
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: boolean
+ *             message:
+ *               type: string
+ */
+router.put('/edit/general/medicamento', getBeneficiarioController.putGeneralMedicamento);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/general/alergias:
+ *   put:
+ *     summary: Actualiza la información de alergias de un beneficiario
+ *     description: Este endpoint actualiza la información de alergias de un beneficiario en la base de datos.
+ *     parameters:
+ *       - in: body
+ *         name: id_value
+ *         description: El ID de la alergia
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: body
+ *         name: value
+ *         description: El nombre de la alergia
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: La información de alergias se actualizó correctamente
+ *         schema:
+ *           $ref: '#/definitions/Result'
+ *       400:
+ *         description: Error en la actualización de la información de alergias
+ *         schema:
+ *           $ref: '#/definitions/Result'
+ */
+router.put('/edit/general/alergias', getBeneficiarioController.putGeneralAlergia);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/general/eps:
+ *   put:
+ *     summary: Actualiza la información general de una EPS
+ *     tags: [Beneficiarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_value:
+ *                 type: integer
+ *                 description: ID de la EPS
+ *               value:
+ *                 type: string
+ *                 description: Nombre de la EPS
+ *             required:
+ *               - id_value
+ *               - value
+ *     responses:
+ *       200:
+ *         description: La información de la EPS fue actualizada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica si la operación fue exitosa
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje relacionado con el resultado de la operación
+ *       400:
+ *         description: Error en la actualización de la información de la EPS
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Indica si la operación fue exitosa
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje relacionado con el resultado de la operación
+ */
+router.put('/edit/general/eps', getBeneficiarioController.putGeneralEps);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/general/genero:
+ *   put:
+ *     summary: Actualiza el género de un beneficiario
+ *     description: Este endpoint actualiza el género de un beneficiario en la base de datos.
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_value:
+ *                 type: integer
+ *                 description: El ID del género a actualizar.
+ *               value:
+ *                 type: string
+ *                 description: El nuevo valor del género.
+ *             required:
+ *               - id_value
+ *               - value
+ *     responses:
+ *       200:
+ *         description: Género actualizado exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado del resultado (true: éxito, false: error).
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje descriptivo del resultado.
+ *                 putGeneralGenero:
+ *                   type: object
+ *                   description: Objeto con información del género actualizado.
+ *       400:
+ *         description: Error al actualizar el género.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   description: Estado del resultado (true: éxito, false: error).
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje descriptivo del resultado.
+ */
+
+router.put('/edit/general/genero', getBeneficiarioController.putGeneralGenero);
+
+
+/**
+ * @swagger
+ * /beneficiarios/edit/general/orientacion:
+ *   put:
+ *     summary: Actualiza la orientación general de un beneficiario
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_value:
+ *                 type: integer
+ *                 example: 1
+ *                 description: ID de la orientación
+ *               value:
+ *                 type: string
+ *                 example: "Nueva orientación"
+ *                 description: Valor de la orientación
+ *     responses:
+ *       200:
+ *         description: Actualización exitosa de la orientación
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "successful"
+ *                 putGeneralOrientacion:
+ *                   type: object
+ *                   description: Objeto que contiene el resultado de la actualización
+ *       400:
+ *         description: Error al actualizar la orientación
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Error message"
+ */
+router.put('/edit/general/orientacion', getBeneficiarioController.putGeneralOrientacion);
+
+/**
+ * @swagger
+ * /beneficiarios/edit/general/tipo-doc:
+ *   put:
+ *     summary: Editar un tipo de documento
+ *     description: Actualiza la información de un tipo de documento en el sistema
+ *     tags:
+ *       - Beneficiarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_value:
+ *                 type: integer
+ *                 description: ID del tipo de documento a editar
+ *               value:
+ *                 type: string
+ *                 description: Nombre del tipo de documento
+ *               complement:
+ *                 type: string
+ *                 description: Abreviatura del tipo de documento
+ *             required:
+ *               - id_value
+ *               - value
+ *               - complement
+ *     responses:
+ *       200:
+ *         description: Tipo de documento actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 putGeneralTipoDoc:
+ *                   type: object
+ *                   description: Objeto con información del tipo de documento actualizado
+ *       400:
+ *         description: Error al actualizar el tipo de documento
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ * */
+router.put('/edit/general/tipo-doc', getBeneficiarioController.putGeneralTipoDoc);
+
+router.put('/edit/eps', getBeneficiarioController.putEps);
+
+router.post('/new/tipo-doc', getBeneficiarioController.postTipoDoc);
+/*
+router.put('/edit/tipo-doc', getBeneficiarioController.putInfo);  
+router.put('/edit/trabajador-social', getBeneficiarioController.putInfo);  
+router.put('/edit/psicologo', getBeneficiarioController.putInfo);  
 */
 
 module.exports = router;

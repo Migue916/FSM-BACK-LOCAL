@@ -109,15 +109,17 @@ async function upload(req) {
     const containerClient = blobServiceClient.getContainerClient(containerName);
     await containerClient.createIfNotExists();
 
-    const blobName = Date.now() + '_' + req.file.originalname;
+    const originalName = req.file.originalname;
+    const newName = originalName.replace(/ /g, "_");
+    const blobName = Date.now() + '_' + newName;
+
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  
+
     const contentType = require('mime-types').lookup(req.file.originalname);
     const options = { blobHTTPHeaders: { blobContentType: contentType } };
     await blockBlobClient.uploadData(req.file.buffer, options);
-  
-    const storageUrl = blockBlobClient.url;
 
+    const storageUrl = blockBlobClient.url;
     return storageUrl;
   } catch (error) {
     console.error('Error al cargar el archivo:', error);
@@ -127,20 +129,20 @@ async function upload(req) {
 
 
 exports.postConsulta = async (req) => {
+
+  const storageUrl = await upload(req);
+  const Empleado = await nombreEmpleado(req.body.id_empleado);
+
+  const Consulta = {
+    id_beneficiario: req.body.id_beneficiario,
+    id_empleado: req.body.id_empleado,
+    id_modulo: Empleado.id_modulo,
+    nombre: req.body.nombre,
+    hex: storageUrl,
+    isFormat: false
+  };
+
   try {
-
-    const storageUrl = await upload(req);
-    const Empleado = await nombreEmpleado(req.body.id_empleado);
-  
-    const Consulta = {
-      id_beneficiario: req.body.id_beneficiario,
-      id_empleado: req.body.id_empleado,
-      id_modulo: Empleado.id_modulo,
-      nombre: req.body.nombre,
-      hex: storageUrl,
-      isFormat: false
-    };
-
     const postConsulta = await queries_Beneficiarios.post_consulta(Consulta);
     const result = {
       id: postConsulta[0].id
@@ -294,10 +296,12 @@ async function blobToFile(blob, filename) {
 };
 
 async function getContainerAndBlobName(url) {
+
   const urlParts = new URL(url);
   const pathParts = urlParts.pathname.split('/');
   const containerName = pathParts[1];
   const blobName = pathParts.slice(2).join('/');
+
   return { containerName, blobName };
 }
 
@@ -316,13 +320,14 @@ exports.getFoto = async (id) => {
 
 exports.getConsultaBuffer = async (info) => {
   try {
-    let file = [];
+    let file;
     if(!info.isFormat){
       const { containerName, blobName } = await getContainerAndBlobName(info.hex);
       const blob = await downloadBlob(blobServiceClient, containerName, blobName);
+      console.log(blobName);
       file = await blobToFile(blob, blobName);
     }{
-      file = JSON.parse(info.hex);
+      //file = JSON.parse(info.hex);
     }
     return file;
   } catch (error) {
@@ -565,6 +570,17 @@ exports.putSede = async (sede) => {
   }
 };
 
+exports.putEps = async (eps) => {
+  try {
+    const putEps = await queries_Beneficiarios.put_Eps(eps);
+    const results = [];
+    results.push(putEps);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
 exports.putDiagnostico = async (diagnostico) => {
   try {
     const putDiagnostico = await queries_Beneficiarios.put_Diagnostico(diagnostico);
@@ -633,6 +649,19 @@ exports.postSede = async (sede) => {
     throw error;
   }
 };
+
+
+exports.postTipoDoc = async (tipoDoc) => {
+  try {
+    const postTipoDoc = await queries_General.post_Tipo_Doc(tipoDoc);
+    const results = [];
+    results.push(postTipoDoc);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 exports.postDiagnostico = async (diagnostico) => {
   try {
@@ -1501,6 +1530,28 @@ exports.putGeneralEps = async (eps) => {
 exports.putGeneralGenero = async (genero) => {
   try {
     const putDiagnostico = await queries_General.put_General_Genero(genero);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralOrientacion = async (orientacion) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Orientacion(orientacion);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralTipoDoc = async (tipo_doc) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Tipo_Doc(tipo_doc);
     const results = [];
     results.push(putDiagnostico);
     return results;

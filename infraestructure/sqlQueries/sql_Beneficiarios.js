@@ -59,7 +59,10 @@ const sqlQueries = {
         "INSERT INTO public.beneficiario_rel_riesgo( id_beneficiario, id_riesgo, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",
 
     PUT_SEDE:
-        "UPDATE public.beneficiario SET id_sede=\$2 WHERE id = \$1;",
+        "UPDATE public.beneficiario SET id_sede = \$2 WHERE id = \$1;",
+
+    PUT_EPS:
+        "UPDATE public.beneficiario SET id_eps = \$2 WHERE id = \$1;",
 
     PUT_MEDICAMENTO:
         "INSERT INTO public.beneficiario_rel_medicamento( id_medicamento, id_beneficiario, id_empleado, fecha, observacion) VALUES (\$1, \$2, \$3, CURRENT_DATE, \$4);",

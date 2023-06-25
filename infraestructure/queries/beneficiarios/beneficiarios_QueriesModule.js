@@ -75,4 +75,6 @@ module.exports = {
     get_Adjuntos_url: require("./get_Adjuntos_url"),
     put_Info: require("./put_Info"),
     get_nombre: require("./get_nombre"),
+    
+    put_Eps: require("./put_Eps"),
 };

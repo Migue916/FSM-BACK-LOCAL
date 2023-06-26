@@ -177,8 +177,10 @@ const format = async(req) => {
 
   if(req.body.Interdependencia){
     const Empleado_Intervencion = await nombreEmpleado(req.body.id_empleado_intervencion)
-    Interdependencia = {      
+    Interdependencia = {   
+      id_Area: Empleado_Intervencion.id_modulo,   
       Area: Empleado_Intervencion.Modulo,
+      Id_profesional: req.body.id_empleado_intervencion,
       Nombre_Profesional: Empleado_Intervencion.Nombre + " " + Empleado_Intervencion.Apellido,
       Fecha_notificacion: req.body.Fecha_notificacion
     }

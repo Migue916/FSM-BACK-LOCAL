@@ -1121,6 +1121,11 @@ exports.getBeneficiarios = async (page) => {
 };
 
 
+
+
+
+
+
 exports.getBeneficiariosGenero = async () => {
   try {
     const getBeneficiariosGenero = await queries_Beneficiarios.get_Beneficiarios_Genero();
@@ -1128,6 +1133,7 @@ exports.getBeneficiariosGenero = async () => {
     for (const row of getBeneficiariosGenero) {
       const genero = await queries_General.get_genero(row.id_genero);
       const result = {
+        Id: row.id_genero,
         Genero: genero[0].genero,
       };
       results.push(result);
@@ -1145,6 +1151,7 @@ exports.getBeneficiariosRiesgos = async () => {
     for (const row of getBeneficiariosRiesgos) {
       const riesgo = await queries_Beneficiarios.get_riesgos_list(row.id_riesgo);
       const result = {
+        Id: row.id_riesgo,
         Riesgo: riesgo[0].riesgo,
       };
       results.push(result);
@@ -1162,6 +1169,7 @@ exports.getBeneficiariosOrientacion = async () => {
     for (const row of getBeneficiariosOrientacion) {
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
       const result = {
+        Id: row.id_orientacion,
         Orientacion: orientacion[0].orientacion,
       };
       results.push(result);
@@ -1179,6 +1187,7 @@ exports.getBeneficiariosSedes = async () => {
     for (const row of getBeneficiariosSedes) {
       const sede = await queries_General.get_sede(row.id_sede);
       const result = {
+        Id: row.id_sede,
         sede: sede[0].sede,
       };
       results.push(result);
@@ -1197,6 +1206,7 @@ exports.getBeneficiariosDiagnosticos = async () => {
     for (const row of getBeneficiariosDiagnosticos) {
       const diagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(row.id_enfermedad);
       const result = {
+        Id: row.id_enfermedad, 
         Diagnosticos: diagnostico[0].enfermedad,
       };
       results.push(result);

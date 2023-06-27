@@ -202,6 +202,8 @@ const format = async(req) => {
     Area: Empleado.Modulo,
     Fecha: fechaFormateada,
     Hora: horaFormateada,
+    id_beneficiario: req.body.id_beneficiario,
+    id_reporte: req.body.id_responsable,
     Nombre_Profesional: Empleado.Nombre + " " + Empleado.Apellido,
     No_Tarjeta_profesional: Empleado.No_Tarjeta_profesional,
     Objetivo_intervencion: req.body.Objetivo_intervencion,

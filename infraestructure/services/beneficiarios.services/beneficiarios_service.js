@@ -1138,7 +1138,7 @@ exports.getBeneficiariosGenero = async () => {
       const genero = await queries_General.get_genero(row.id_genero);
       const result = {
         Id: row.id_genero,
-        Genero: genero[0].genero,
+        Values: genero[0].genero,
       };
       results.push(result);
     }
@@ -1156,7 +1156,7 @@ exports.getBeneficiariosRiesgos = async () => {
       const riesgo = await queries_Beneficiarios.get_riesgos_list(row.id_riesgo);
       const result = {
         Id: row.id_riesgo,
-        Riesgo: riesgo[0].riesgo,
+        Values: riesgo[0].riesgo,
       };
       results.push(result);
     }
@@ -1174,7 +1174,7 @@ exports.getBeneficiariosOrientacion = async () => {
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
       const result = {
         Id: row.id_orientacion,
-        Orientacion: orientacion[0].orientacion,
+        Values: orientacion[0].orientacion,
       };
       results.push(result);
     }
@@ -1192,7 +1192,7 @@ exports.getBeneficiariosSedes = async () => {
       const sede = await queries_General.get_sede(row.id_sede);
       const result = {
         Id: row.id_sede,
-        sede: sede[0].sede,
+        Values: sede[0].sede,
       };
       results.push(result);
     }
@@ -1210,7 +1210,7 @@ exports.getBeneficiariosDiagnosticos = async () => {
       const diagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(row.id_enfermedad);
       const result = {
         Id: row.id_enfermedad, 
-        Diagnosticos: diagnostico[0].enfermedad,
+        Values: diagnostico[0].enfermedad,
       };
       results.push(result);
     }

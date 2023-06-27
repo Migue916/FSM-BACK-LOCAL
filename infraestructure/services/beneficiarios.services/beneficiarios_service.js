@@ -1051,8 +1051,6 @@ exports.getBeneficiarios = async (page) => {
     }
 
     let filtredData = preview;
-
-    console.log(filtredData)
     
     if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
@@ -1118,21 +1116,18 @@ exports.getBeneficiarios = async (page) => {
         nombreEmpleados = NombreEmpleados.Nombre + " " + NombreEmpleados.Apellido;
       }
 
-      let riesgos = row.riesgo.riesgo ?? null;
-      let diagnostico = row.diagnostico.enfermedad ?? null;      
-
       const result = {
         Identificacion: row.id,
         Nombre: row.Nombre,
         Edad: row.Edad,
         Genero: genero[0].genero,
-        Diagnostico_p: diagnostico?.[0]?.enfermedad ?? null,
+        Diagnostico_p: row.diagnostico.enfermedad ?? null,
         Sede: sede[0].sede,
         Fecha_ingreso: row.Fecha_ingreso,
         Empleado_ultima_consulta: Empleado_ultima_consulta,
         NombreEmpleado: nombreEmpleados,
         Orientacion: orientacion[0].orientacion,
-        Riesgos: riesgos
+        Riesgos: row.riesgo.riesgo ?? null
       };
       results.push(result);
     }
@@ -1145,10 +1140,112 @@ exports.getBeneficiarios = async (page) => {
   }
 };
 
+exports.getBeneficiariosDownload = async (page) => {
+  try {
+    const getBeneficiarios = await queries_Beneficiarios.get_Beneficiarios(page);
+    const results = [];
+    const preview = [];
+
+    for(const row of getBeneficiarios){
+
+      let diagnostico = await diagnosticos_principal_beneficiario(row.id);
+      let riesgos = await riesgos_beneficiario(row.id);
+
+      const result = {
+        id: row.id,
+        Nombre: row.p_nombre + " " +
+          row.s_nombre + " " +
+          row.p_apellido + " " +
+          row.s_apellido,
+        Edad: row.edad,
+        id_genero: row.id_genero,
+        id_sede: row.id_sede,
+        Fecha_ingreso: row.fecha_ingreso,
+        id_orientacion: row.id_orientacion,
+        riesgo: riesgos,     
+        diagnostico: diagnostico
+      };
+      preview.push(result);
+    }
+
+    let filtredData = preview;
+    
+    if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
+      filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
+    }
+
+    if (page.FecIn !== undefined && page.FecFn !== undefined) {
+
+      const FecInDate = new Date(page.FecIn);
+      const FecFnDate = new Date(page.FecFn);
+
+      filtredData = filtredData.filter(beneficiario => {
+        const FechaIngresoDate = new Date(beneficiario.Fecha_ingreso);
+        return FechaIngresoDate >= FecInDate && FechaIngresoDate <= FecFnDate;
+      });
+    }
 
 
+    if (page.Genero !== undefined) {
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_genero == page.Genero
+        );
+    }
+    
+    if (page.Sede !== undefined) {
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_sede == page.Sede);
+    }
+    
+    if (page.Diagnostico_p !== undefined) {
+      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.id == page.Diagnostico_p);
+    }
+    
+    if (page.Riesgos !== undefined) {
+      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo.id) == page.Riesgos);
+    }
+    
+    if (page.Orientacion !== undefined) {
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_orientacion == page.Orientacion);
+    }
+    
 
+    for (const row of filtredData) {
 
+      const sede = await queries_General.get_sede(row.id_sede);
+      const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
+      const orientacion = await queries_General.get_orientacion(row.id_orientacion);
+      const genero = await queries_General.get_genero(row.id_genero);
+
+      let Empleado_ultima_consulta = null;
+      let nombreEmpleados = null;
+      if (ultima_consulta.length !== 0) {
+        Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
+        const NombreEmpleados = await nombreEmpleado(+Empleado_ultima_consulta);
+        nombreEmpleados = NombreEmpleados.Nombre + " " + NombreEmpleados.Apellido;
+      }
+
+      const result = {
+        Identificacion: row.id,
+        Nombre: row.Nombre,
+        Edad: row.Edad,
+        Genero: genero[0].genero,
+        Diagnostico_p: row.diagnostico.enfermedad ?? null,
+        Sede: sede[0].sede,
+        Fecha_ingreso: row.Fecha_ingreso,
+        Empleado_ultima_consulta: Empleado_ultima_consulta,
+        NombreEmpleado: nombreEmpleados,
+        Orientacion: orientacion[0].orientacion,
+        Riesgos: row.riesgo.riesgo ?? null
+      };
+      results.push(result);
+    }
+
+    results.push(filtrados);
+
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 exports.getBeneficiariosGenero = async () => {

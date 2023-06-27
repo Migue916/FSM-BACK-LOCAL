@@ -3208,6 +3208,8 @@ router.put('/edit/psicologo', getBeneficiarioController.putPsicologo);
 
 router.put('/edit/general/sede', getBeneficiarioController.putGeneralSede);
 
+router.put('/download/listAll/', getBeneficiarioController.getBeneficiariosDownload);
+
 module.exports = router;
 
 

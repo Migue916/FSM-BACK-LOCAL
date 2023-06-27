@@ -1071,18 +1071,23 @@ exports.getBeneficiarios = async (page) => {
     if (page.Genero !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.id_genero === page.Genero);
     }
+    
     if (page.Sede !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.id_sede === page.Sede);
     }
+    
     if (page.Diagnostico_p !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.id === page.Diagnostico_p);
+      filtredData = filtredData.filter(beneficiario => (beneficiario.diagnostico[0]?.id ?? null) === page.Diagnostico_p);
     }
+    
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.riesgo.id === page.Riesgos);
+      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo[0]?.id ?? null) === page.Riesgos);
     }
+    
     if (page.Orientacion !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.id_orientacion === page.Orientacion);
     }
+    
 
     const remainingRecords = filtredData.length - ((+page.page - 1) * 10);
     const isLastPage = Math.ceil(filtredData.length / 10) === +page.page;

@@ -3204,7 +3204,9 @@ router.put('/edit/trabajador-social', getBeneficiarioController.putTrabajadorSoc
  *                   type: string
  *                   description: Mensaje de error interno
  */
-router.put('/edit/psicologo', getBeneficiarioController.putPsicologo);  
+router.put('/edit/psicologo', getBeneficiarioController.putPsicologo);
+
+router.put('/edit/general/sede', getBeneficiarioController.putGeneralSede);
 
 module.exports = router;
 

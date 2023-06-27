@@ -36,4 +36,6 @@ module.exports = {
     put_General_Orientacion: require("./put_General_Orientacion"),
     put_General_Tipo_Doc: require("./put_General_Tipo_Doc"),
     post_Tipo_Doc: require("./post_Tipo_Doc"),
+    put_General_Sede: require("./put_General_Sede"),
+
 };

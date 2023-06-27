@@ -824,7 +824,7 @@ exports.getSedeList = async (sede) => {
     for (const row of getSedeList) {
       const result = {
         id: row.id,
-        sede: row.sede
+        Values: row.sede
       };
       results.push(result);
     }
@@ -856,7 +856,7 @@ exports.getPerfil = async (id) => {
       Genero: genero[0].genero,
       Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
       Edad: getPerfil[0].edad,
-      Diagnostico_p: await diagnosticos_principal_beneficiario(id),
+      Diagnostico_p: (await diagnosticos_principal_beneficiario(id)).enfermedad,
       Sede: sede[0].sede,
       Fecha_ingreso: getPerfil[0].fecha_ingreso,
       Diagnostico_s: await diagnosticos_secundarios_beneficiario(id),
@@ -910,7 +910,10 @@ const diagnosticos_principal_beneficiario = async (id) => {
     return getDiagnostico;
   }
   getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(+diagnostico_principal[0].id_enfermedad);
-  const diagnostico = getDiagnostico[0].enfermedad;
+  const diagnostico = {
+    enfermedad: getDiagnostico[0].enfermedad,
+    id: getDiagnostico[0].id
+  };
   return diagnostico;
 };
 
@@ -952,6 +955,7 @@ const riesgos_beneficiario = async (id) => {
         const id_empleados = row.id_empleado;
         const empleado = await nombreEmpleado(id_empleados);
         const riesgos = {
+          id: row.id_riesgo,
           riesgos: riesgo[0].riesgo,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
           Fecha: riesgo[0].fecha
@@ -1022,51 +1026,31 @@ exports.getBeneficiarios = async (page) => {
   try {
     const getBeneficiarios = await queries_Beneficiarios.get_Beneficiarios(page);
     const results = [];
-    for (const row of getBeneficiarios) {
+    const preview = [];
 
-      const sede = await queries_General.get_sede(row.id_sede);
-      const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
-      const orientacion = await queries_General.get_orientacion(row.id_orientacion);
-      const genero = await queries_General.get_genero(row.id_genero);
-
-      let Empleado_ultima_consulta = null;
-      let nombreEmpleados = null;
-      if (ultima_consulta.length !== 0) {
-        Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
-        const NombreEmpleados = await nombreEmpleado(+Empleado_ultima_consulta);
-        nombreEmpleados = NombreEmpleados.Nombre + " " + NombreEmpleados.Apellido;
-      }
-
-      let riesgos = await riesgos_beneficiario(row.id);
-      if (riesgos.length === 0) {
-        riesgos = null;
-      }
+    for(const row of getBeneficiarios){
 
       let diagnostico = await diagnosticos_principal_beneficiario(row.id);
-      if (diagnostico.length === 0) {
-        diagnostico = null;
-      }
+      let riesgos = await riesgos_beneficiario(row.id);
 
       const result = {
-        Identificacion: row.id,
+        id: row.id,
         Nombre: row.p_nombre + " " +
           row.s_nombre + " " +
           row.p_apellido + " " +
           row.s_apellido,
-
         Edad: row.edad,
-        Genero: genero[0].genero,
-        Diagnostico_p: diagnostico,
-        Sede: sede[0].sede,
+        id_genero: row.id_genero,
+        id_sede: row.id_sede,
         Fecha_ingreso: row.fecha_ingreso,
-        Empleado_ultima_consulta: Empleado_ultima_consulta,
-        NombreEmpleado: nombreEmpleados,
-        Orientacion: orientacion[0].orientacion,
-        Riesgos: riesgos
+        id_orientacion: row.id_orientacion,
+        riesgo: riesgos,     
+        diagnostico: diagnostico
       };
-      results.push(result);
+      preview.push(result);
     }
-    let filtredData = results;
+
+    let filtredData = preview;
 
     if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
@@ -1085,40 +1069,69 @@ exports.getBeneficiarios = async (page) => {
 
 
     if (page.Genero !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.Genero === page.Genero);
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_genero === page.Genero);
     }
     if (page.Sede !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.Sede === page.Sede);
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_sede === page.Sede);
     }
     if (page.Diagnostico_p !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.Diagnostico_p === page.Diagnostico_p);
+      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.id === page.Diagnostico_p);
     }
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.Riesgos === page.Riesgos);
+      filtredData = filtredData.filter(beneficiario => beneficiario.riesgo.id === page.Riesgos);
     }
     if (page.Orientacion !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.Orientacion === page.Orientacion);
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_orientacion === page.Orientacion);
     }
 
-    const remainingRecords = filtredData.length % 10;
+    const remainingRecords = filtredData.length - ((+page.page - 1) * 10);
     const isLastPage = Math.ceil(filtredData.length / 10) === +page.page;
     const recordsToTake = isLastPage ? Math.min(remainingRecords, 10) : 10;
 
-    let firstTenRecords;
-    if (remainingRecords !== 0) {
-      firstTenRecords = filtredData.slice((+page.page - 1) * 10, (+page.page - 1) * 10 + recordsToTake);
-    } else {
-      firstTenRecords = filtredData.slice((+page.page * 10) - 10, (+page.page) * 10);
-    }
+    let firstTenRecords = filtredData.slice((+page.page - 1) * 10, (+page.page - 1) * 10 + recordsToTake);
 
     const filtrados = {
       Cantidad_filtrada: filtredData.length,
-      Numero_de_paginas: filtredData.length / 10
+      Numero_de_paginas: Math.ceil(filtredData.length / 10)
     };
 
-    firstTenRecords.push(filtrados);
+    for (const row of firstTenRecords) {
 
-    return firstTenRecords;
+      const sede = await queries_General.get_sede(row.id_sede);
+      const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
+      const orientacion = await queries_General.get_orientacion(row.id_orientacion);
+      const genero = await queries_General.get_genero(row.id_genero);
+
+      let Empleado_ultima_consulta = null;
+      let nombreEmpleados = null;
+      if (ultima_consulta.length !== 0) {
+        Empleado_ultima_consulta = ultima_consulta[0].id_empleado;
+        const NombreEmpleados = await nombreEmpleado(+Empleado_ultima_consulta);
+        nombreEmpleados = NombreEmpleados.Nombre + " " + NombreEmpleados.Apellido;
+      }
+
+      let riesgos = row.riesgo.riesgo ?? null;
+      let diagnostico = row.diagnostico.enfermedad ?? null;      
+
+      const result = {
+        Identificacion: row.id,
+        Nombre: row.Nombre,
+        Edad: row.Edad,
+        Genero: genero[0].genero,
+        Diagnostico_p: diagnostico?.[0]?.enfermedad ?? null,
+        Sede: sede[0].sede,
+        Fecha_ingreso: row.Fecha_ingreso,
+        Empleado_ultima_consulta: Empleado_ultima_consulta,
+        NombreEmpleado: nombreEmpleados,
+        Orientacion: orientacion[0].orientacion,
+        Riesgos: riesgos
+      };
+      results.push(result);
+    }
+
+    results.push(filtrados);
+
+    return results;
   } catch (error) {
     throw error;
   }
@@ -1451,7 +1464,7 @@ exports.getBeneficiariosLastTen = async () => {
         sede: sede[0].sede,
         edad: edad,
         riesgos: riesgos,
-        Diagnostico_p: diagnostico,
+        Diagnostico_p: diagnostico[0].enfermedad,
         fecha_nacimiento: fecha_nacimiento,
         orientacion: orientacion[0].orientacion,
         fecha_ingreso: fecha_ingreso,
@@ -1599,6 +1612,17 @@ exports.putGeneralGenero = async (genero) => {
 exports.putGeneralOrientacion = async (orientacion) => {
   try {
     const putDiagnostico = await queries_General.put_General_Orientacion(orientacion);
+    const results = [];
+    results.push(putDiagnostico);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralSede = async (sede) => {
+  try {
+    const putDiagnostico = await queries_General.put_General_Sede(sede);
     const results = [];
     results.push(putDiagnostico);
     return results;

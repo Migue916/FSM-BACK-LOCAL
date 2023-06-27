@@ -766,8 +766,8 @@ exports.postSede= async (req, res, next) => {
       message: "successful",
     };
     const sede = {
-      sede: req.body.sede, 
-      direccion: req.body.direccion
+      sede: req.body.value, 
+      direccion: req.body.complement
     };
     const camposLlenos = Object.values(sede).every((value) => value !== undefined && value !== '');
     if (camposLlenos){
@@ -1137,7 +1137,7 @@ exports.getSedeList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getSedeList =
+    result.getList =
       await beneficiarioServices.getSedeList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
@@ -1656,6 +1656,39 @@ exports.putGeneralOrientacion= async (req, res, next) => {
     if (camposLlenos){
       result.putGeneralOrientacion = 
         await beneficiarioServices.putGeneralOrientacion(orientacion);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.putGeneralSede= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const sede = {
+      id_sede: req.body.id_value,
+      sede: req.body.value,
+      direccion: req.body.complement
+    };
+
+    const camposLlenos = Object.values(sede).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralSede = 
+        await beneficiarioServices.putGeneralSede(sede);
     }else{
       console.error(error.message);
       response.error(req, res, result, 400, "error");

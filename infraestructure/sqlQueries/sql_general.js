@@ -102,6 +102,9 @@ const sqlQueries = {
     PUT_ORIENTACION: 
         "UPDATE orientacion SET orientacion = \$2 WHERE id = \$1",
 
+    PUT_SEDE: 
+        "UPDATE sede SET sede = \$2, direccion = \$3 WHERE id = \$1",
+
     PUT_TIPO_DOC: 
         "UPDATE tipo_doc SET tipo_documento = \$2 AND abreviacion = \$3 WHERE id = \$1",
 

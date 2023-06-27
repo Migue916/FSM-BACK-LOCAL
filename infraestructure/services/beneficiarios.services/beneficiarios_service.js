@@ -1196,7 +1196,6 @@ exports.getBeneficiariosSedes = async () => {
       };
       results.push(result);
     }
-    results.push({ sede: "No_registra", });
     return results;
   } catch (error) {
     throw error;

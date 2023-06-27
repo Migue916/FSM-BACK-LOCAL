@@ -912,7 +912,7 @@ const diagnosticos_principal_beneficiario = async (id) => {
   getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(+diagnostico_principal[0].id_enfermedad);
   const diagnostico = {
     enfermedad: getDiagnostico[0].enfermedad,
-    id: getDiagnostico[0].id
+    id: diagnostico_principal[0].id_enfermedad
   };
   return diagnostico;
 };
@@ -1052,6 +1052,8 @@ exports.getBeneficiarios = async (page) => {
 
     let filtredData = preview;
 
+    console.log(filtredData)
+    
     if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
     }
@@ -1069,23 +1071,24 @@ exports.getBeneficiarios = async (page) => {
 
 
     if (page.Genero !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.id_genero === page.Genero);
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_genero == page.Genero
+        );
     }
     
     if (page.Sede !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.id_sede === page.Sede);
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_sede == page.Sede);
     }
     
     if (page.Diagnostico_p !== undefined) {
-      filtredData = filtredData.filter(beneficiario => (beneficiario.diagnostico[0]?.id ?? null) === page.Diagnostico_p);
+      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.id == page.Diagnostico_p);
     }
     
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo[0]?.id ?? null) === page.Riesgos);
+      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo.id) == page.Riesgos);
     }
     
     if (page.Orientacion !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.id_orientacion === page.Orientacion);
+      filtredData = filtredData.filter(beneficiario => beneficiario.id_orientacion == page.Orientacion);
     }
     
 

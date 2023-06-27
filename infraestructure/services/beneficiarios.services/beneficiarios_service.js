@@ -1239,8 +1239,6 @@ exports.getBeneficiariosDownload = async (page) => {
       results.push(result);
     }
 
-    results.push(filtrados);
-
     return results;
   } catch (error) {
     throw error;

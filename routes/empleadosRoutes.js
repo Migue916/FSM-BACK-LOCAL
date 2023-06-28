@@ -1047,9 +1047,10 @@ router.post('/download/consulta', getEmpleadoController.getConsultaBuffer);
 router.get('/consultas/ultimo-mes', getEmpleadoController.getBeneficiariosUltimoMes);
 
 
-/*router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
-router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
+router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
 
+router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
+/*
 router.post('/new/modulo', getEmpleadoController.postModulo);
 router.post('/new/cargo', getEmpleadoController.postCargo);
 router.post('/new/profesion', getEmpleadoController.postProfesion);

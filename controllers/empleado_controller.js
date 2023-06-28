@@ -308,8 +308,8 @@ exports.getModulosList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getModulosList =
-      await empleadosServices.getModulosList(req.query.Modulo);
+    result.getList =
+      await empleadosServices.getModulosList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -329,8 +329,8 @@ exports.getCargosList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getCargosList =
-      await empleadosServices.getCargosList(req.query.Cargo);
+    result.getList =
+      await empleadosServices.getCargosList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -350,8 +350,8 @@ exports.getProfesionList= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getProfesionList =
-      await empleadosServices.getProfesionList(req.query.Profesion);
+    result.getList =
+      await empleadosServices.getProfesionList(req.query.Search);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -373,7 +373,7 @@ exports.putEmpleadoModulo = async (req, res, next) => {
 
     const modulo = {
       id_empleado: req.body.id_empleado, 
-      id_new_modulo: req.body.id_new_modulo
+      id_new_modulo: req.body.id_value 
     };
 
     const camposLlenos = Object.values(modulo).every((value) => value !== undefined && value !== '');
@@ -405,7 +405,7 @@ exports.putEmpleadoCargo = async (req, res, next) => {
 
     const cargo = {
       id_empleado: req.body.id_empleado, 
-      id_new_cargo: req.body.id_new_cargo
+      id_new_cargo: req.body.id_value
     };
 
     const camposLlenos = Object.values(cargo).every((value) => value !== undefined && value !== '');
@@ -427,6 +427,73 @@ exports.putEmpleadoCargo = async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
+
+exports.putEmpleadoProfesion = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const profesion = {
+      id_empleado: req.body.id_empleado, 
+      id_new_profesion: req.body.id_value
+    };
+
+    const camposLlenos = Object.values(profesion).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putEmpleadoProfesion = 
+        await empleadosServices.putEmpleadoProfesion(profesion);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.putEmpleadoTipoAdmin = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const admin = {
+      id_empleado: req.body.id_empleado, 
+      isAdmin: req.body.value
+    };
+
+    const camposLlenos = Object.values(admin).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putEmpleadoTipoAdmin = 
+        await empleadosServices.putEmpleadoTipoAdmin(admin);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
 
 exports.putInfo= async (req, res, next) => {
   try {

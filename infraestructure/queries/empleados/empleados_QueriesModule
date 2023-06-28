@@ -37,4 +37,7 @@ module.exports = {
     get_Consultas_url: require("./get_Consultas_url"),
     get_Beneficiarios_Ultimo_Mes: require("./get_Beneficiarios_Ultimo_Mes"),
 
+
+    put_Empleado_Profesion: require("./put_Empleado_Profesion"),
+    put_Empleado_Tipo_Admin: require("./put_Empleado_Tipo_Admin")
 };

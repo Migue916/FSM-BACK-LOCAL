@@ -1,5 +1,8 @@
 const sqlQueries = {
 
+    GET_PROFESION:
+        "SELECT * FROM profesion WHERE id = \$1",
+
     PUT_CONTRASENA:
         "UPDATE users SET contrasena = \$2 WHERE email = \$1",
 

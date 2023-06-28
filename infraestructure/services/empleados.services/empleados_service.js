@@ -102,6 +102,8 @@ exports.getEmpleados = async (page) => {
       const cargo = await queries_Empleados.get_Cargo(row.id_cargo);
       const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
       const genero = await queries_General.get_genero(row.id_genero);
+      const profesion = await queries_General.get_profesion(row.id_profesion);
+      const tipo_doc = await queries_General.get_tipo_doc(nombreBeneficiario[0].id_tipo_doc);
 
 
       if (consultas.length === 0){
@@ -119,8 +121,10 @@ exports.getEmpleados = async (page) => {
                 row.s_apellido,
 
         Identificacion: row.id,
+        Tipo_doc: tipo_doc[0].abreviacion,
         Genero: genero[0].genero,
         Edad: row.edad,
+        Profesion: profesion[0].profesion,
         Consultas_realizadas: consultas[0].cant,
         Cargo: cargo[0].cargo,
         Modulo: modulo[0].modulo,
@@ -390,6 +394,7 @@ exports.getPerfil = async (id) => {
       const genero = await queries_General.get_genero(getPerfil[0].id_genero);
       const user = await queries_Empleados.get_Tipo_Cargo(id);
       const tipo_doc = await queries_General.get_tipo_doc(getPerfil[0].id_tipo_doc);
+      const profesion = await queries_General.get_profesion(row.id_profesion);
 
 
       if (consultas.length === 0){
@@ -411,6 +416,7 @@ exports.getPerfil = async (id) => {
           Num_consultas: consultas[0].cant,
           Cargo: cargo[0].cargo, 
           Modulo: modulo[0].modulo,
+          Profesion: profesion[0].profesion,
           Admin: user[0].cargo
         };   
         results.push(result);
@@ -539,7 +545,7 @@ exports.getModulosList = async (modulo) => {
     for (const row of getModulosList) {
       const result = {
         id: row.id,
-        modulo: row.modulo
+        values: row.modulo
       };
       results.push(result);
     }
@@ -556,7 +562,7 @@ exports.getCargosList = async (cargo) => {
     for (const row of getCargosList) {
       const result = {
         id: row.id,
-        cargo: row.cargo
+        values: row.cargo
       };
       results.push(result);
     }
@@ -573,7 +579,7 @@ exports.getProfesionList = async (profesion) => {
     for (const row of getProfesionList) {
       const result = {
         id: row.id,
-        profesion: row.profesion
+        values: row.profesion
       };
       results.push(result);
     }
@@ -597,6 +603,28 @@ exports.putEmpleadoModulo = async (modulo) => {
 exports.putEmpleadoCargo = async (cargo) => {
   try {
     const putEmpleadoCargo = await queries_Empleados.put_EmpleadoCargo(cargo);
+    const results = [];
+    results.push(results);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putEmpleadoProfesion = async (profesion) => {
+  try {
+    const putEmpleadoProfesion = await queries_Empleados.put_Empleado_Profesion(profesion);
+    const results = [];
+    results.push(results);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putEmpleadoTipoAdmin = async (tipoAdmin) => {
+  try {
+    const putEmpleadoTipoAdmin = await queries_Empleados.put_Empleado_Tipo_Admin(tipoAdmin);
     const results = [];
     results.push(results);
     return results;

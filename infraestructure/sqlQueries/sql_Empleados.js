@@ -1,4 +1,8 @@
 const sqlQueries = {
+
+    PUT_EMPLEADO_ISADMIN:
+        "UPDATE users SET cargo = \$2 WHERE id = \$1",
+
     GET_EMPLEADOS_GENEROS:
         "SELECT DISTINCT id_genero FROM EMPLEADO WHERE ACTIVO = TRUE",
 
@@ -13,6 +17,9 @@ const sqlQueries = {
 
     PUT_EMPLEADO_CARGO: 
         "UPDATE empleado SET id_cargo = \$2 WHERE id = \$1",
+
+    PUT_EMPLEADO_PROFESION: 
+        "UPDATE empleado SET id_profesion = \$2 WHERE id = \$1",
 
     PUT_EMPLEADO_MODULO: 
         "UPDATE empleado SET pertenencia_de_modulo = \$2 WHERE id = \$1",

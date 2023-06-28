@@ -1553,10 +1553,7 @@ exports.getBeneficiariosLastTen = async () => {
       }
 
       let diagnostico = await diagnosticos_principal_beneficiario(row.id)
-      if (diagnostico.length === 0) {
-        diagnostico = null;
-      }
-
+      
       const result = {
         id: id,
         tipo_doc: tipo_doc[0].abreviacion,
@@ -1567,7 +1564,7 @@ exports.getBeneficiariosLastTen = async () => {
         sede: sede[0].sede,
         edad: edad,
         riesgos: riesgos,
-        Diagnostico_p: diagnostico[0].enfermedad,
+        Diagnostico_p: diagnostico.enfermedad ?? null,
         fecha_nacimiento: fecha_nacimiento,
         orientacion: orientacion[0].orientacion,
         fecha_ingreso: fecha_ingreso,

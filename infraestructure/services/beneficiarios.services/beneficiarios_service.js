@@ -898,7 +898,7 @@ const medicamentos_beneficiario = async (id) => {
           Id: row.id_medicamento,
           Value: medicamento[0].medicamento,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
-          Fecha: medicamento[0].fecha
+          Fecha: row.fecha
         };
         allMedicamento.push(medicamentos);
       }

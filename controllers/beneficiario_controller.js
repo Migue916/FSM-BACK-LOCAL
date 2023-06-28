@@ -638,6 +638,7 @@ exports.putDiagnostico= async (req, res, next) => {
     const camposLlenos = Object.values(diagnostico).every((value) => value !== undefined && value !== '');
     
     if (camposLlenos){
+      console.log(diagnostico);
       result.putDiagnostico = 
         await beneficiarioServices.putDiagnostico(diagnostico);
     }else{

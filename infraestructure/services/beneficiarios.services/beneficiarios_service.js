@@ -629,6 +629,7 @@ exports.putEps = async (eps) => {
 
 exports.putDiagnostico = async (diagnostico) => {
   try {
+    console.log(diagnostico);
     const putDiagnostico = await queries_Beneficiarios.put_Diagnostico(diagnostico);
     const results = [];
     results.push(putDiagnostico);
@@ -943,7 +944,7 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
           Id: row.id_enfermedad,
           Value: diagnosticos_secundario[0].enfermedad,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
-          Fecha: diagnosticos_secundario[0].fecha
+          Fecha: row.fecha
         };
         allDiagnosticos.push(diagnostico);
       }
@@ -970,7 +971,7 @@ const riesgos_beneficiario = async (id) => {
           Id: row.id_riesgo,
           Value: riesgo[0].riesgo,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
-          Fecha: riesgo[0].fecha
+          Fecha: row.fecha
         };
         allRiesgo.push(riesgos);
       }
@@ -997,7 +998,7 @@ const alergias_beneficiario = async (id) => {
           Id: row.id_tipo_alergia,
           Value: alergia[0].alergia,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
-          Fecha: alergia[0].fecha
+          Fecha: row.fecha
         };
         allAlergias.push(alergias);
       }

@@ -7,42 +7,47 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(connectionStrin
 const { Blob } = require('buffer');
 
 exports.postFoto = async (req) => {
-
-  const id = req.body.id;
-
-  const containerName = 'profilephotos';
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  await containerClient.createIfNotExists();
-
-  const blobName = Date.now() + '_' + req.file.originalname;
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
-  const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
-  await blockBlobClient.uploadData(req.file.buffer, options);
-
-  const storageUrl = blockBlobClient.url;
-
-  const getFoto = getBlobUrl(id);
-  if(getFoto.length === 0){
-    const { containerName, blobName } = await getContainerAndBlobName(getFoto);
-    deleteBlob(containerName, blobName);
-    await queries_General.delete_foto(id);
-  }
-
-  const Foto = {
-    id_persona: id,
-    ruta: storageUrl,
-  };
-
   try {
+
+    const id = req.body.id;
+
+    const containerName = 'profilephotos';
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    await containerClient.createIfNotExists();
+  
+    const originalName = req.file.originalname;
+    const newName = originalName.replace(/ /g, "_");
+    const blobName = Date.now() + '_' + newName;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  
+    const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
+    await blockBlobClient.uploadData(req.file.buffer, options);
+  
+    const storageUrl = blockBlobClient.url;
+    
+    const getFoto = await getBlobUrl(id);
+    console.log(getFoto.length);
+    if(getFoto.length > 0){
+      const { containerName, blobName } = await getContainerAndBlobName(getFoto);
+      deleteBlob(containerName, blobName);
+      await queries_General.delete_foto(id);
+    }
+  
+    const Foto = {
+      id_persona: id,
+      ruta: storageUrl,
+    };
+
     const postFoto = await queries_General.post_Foto(Foto);
-    const results = [];
+    const results = {
+      Estado: "Exitoso"
+    };
 
     return (results);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server error');
-  }
+    return res.status(500).send('Server error');
+  }  
 };
 
 
@@ -121,10 +126,10 @@ async function upload(req) {
 
     const storageUrl = blockBlobClient.url;
     return storageUrl;
-  } catch (error) {
-    console.error('Error al cargar el archivo:', error);
-    throw error;
-  }
+  }  catch (error) {
+    console.error(error);
+    return res.status(500).send('Server error');
+  } 
 }
 
 
@@ -856,13 +861,13 @@ exports.getPerfil = async (id) => {
       Genero: genero[0].genero,
       Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
       Edad: getPerfil[0].edad,
-      Diagnostico_p: (await diagnosticos_principal_beneficiario(id)).enfermedad,
+      Diagnostico_p: await diagnosticos_principal_beneficiario(id) ?? null,
       Sede: sede[0].sede,
       Fecha_ingreso: getPerfil[0].fecha_ingreso,
-      Diagnostico_s: await diagnosticos_secundarios_beneficiario(id),
-      Riesgos: await riesgos_beneficiario(id),
-      Alergias: await alergias_beneficiario(id),
-      Medicamentos: await medicamentos_beneficiario(id),
+      Diagnostico_s: await diagnosticos_secundarios_beneficiario(id) ?? null,
+      Riesgos: await riesgos_beneficiario(id) ?? null,
+      Alergias: await alergias_beneficiario(id) ?? null,
+      Medicamentos: await medicamentos_beneficiario(id) ?? null,
       Orientacion: orientacion[0].orientacion,
       eps: eps[0].eps,
       id_trabajador_social: getPerfil[0].id_trabajador_social,
@@ -889,7 +894,8 @@ const medicamentos_beneficiario = async (id) => {
         const id_empleados = row.id_empleado;
         const empleado = await nombreEmpleado(id_empleados);
         const medicamentos = {
-          medicamentos: medicamento[0].medicamento,
+          Id: row.id_medicamento,
+          Value: medicamento[0].medicamento,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
           Fecha: medicamento[0].fecha
         };
@@ -904,17 +910,22 @@ const medicamentos_beneficiario = async (id) => {
 
 const diagnosticos_principal_beneficiario = async (id) => {
   const diagnostico_principal = await queries_Beneficiarios.get_diagnostico_principal(id);
-
+  const result = [];
   var getDiagnostico = [];
   if (diagnostico_principal.length === 0) {
     return getDiagnostico;
   }
   getDiagnostico = await queries_Beneficiarios.get_tipos_diagnosticos(+diagnostico_principal[0].id_enfermedad);
+  const id_empleados = diagnostico_principal[0].id_empleado;
+  const empleado = await nombreEmpleado(id_empleados);
   const diagnostico = {
-    enfermedad: getDiagnostico[0].enfermedad,
-    id: diagnostico_principal[0].id_enfermedad
+    Id: diagnostico_principal[0].id_enfermedad,
+    Value: getDiagnostico[0].enfermedad,
+    Empleado: empleado.Nombre + " " + empleado.Apellido,
+    Fecha: diagnostico_principal[0].fecha
   };
-  return diagnostico;
+  result.push(diagnostico)
+  return result;
 };
 
 const diagnosticos_secundarios_beneficiario = async (id) => {
@@ -929,7 +940,8 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
         const id_empleados = row.id_empleado;
         const empleado = await nombreEmpleado(id_empleados);
         diagnostico = {
-          diagnosticos_secundario: diagnosticos_secundario[0].enfermedad,
+          Id: row.id_enfermedad,
+          Value: diagnosticos_secundario[0].enfermedad,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
           Fecha: diagnosticos_secundario[0].fecha
         };
@@ -955,8 +967,8 @@ const riesgos_beneficiario = async (id) => {
         const id_empleados = row.id_empleado;
         const empleado = await nombreEmpleado(id_empleados);
         const riesgos = {
-          id: row.id_riesgo,
-          riesgos: riesgo[0].riesgo,
+          Id: row.id_riesgo,
+          Value: riesgo[0].riesgo,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
           Fecha: riesgo[0].fecha
         };
@@ -982,7 +994,8 @@ const alergias_beneficiario = async (id) => {
         const id_empleados = row.id_empleado;
         const empleado = await nombreEmpleado(+id_empleados);
         const alergias = {
-          alergias: alergia[0].alergia,
+          Id: row.id_tipo_alergia,
+          Value: alergia[0].alergia,
           Empleado: empleado.Nombre + " " + empleado.Apellido,
           Fecha: alergia[0].fecha
         };
@@ -1553,7 +1566,7 @@ exports.getBeneficiariosLastTen = async () => {
       }
 
       let diagnostico = await diagnosticos_principal_beneficiario(row.id)
-      
+
       const result = {
         id: id,
         tipo_doc: tipo_doc[0].abreviacion,

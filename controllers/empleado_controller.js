@@ -289,7 +289,7 @@ exports.postFoto = async (req, res, next) => {
     };
 
     result.postFoto = 
-      await empleadosServices.postFoto(req);
+      await beneficiarioServices.postFoto(req);
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

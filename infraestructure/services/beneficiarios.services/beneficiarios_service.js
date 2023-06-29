@@ -204,6 +204,17 @@ const format = async(req) => {
   }
   
   const Formato = {
+
+    Estado_civil: req.body.Estado_civil,
+    Ocupacion: req.body.Ocupacion,
+    Direccion: req.body.Direccion,
+    Telefono_beneficiario: req.body.Telefono_beneficiario,
+    Aseguradora: req.body.Aseguradora,
+    Regimen: req.body.Regimen,
+    Nombre_acompañante: req.body.Nombre_acompañante,
+    Telefono_acompañante: req.body.Telefono_acompañante,
+    Parentesco: req.body.Parentesco,
+
     Area: Empleado.Modulo,
     Fecha: fechaFormateada,
     Hora: horaFormateada,

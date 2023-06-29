@@ -85,7 +85,7 @@ const sqlQueries = {
         "select * from (SELECT *, SIMILARITY(ABREVIACION, \$1) AS similitud FROM TIPO_DOC) as sc where similitud > 0.07",
 
     PUT_DIAGNOSTICO: 
-        "UPDATE enfermedad SET enfermedad = \$2 WHERE id = \$1",
+        "UPDATE enfermedades SET enfermedad = \$2 WHERE id = \$1",
 
     PUT_RIESGO: 
         "UPDATE riesgos SET riesgo = \$2 WHERE id = \$1",

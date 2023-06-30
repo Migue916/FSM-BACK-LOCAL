@@ -96,7 +96,7 @@ exports.user_create = async (req, res, next) => {
     };
     const todosLosCamposLlenos = Object.values(employee).every((value) => value !== undefined && value !== '');
     if (todosLosCamposLlenos) {
-      const creacionUser = false;
+      let creacionUser = false;
       creacionUser = queries_General.create_user_account(employee);
       if(creacionUser){
         await await queries_General.create_user(employee);

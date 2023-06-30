@@ -44,7 +44,8 @@ module.exports = {
 
     get_BalanceNuevos: require("./get_BalanceNuevos"),
     get_BalanceEgresados: require("./get_BalanceEgresados"),
-    get_anios: require("./get_anios"),
+    get_anios_ing: require("./get_anios_ing"),
+    get_anios_egr: require("./get_anios_egr"),
 
     get_Diagnosticos: require("./get_Diagnosticos"),
     get_tipos_diagnosticos: require("./get_tipos_diagnosticos"),

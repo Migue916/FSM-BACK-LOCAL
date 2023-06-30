@@ -163,8 +163,11 @@ const sqlQueries = {
     GET_BALANCE_EGRESADOS:
         "SELECT EXTRACT(MONTH FROM fecha) AS mes, COUNT(*) FROM egreso WHERE EXTRACT(YEAR FROM fecha) = \$1 AND TIPO_USUARIO = TRUE GROUP BY mes ORDER BY mes;",
     
-    GET_ANIOS:
+    GET_ANIOS_ING:
         "SELECT EXTRACT(YEAR FROM fecha_INGRESO) AS anio FROM beneficiario GROUP BY anio ORDER BY anio;",
+
+    GET_ANIOS_EGR:
+        "SELECT EXTRACT(YEAR FROM fecha) AS anio FROM egreso GROUP BY anio ORDER BY anio;",
 
     GET_DIAGNOSTICOS: 
         "SELECT id_enfermedad, count(*) from enfermedad_rel_beneficiario group by id_enfermedad;",

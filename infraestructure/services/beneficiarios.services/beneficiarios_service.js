@@ -1397,22 +1397,34 @@ exports.getDiagnosticos = async () => {
 
 exports.getAnios = async () => {
   try {
-    const getAnios = await queries_Beneficiarios.get_anios();
+    const getAniosIng = await queries_Beneficiarios.get_anios_ing();
+    const getAniosEgr = await queries_Beneficiarios.get_anios_egr();
     const results = [];
 
-    for (const row of getAnios) {
+    for (const row of getAniosIng) {
       const anio = row.anio;
       const result = {
         anio: anio
       };
-
       results.push(result);
     }
-    return results;
+
+    for (const row of getAniosEgr) {
+      const anio = row.anio;
+      const result = {
+        anio: anio
+      };
+      results.push(result);
+    }
+
+    const uniqueResults = Array.from(new Set(results.map(JSON.stringify))).map(JSON.parse);
+
+    return uniqueResults;
   } catch (error) {
     throw error;
   }
 };
+
 
 function ObtenerMes(mes) {
   switch (mes) {

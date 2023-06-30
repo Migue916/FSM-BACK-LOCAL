@@ -83,20 +83,24 @@ exports.putAdjuntos = async (req) => {
 
 exports.putConsulta = async (req) => {
 
-  let storageUrl = '';
+  let variable = '';
+
   if(!req.body.isFormat){
-    storageUrl = upload(req);
+    const storageUrl = upload(req);
     const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
     deleteBlob(containerName, blobName);
+    variable = storageUrl;
   }else{
     const formato = await format(req);
-    storageUrl = JSON.stringify(formato);
+    const storageUrl = JSON.stringify(formato);
+    variable = storageUrl;
   }
+
   const Consulta = {
     id_consulta: req.body.id_consulta,
     id_empleado: req.body.id_empleado,
     rutaAnt: req.body.hex,
-    rutaNew: storageUrl
+    rutaNew: variable
   };
 
   try {

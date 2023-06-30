@@ -1621,7 +1621,7 @@ exports.getBeneficiariosActuales = async () => {
     const pasado =
       await queries_Beneficiarios.get_BeneficiariosActualesPasado();
     let porcentaje = 100;
-    if (pasado.length != 0) {
+    if (+pasado[0].count !== 0) {
       porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
     }
     const result = {
@@ -1643,7 +1643,7 @@ exports.getBeneficiariosEgresados = async () => {
       await queries_Beneficiarios.get_BeneficiariosEgresadosPasado();
 
     let porcentaje = 100;
-    if (pasado.length != 0) {
+    if (+pasado[0].count !== 0) {
       porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
     }
 
@@ -1665,7 +1665,7 @@ exports.getBeneficiariosNuevos = async () => {
       await queries_Beneficiarios.get_BeneficiariosNuevosPasado();
 
     let porcentaje = 100;
-    if (pasado.length != 0) {
+    if (+pasado[0].count !== 0) {
       porcentaje = (100 / (+pasado[0].count)) * ((+actual[0].count) - (+pasado[0].count));
     }
 

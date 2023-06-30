@@ -101,7 +101,7 @@ exports.user_create = async (req, res, next) => {
       if(creacionUser){
         await queries_General.create_user(employee);
       }else{
-        res.status(400);
+        res.status(200);
         result = {
           status: false,
           message: "Error algun valor ya existe",

@@ -394,7 +394,7 @@ exports.getPerfil = async (id) => {
       const genero = await queries_General.get_genero(getPerfil[0].id_genero);
       const user = await queries_Empleados.get_Tipo_Cargo(id);
       const tipo_doc = await queries_General.get_tipo_doc(getPerfil[0].id_tipo_doc);
-      const profesion = await queries_General.get_profesion(row.id_profesion);
+      const profesion = await queries_General.get_profesion(getPerfil[0].id_profesion);
 
 
       if (consultas.length === 0){

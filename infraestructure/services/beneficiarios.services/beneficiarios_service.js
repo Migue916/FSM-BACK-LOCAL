@@ -1037,7 +1037,8 @@ exports.post_beneficiario = async (beneficiario) => {
     result = [];
     const camposLlenos = Object.values(beneficiario).every((value) => value !== undefined && value !== '');
     if (camposLlenos) {
-      result.push(await queries_Beneficiarios.post_beneficiario(beneficiario));
+      await queries_Beneficiarios.post_beneficiario(beneficiario)
+      result.push({Estado: 'Existoso'});
     }
     else
       res.status(400);

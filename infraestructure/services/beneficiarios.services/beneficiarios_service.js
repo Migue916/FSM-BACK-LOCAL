@@ -115,8 +115,8 @@ async function upload(req) {
     await containerClient.createIfNotExists();
 
     const originalName = req.file.originalname;
-    const newName = originalName.replace(/ /g, "_");
-    const blobName = Date.now() + '_' + newName;
+    const newName = originalName.normalize('NFD').replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9_.-]/g, "_");
+    const blobName = Date.now() + '_' + newName;    
 
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 

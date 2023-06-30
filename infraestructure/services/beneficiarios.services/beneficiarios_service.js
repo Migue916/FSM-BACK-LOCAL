@@ -166,6 +166,13 @@ exports.postConsulta = async (req) => {
 
 const format = async(req) => {
   const Empleado = await nombreEmpleado(req.body.id_empleado);
+  const Beneficiario = await queries_Beneficiarios.get_Perfil(req.body.id_beneficiario);
+
+  const sede = await queries_General.get_sede(Beneficiario[0].id_sede);
+  const orientacion = await queries_General.get_orientacion(Beneficiario[0].id_orientacion);
+  const eps = await queries_General.get_eps(Beneficiario[0].id_eps);
+  const genero = await queries_General.get_genero(Beneficiario[0].id_genero);
+  const tipo_doc = await queries_General.get_tipo_doc(Beneficiario[0].id_tipo_doc);
 
   const fechaActual = new Date();
 
@@ -204,6 +211,16 @@ const format = async(req) => {
   }
   
   const Formato = {
+
+    Nombre: Beneficiario[0].p_nombre + " " + Beneficiario[0].s_nombre,
+    Apellido: Beneficiario[0].p_apellido + " " + Beneficiario[0].s_apellido,
+    Identificacion: Beneficiario[0].id,
+    tipo_doc: tipo_doc[0].abreviacion,
+    Genero: genero[0].genero,
+    Fecha_nacimiento: Beneficiario[0].fecha_nacimiento,
+    Edad: Beneficiario[0].edad,
+    Sede: sede[0].sede,
+    eps: eps[0].eps,
 
     Estado_civil: req.body.Estado_civil,
     Ocupacion: req.body.Ocupacion,

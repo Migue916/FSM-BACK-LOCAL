@@ -42,6 +42,10 @@ module.exports = {
     post_Tipo_Doc: require("./post_Tipo_Doc"),
     put_General_Sede: require("./put_General_Sede"),
 
+    put_General_Modulo: require("./put_General_Modulo"),
+    put_General_Cargo:require("./put_General_Cargo"),
+    put_General_Profesion: require("./put_General_Profesion"),
+
     get_profesion: require("./get_profesion")
 
 };

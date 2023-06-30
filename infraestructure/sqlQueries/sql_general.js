@@ -102,6 +102,15 @@ const sqlQueries = {
     PUT_MEDICAMENTO: 
         "UPDATE medicamento SET medicamento = \$2 WHERE id = \$1",
 
+    PUT_MODULO: 
+        "UPDATE modulo SET modulo = \$2 WHERE id = \$1",
+
+    PUT_CARGO: 
+        "UPDATE cargo SET cargo = \$2 WHERE id = \$1",
+
+    PUT_PROFESION: 
+        "UPDATE profesion SET profesion = \$2 WHERE id = \$1",
+
     PUT_ALERGIA: 
         "UPDATE tipo_alergia SET alergia = \$2 WHERE id = \$1",
 

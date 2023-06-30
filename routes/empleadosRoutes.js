@@ -1059,4 +1059,12 @@ router.post('/new/cargo', getEmpleadoController.postCargo);
 
 router.post('/new/profesion', getEmpleadoController.postProfesion);
 
+
+
+router.put('/edit/general/modulo', getEmpleadoController.putGeneralModulo);
+
+router.put('/edit/general/cargo', getEmpleadoController.putGeneralCargo);
+
+router.put('/edit/general/profesion', getEmpleadoController.putGeneralProfesion);
+
 module.exports = router;

@@ -707,7 +707,7 @@ exports.postCargo = async (cargo) => {
   try {
     const postCargo = await queries_General.post_Cargo(cargo);
     const results = [];
-    results.push(postModulo);
+    results.push(postCargo);
     return results;
   } catch (error) {
     throw error;
@@ -718,7 +718,40 @@ exports.postProfesion = async (profesion) => {
   try {
     const postProfesion = await queries_General.post_Profesion(profesion);
     const results = [];
-    results.push(postModulo);
+    results.push(postProfesion);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralModulo = async (modulo) => {
+  try {
+    const putGeneralModulo = await queries_General.put_General_Modulo(modulo);
+    const results = [];
+    results.push(putGeneralModulo);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralCargo = async (cargo) => {
+  try {
+    const putGeneralCargo = await queries_General.put_General_Cargo(cargo);
+    const results = [];
+    results.push(putGeneralCargo);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.putGeneralProfesion = async (profesion) => {
+  try {
+    const putGeneralProfesion = await queries_General.put_General_Profesion(profesion);
+    const results = [];
+    results.push(putGeneralProfesion);
     return results;
   } catch (error) {
     throw error;

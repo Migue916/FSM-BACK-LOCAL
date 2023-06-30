@@ -681,3 +681,104 @@ exports.postProfesion= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
+
+
+exports.putGeneralModulo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const modulo = {
+      id_modulo: req.body.id_value,
+      modulo: req.body.value
+    };
+
+    const camposLlenos = Object.values(modulo).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralModulo = 
+        await empleadosServices.putGeneralModulo(modulo);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.putGeneralCargo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const cargo = {
+      id_cargo: req.body.id_value,
+      cargo: req.body.value
+    };
+
+    const camposLlenos = Object.values(cargo).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralCargo = 
+        await empleadosServices.putGeneralCargo(cargo);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+
+exports.putGeneralProfesion= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    const profesion = {
+      id_profesion: req.body.id_value,
+      profesion: req.body.value
+    };
+
+    const camposLlenos = Object.values(profesion).every((value) => value !== undefined && value !== '');
+    
+    if (camposLlenos){
+      result.putGeneralProfesion = 
+        await empleadosServices.putGeneralProfesion(profesion);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+

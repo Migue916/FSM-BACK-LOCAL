@@ -58,7 +58,7 @@ const sqlQueries = {
         "SELECT * FROM USERS WHERE email = \$1;", 
     
     CREATE_USER:
-        "INSERT INTO empleado (id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_profesion, tarjeta_profesional, id_cargo, activo, id_genero, fecha_ingreso, pertenencia_de_modulo, fecha_nacimiento) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, \$11, CURRENT_TIMESTAMP, \$12, \$13)",
+        "INSERT INTO empleado (id, id_tipo_doc, p_nombre, s_nombre, p_apellido, s_apellido, id_profesion, tarjeta_profesional, id_cargo, activo, id_genero, fecha_ingreso, pertenencia_de_modulo, fecha_nacimiento) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, \$11, CURRENT_TIMESTAMP, \$12, \$13) RETURNING true",
     
     CREATE_USER_ACCOUNT:
         "INSERT INTO USERS (id, email, contrasena, cargo) VALUES (\$1, \$2, \$3, \$4)",

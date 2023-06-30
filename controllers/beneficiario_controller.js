@@ -917,7 +917,7 @@ exports.getFoto = async (req, res, next) => {
       message: error.message,
     };
     console.error(error.message);
-    response.error(req, res, result, 400, "error");
+    response.error(req, res, result, 200, "error");
   }
 };
 

@@ -1049,12 +1049,14 @@ router.get('/consultas/ultimo-mes', getEmpleadoController.getBeneficiariosUltimo
 
 router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
 
-router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);           
-/*
-router.post('/new/modulo', getEmpleadoController.postModulo);
-router.post('/new/cargo', getEmpleadoController.postCargo);
-router.post('/new/profesion', getEmpleadoController.postProfesion);
 
-*/
+router.put('/edit/tipoAdmin', getEmpleadoController.putEmpleadoTipoAdmin);  
+
+
+router.post('/new/modulo', getEmpleadoController.postModulo);
+
+router.post('/new/cargo', getEmpleadoController.postCargo);
+
+router.post('/new/profesion', getEmpleadoController.postProfesion);
 
 module.exports = router;

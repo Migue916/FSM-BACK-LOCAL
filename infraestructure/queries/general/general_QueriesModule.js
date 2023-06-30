@@ -24,6 +24,10 @@ module.exports = {
     post_Foto: require("./post_Foto"),
     post_Medicamento: require("./post_Medicamento"),
 
+    post_Modulo: require("./post_Modulo"),
+    post_Cargo: require("./post_Cargo"),
+    post_Profesion: require("./post_Profesion"),
+
     delete_foto: require("./delete_foto"),
     new_Password: require("./new_Password"),
 

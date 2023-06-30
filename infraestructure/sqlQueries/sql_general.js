@@ -21,6 +21,15 @@ const sqlQueries = {
     POST_GENERO:
         "INSERT INTO genero (genero) VALUES (\$1);",
 
+    POST_MODULO:
+        "INSERT INTO modulo (modulo) VALUES (\$1);",
+
+    POST_PROFESION:
+        "INSERT INTO profesion (profesion) VALUES (\$1);",
+    
+    POST_CARGO:
+        "INSERT INTO cargo (cargo) VALUES (\$1);",
+
     POST_MEDICAMENTO:
         "INSERT INTO medicamento (medicamento) VALUES (\$1);",
 

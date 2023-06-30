@@ -691,3 +691,36 @@ exports.getBeneficiariosUltimoMes = async (id) => {
     throw error;
   }
 };
+
+exports.postModulo = async (modulo) => {
+  try {
+    const postModulo = await queries_General.post_Modulo(modulo);
+    const results = [];
+    results.push(postModulo);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.postCargo = async (cargo) => {
+  try {
+    const postCargo = await queries_General.post_Cargo(cargo);
+    const results = [];
+    results.push(postModulo);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.postProfesion = async (profesion) => {
+  try {
+    const postProfesion = await queries_General.post_Profesion(profesion);
+    const results = [];
+    results.push(postModulo);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};

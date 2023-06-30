@@ -606,3 +606,78 @@ exports.getBeneficiariosUltimoMes= async (req, res, next) => {
     response.error(req, res, result, 400, "error");
   }
 };
+
+exports.postModulo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    modulo = req.body.value;
+    if (modulo.length !== 0){
+      result.postModulo = 
+        await empleadosServices.postModulo(modulo);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.postCargo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    cargo = req.body.value;
+    if (cargo.length !== 0){
+      result.postCargo = 
+        await empleadosServices.postCargo(cargo);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.postProfesion= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+    profesion = req.body.value;
+    if (profesion.length !== 0){
+      result.postProfesion = 
+        await empleadosServices.postProfesion(profesion);
+    }else{
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};

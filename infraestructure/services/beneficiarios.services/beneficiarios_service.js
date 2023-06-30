@@ -83,7 +83,7 @@ exports.putAdjuntos = async (req) => {
 
 exports.putConsulta = async (req) => {
 
-  let storageUrl = null;
+  let storageUrl = '';
   if(!req.body.isFormat){
     storageUrl = upload(req);
     const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);

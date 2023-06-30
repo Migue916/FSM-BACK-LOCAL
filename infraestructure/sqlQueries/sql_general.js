@@ -10,7 +10,7 @@ const sqlQueries = {
         "DELETE FROM public.profilePhoto WHERE id_persona = \$1",
 
     GET_FOTO: 
-        "SELECT * FROM public.profilePhoto WHERE id_persona = \$1",
+        "SELECT id, id_persona, hex FROM public.profilePhoto WHERE id_persona = \$1",
 
     POST_FOTO:
         "INSERT INTO profilePhoto(id_persona, hex) VALUES (\$1, \$2)", 

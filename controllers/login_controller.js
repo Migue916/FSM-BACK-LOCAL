@@ -43,7 +43,7 @@ exports.ingresar = async (req, res, next) => {
             
           result = {
             status: false,
-            message: "Contraseña incorrecta",
+            message: "Contrasena incorrecta",
           };
           response.error(req, res, result, 400, "error");
         }

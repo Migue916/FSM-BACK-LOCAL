@@ -26,9 +26,9 @@ exports.postFoto = async (req) => {
     const storageUrl = blockBlobClient.url;
     
     const getFoto = await getBlobUrl(id);
-    console.log(getFoto.length);
+
     if(getFoto.length > 0){
-      const { containerName, blobName } = await getContainerAndBlobName(getFoto);
+      const { containerName, blobName } = await getContainerAndBlobName(getFoto[0].hex);
       deleteBlob(containerName, blobName);
       await queries_General.delete_foto(id);
     }
@@ -211,8 +211,8 @@ const format = async(req) => {
     Telefono_beneficiario: req.body.Telefono_beneficiario,
     Aseguradora: req.body.Aseguradora,
     Regimen: req.body.Regimen,
-    Nombre_acompañante: req.body.Nombre_acompañante,
-    Telefono_acompañante: req.body.Telefono_acompañante,
+    Nombre_acompanante: req.body.Nombre_acompanante,
+    Telefono_acompanante: req.body.Telefono_acompanante,
     Parentesco: req.body.Parentesco,
 
     Area: Empleado.Modulo,
@@ -288,7 +288,7 @@ exports.postAdjuntos = async (req) => {
 
 async function getBlobUrl(id) {
   const foto = await queries_General.get_Foto(id);
-  return foto[0].hex;
+  return foto;
 };
 
 async function streamToBlob(stream) {
@@ -331,7 +331,7 @@ async function getContainerAndBlobName(url) {
 exports.getFoto = async (id) => {
   try {
     const url = await getBlobUrl(id);
-    const { containerName, blobName } = await getContainerAndBlobName(url);
+    const { containerName, blobName } = await getContainerAndBlobName(url[0].hex);
     const blob = await downloadBlob(blobServiceClient, containerName, blobName);
     const file = await blobToFile(blob, 'filename.jpg');
     return file;
@@ -346,7 +346,6 @@ exports.getConsultaBuffer = async (info) => {
     if(!info.isFormat){
       const { containerName, blobName } = await getContainerAndBlobName(info.hex);
       const blob = await downloadBlob(blobServiceClient, containerName, blobName);
-      console.log(blobName);
       file = await blobToFile(blob, blobName);
     }{
       //file = JSON.parse(info.hex);
@@ -640,7 +639,6 @@ exports.putEps = async (eps) => {
 
 exports.putDiagnostico = async (diagnostico) => {
   try {
-    console.log(diagnostico);
     const putDiagnostico = await queries_Beneficiarios.put_Diagnostico(diagnostico);
     const results = [];
     results.push(putDiagnostico);
@@ -1036,9 +1034,10 @@ exports.putEgreso = async (egreso) => {
 
 exports.post_beneficiario = async (beneficiario) => {
   try {
+    result = [];
     const camposLlenos = Object.values(beneficiario).every((value) => value !== undefined && value !== '');
     if (camposLlenos) {
-      await queries_Beneficiarios.post_beneficiario(beneficiario);
+      result.push(await queries_Beneficiarios.post_beneficiario(beneficiario));
     }
     else
       res.status(400);

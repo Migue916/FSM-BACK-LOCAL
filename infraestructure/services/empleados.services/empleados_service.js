@@ -103,7 +103,7 @@ exports.getEmpleados = async (page) => {
       const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
       const genero = await queries_General.get_genero(row.id_genero);
       const profesion = await queries_General.get_profesion(row.id_profesion);
-      const tipo_doc = await queries_General.get_tipo_doc(nombreBeneficiario[0].id_tipo_doc);
+      const tipo_doc = await queries_General.get_tipo_doc(row.id_tipo_doc);
 
 
       if (consultas.length === 0){
@@ -491,53 +491,6 @@ exports.getFoto = async (id) => {
   }
 };
 
-exports.postFoto = async (req) => {
-
-  const id = req.body.id;
-
-  const containerName = 'profilephotos';
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  await containerClient.createIfNotExists();
-
-  const blobName = Date.now() + '_' + req.file.originalname;
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
-  const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
-  await blockBlobClient.uploadData(req.file.buffer, options);
-
-  const storageUrl = blockBlobClient.url;
-
-  const getFoto = getBlobUrl(id);
-  if(getFoto.length === 0){
-    const { containerName, blobName } = await getContainerAndBlobName(getFoto);
-    deleteBlob(containerName, blobName);
-    await queries_General.delete_foto(id);
-  }
-
-  const Foto = {
-    id_persona: id,
-    ruta: storageUrl,
-  };
-
-  try {
-    const postFoto = await queries_General.post_Foto(Foto);
-    const results = [];
-    results.push(results);
-
-    return (results);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Server error');
-  }
-};
-
-
-async function deleteBlob(containerName, blobName){
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  await blockBlobClient.deleteIfExists();
-}
-
 exports.getModulosList = async (modulo) => {
   try {
     const getModulosList = await queries_Empleados.get_ModulosList(modulo);
@@ -545,7 +498,7 @@ exports.getModulosList = async (modulo) => {
     for (const row of getModulosList) {
       const result = {
         id: row.id,
-        values: row.modulo
+        Values: row.modulo
       };
       results.push(result);
     }
@@ -562,7 +515,7 @@ exports.getCargosList = async (cargo) => {
     for (const row of getCargosList) {
       const result = {
         id: row.id,
-        values: row.cargo
+        Values: row.cargo
       };
       results.push(result);
     }
@@ -579,7 +532,7 @@ exports.getProfesionList = async (profesion) => {
     for (const row of getProfesionList) {
       const result = {
         id: row.id,
-        values: row.profesion
+        Values: row.profesion
       };
       results.push(result);
     }

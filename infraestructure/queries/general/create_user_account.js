@@ -7,7 +7,7 @@ const create_user_account = async (empleado) => {
       return true;
       } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Error al insertar el empleado' });
+      res.status(200).json({ error: 'Error al insertar el empleado' });
     }
 };
 module.exports = create_user_account;   

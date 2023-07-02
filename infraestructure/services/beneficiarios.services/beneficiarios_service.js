@@ -1145,9 +1145,17 @@ exports.getBeneficiarios = async (page) => {
     }
     
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => console.log(beneficiario?.riesgos?.Id)/*(beneficiario?.riesgo?.Id)  == page.Riesgos*/);
+      let idRiesgo = page.Riesgos;
+      console.log(filtredData)
+      filtredData = filtredData.filter((beneficiario) => {
+        let beneficiarioFiltered = beneficiario.riesgos.filter((riesgo) => riesgo.Id === parseInt(idRiesgo));
+        if (beneficiarioFiltered.length > 0) {
+          return true; 
+        } else {
+          return false; 
+        }
+      });
     }
-     
     
     if (page.Orientacion !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.id_orientacion == page.Orientacion);

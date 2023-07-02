@@ -1092,7 +1092,7 @@ exports.getBeneficiarios = async (page) => {
         id_sede: row.id_sede,
         Fecha_ingreso: row.fecha_ingreso,
         id_orientacion: row.id_orientacion,
-        riesgo: riesgos[0].Id,     
+        riesgo: riesgos[0]?.Id,     
         diagnostico: diagnostico[0]
       };
       preview.push(result);
@@ -1132,7 +1132,9 @@ exports.getBeneficiarios = async (page) => {
     }
     
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo ?? null)  == page.Riesgos);
+      for(const row of filtredData.riesgo){
+        filtredData = filtredData.filter(beneficiario => (beneficiario?.riesgo)  == page.Riesgos);
+      }
     }
      
     

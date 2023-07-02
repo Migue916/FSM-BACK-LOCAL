@@ -988,7 +988,7 @@ router.post('/download/consulta', getEmpleadoController.getConsultaBuffer);
  *     description: Obtén la lista de beneficiarios del último mes para un empleado.
  *     parameters:
  *       - in: query
- *         name: id_empleado
+ *         name: Id
  *         schema:
  *           type: integer
  *         required: true

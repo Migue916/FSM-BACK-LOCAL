@@ -647,14 +647,14 @@ async function getAdjuntos(id){
 const nombreBeneficiario = async (id) => {
   try {
     const nombreBeneficiario = await queries_Beneficiarios.get_nombre(id);
-    const tipo_doc = await queries_General.get_tipo_doc(nombreBeneficiario[0].id_tipo_doc);
+    const tipo_doc = await queries_General.get_tipo_doc(nombreBeneficiario[0]?.id_tipo_doc);
 
     const result = {
       id: id,
-      Nombre: nombreBeneficiario[0].p_nombre + " " + nombreBeneficiario[0].s_nombre,
-      Apellido: nombreBeneficiario[0].p_apellido + " " + nombreBeneficiario[0].s_apellido,
-      Edad: nombreBeneficiario[0].edad,
-      Tipo_doc: tipo_doc[0].abreviacion
+      Nombre: nombreBeneficiario[0]?.p_nombre + " " + nombreBeneficiario[0]?.s_nombre,
+      Apellido: nombreBeneficiario[0]?.p_apellido + " " + nombreBeneficiario[0]?.s_apellido,
+      Edad: nombreBeneficiario[0]?.edad,
+      Tipo_doc: tipo_doc[0]?.abreviacion
     };
 
     return result;

@@ -1638,7 +1638,7 @@ exports.getBeneficiariosLastTen = async () => {
         segundo_apellido: segundo_apellido,
         sede: sede[0].sede,
         edad: edad,
-        riesgos: riesgos[0] ?? null,
+        riesgos: riesgos ?? null,
         Diagnostico_p: diagnostico[0] ?? null,
         fecha_nacimiento: fecha_nacimiento,
         orientacion: orientacion[0].orientacion,

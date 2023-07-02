@@ -594,7 +594,7 @@ exports.getBeneficiariosUltimoMes= async (req, res, next) => {
     };
 
     result.getBeneficiariosUltimoMes =
-      await empleadosServices.getBeneficiariosUltimoMes(req.query.id_empleado);
+      await empleadosServices.getBeneficiariosUltimoMes(req.query.Id);
     
     response.success(req, res, result, 200, "success");
   } catch (error) {

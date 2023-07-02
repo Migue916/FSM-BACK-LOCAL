@@ -59,22 +59,21 @@ async function deleteBlob(containerName, blobName){
 
 exports.putAdjuntos = async (req) => {
 
-  const storageUrl = upload(req);
+  const storageUrls = upload(req);
+  const storageUrlsString = storageUrls.split(', ');
+
   const { containerName, blobName } = await getContainerAndBlobName(req.hex);
   deleteBlob(containerName, blobName);
   
   const Consulta = {
     id_consulta: req.body.id_consulta,
     rutaAnt: req.body.hex,
-    rutaNew: storageUrl
+    rutaNew: storageUrlsString[0]
   };
 
   try {
     const putAdjuntos = await queries_Beneficiarios.put_Adjuntos(Consulta);
-    const results = [];
-
-    results.push(putAdjuntos);
-
+    const results = [{Estado: true}];
     return results;
   } catch (error) {
     throw error;
@@ -83,40 +82,40 @@ exports.putAdjuntos = async (req) => {
 
 exports.putConsulta = async (req) => {
 
-  let variable = '';
+  let hex = '';
 
   if(!req.body.isFormat){
-    const storageUrl = upload(req);
+    const storageUrls = upload(req);
+    const storageUrlsString = storageUrls.split(', ');
     const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
     deleteBlob(containerName, blobName);
-    variable = storageUrl;
+    hex = storageUrlsString[0];
   }else{
     const formato = await format(req);
-    const storageUrl = JSON.stringify(formato);
-    variable = storageUrl;
+    hex = JSON.stringify(formato);
   }
 
   const Consulta = {
     id_consulta: req.body.id_consulta,
     id_empleado: req.body.id_empleado,
     rutaAnt: req.body.hex,
-    rutaNew: variable
+    rutaNew: hex
   };
 
   try {
     const putConsulta = await queries_Beneficiarios.put_consulta(Consulta);
-    const results = [];
+    const results = [{Estado: true}];
     return results;
   } catch (error) {
     throw error;
   }
 };
 
-async function upload(req) {
+function upload(req) {
   try {
     const containerName = 'consultas';
     const containerClient = blobServiceClient.getContainerClient(containerName);
-    await containerClient.createIfNotExists();
+    containerClient.createIfNotExists();
 
     const originalName = req.file.originalname;
     const newName = originalName.normalize('NFD').replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9_.-]/g, "_");
@@ -126,7 +125,7 @@ async function upload(req) {
 
     const contentType = require('mime-types').lookup(req.file.originalname);
     const options = { blobHTTPHeaders: { blobContentType: contentType } };
-    await blockBlobClient.uploadData(req.file.buffer, options);
+    blockBlobClient.uploadData(req.file.buffer, options);
 
     const storageUrl = blockBlobClient.url;
     return storageUrl;
@@ -139,7 +138,9 @@ async function upload(req) {
 
 exports.postConsulta = async (req) => {
 
-  const storageUrl = await upload(req);
+  const storageUrls = await upload(req);
+  const storageUrlsString = storageUrls.split(', ');
+
   const Empleado = await nombreEmpleado(req.body.id_empleado);
 
   const Consulta = {
@@ -147,7 +148,7 @@ exports.postConsulta = async (req) => {
     id_empleado: req.body.id_empleado,
     id_modulo: Empleado.id_modulo,
     nombre: req.body.nombre,
-    hex: storageUrl,
+    hex: storageUrlsString[0],
     isFormat: false,
     docType: require('mime-types').lookup(req.file.originalname)
   };
@@ -288,23 +289,23 @@ exports.postFormat = async (req) => {
 exports.postAdjuntos = async (req) => {
   try {
     const storageUrls = await upload(req);
+    const storageUrlsString = storageUrls.split(', ');
+
     const consulta = {
       id_reporte: req.body.id_reporte,
       nombre: req.body.nombre,
-      ruta: storageUrls,
+      ruta: storageUrlsString[0],
       docType: require('mime-types').lookup(req.file.originalname)
     };
-
-    const results = [];
-
+    console.log(consulta);
     const postAdjunto = await queries_Beneficiarios.post_Adjuntos(consulta);
-    results.push(results);
-
+    const results = [{Estado: true}];
     return results;
   } catch (error) {
     throw error;
   }
 };
+
 
 
 async function getBlobUrl(id) {

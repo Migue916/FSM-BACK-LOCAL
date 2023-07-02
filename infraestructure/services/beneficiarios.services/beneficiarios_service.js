@@ -1077,7 +1077,9 @@ exports.getBeneficiarios = async (page) => {
     for(const row of getBeneficiarios){
 
       let diagnostico = await diagnosticos_principal_beneficiario(row.id);
-      let riesgos = await riesgos_beneficiario(row.id);
+      let riesgos = [];
+      riesgos.push( await riesgos_beneficiario(row.id));
+
 
       const result = {
         id: row.id,
@@ -1124,12 +1126,15 @@ exports.getBeneficiarios = async (page) => {
     }
     
     if (page.Diagnostico_p !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.id == page.Diagnostico_p);
+      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico[0].Id == page.Diagnostico_p);
     }
     
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo.id) == page.Riesgos);
+      filtredData = filtredData.filter(beneficiario => {
+        return beneficiario.riesgo.some(riesgo => riesgo[0].Id === page.Riesgos);
+      });
     }
+     
     
     if (page.Orientacion !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.id_orientacion == page.Orientacion);
@@ -1167,17 +1172,16 @@ exports.getBeneficiarios = async (page) => {
         Nombre: row.Nombre,
         Edad: row.Edad,
         Genero: genero[0].genero,
-        Diagnostico_p: row.diagnostico.enfermedad ?? null,
+        Diagnostico_p: row.diagnostico.Value ?? null,
         Sede: sede[0].sede,
         Fecha_ingreso: row.Fecha_ingreso,
         Empleado_ultima_consulta: Empleado_ultima_consulta,
         NombreEmpleado: nombreEmpleados,
         Orientacion: orientacion[0].orientacion,
-        Riesgos: row.riesgo.riesgo ?? null
+        Riesgos: row.riesgo ?? null
       };
       results.push(result);
     }
-
     results.push(filtrados);
 
     return results;
@@ -1606,10 +1610,6 @@ exports.getBeneficiariosLastTen = async () => {
       const orientacion = await queries_General.get_orientacion(+id_orientacion);
 
       let riesgos = await riesgos_beneficiario(row.id);
-      if (riesgos.length === 0) {
-        riesgos = null;
-      }
-
       let diagnostico = await diagnosticos_principal_beneficiario(row.id)
 
       const result = {
@@ -1621,8 +1621,8 @@ exports.getBeneficiariosLastTen = async () => {
         segundo_apellido: segundo_apellido,
         sede: sede[0].sede,
         edad: edad,
-        riesgos: riesgos,
-        Diagnostico_p: diagnostico.enfermedad ?? null,
+        riesgos: riesgos ?? null,
+        Diagnostico_p: diagnostico[0].Value ?? null,
         fecha_nacimiento: fecha_nacimiento,
         orientacion: orientacion[0].orientacion,
         fecha_ingreso: fecha_ingreso,

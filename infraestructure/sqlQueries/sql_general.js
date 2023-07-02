@@ -127,7 +127,7 @@ const sqlQueries = {
         "UPDATE sede SET sede = \$2, direccion = \$3 WHERE id = \$1",
 
     PUT_TIPO_DOC: 
-        "UPDATE tipo_doc SET tipo_documento = \$2 AND abreviacion = \$3 WHERE id = \$1",
+        "UPDATE tipo_doc SET tipo_documento = \$2, abreviacion = \$3 WHERE id = \$1",
 
     POST_TIPO_DOC:
         "INSERT INTO public.tipo_doc(tipo_documento, abreviacion) VALUES (\$1, \$2)",

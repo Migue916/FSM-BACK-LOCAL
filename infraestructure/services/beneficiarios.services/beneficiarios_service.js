@@ -23,7 +23,8 @@ exports.postFoto = async (req) => {
     const options = { blobHTTPHeaders: { blobContentType: 'image/jpeg' } };
     await blockBlobClient.uploadData(req.file.buffer, options);
   
-    const storageUrl = blockBlobClient.url;
+    const storageUrls = blockBlobClient.url;
+    const storageUrlsString = storageUrls.split(', ');
     
     const getFoto = await getBlobUrl(id);
 
@@ -35,12 +36,12 @@ exports.postFoto = async (req) => {
   
     const Foto = {
       id_persona: id,
-      ruta: storageUrl,
+      ruta: storageUrlsString[0],
     };
 
     const postFoto = await queries_General.post_Foto(Foto);
     const results = {
-      Estado: "Exitoso"
+      Estado: true
     };
 
     return (results);

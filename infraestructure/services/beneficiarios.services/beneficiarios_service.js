@@ -619,8 +619,7 @@ exports.putSede = async (sede) => {
 exports.putTrabajadorSocial = async (trabajador_social) => {
   try {
     const putTrabajadorSocial = await queries_Beneficiarios.put_Trabajador_Social(trabajador_social);
-    const results = [];
-    results.push(putTrabajadorSocial);
+    const results = [{Estado : true}];
     return results;
   } catch (error) {
     throw error;
@@ -630,8 +629,22 @@ exports.putTrabajadorSocial = async (trabajador_social) => {
 exports.putPsicologo = async (psicologo) => {
   try {
     const putPsicologo = await queries_Beneficiarios.put_Psicologo(psicologo);
-    const results = [];
-    results.push(putPsicologo);
+    const results = [{Estado : true}];
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.deleteRegistros = async (info) => {
+  try {
+
+    await queries_Beneficiarios.delete_Alergias_all(info.id_persona);
+    await queries_Beneficiarios.delete_Diagnostico_all(info.id_persona);
+    await queries_Beneficiarios.delete_Medicamento_all(info.id_persona);
+    await queries_Beneficiarios.delete_Riesgos_all(info.id_persona);
+
+    const results = [{Estado : true}];
     return results;
   } catch (error) {
     throw error;
@@ -1132,9 +1145,7 @@ exports.getBeneficiarios = async (page) => {
     }
     
     if (page.Riesgos !== undefined) {
-      for(const row of filtredData.riesgo){
-        filtredData = filtredData.filter(beneficiario => (beneficiario?.riesgo)  == page.Riesgos);
-      }
+      filtredData = filtredData.filter(beneficiario => (beneficiario?.riesgo)  == page.Riesgos);
     }
      
     

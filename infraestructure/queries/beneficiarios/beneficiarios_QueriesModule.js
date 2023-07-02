@@ -81,4 +81,9 @@ module.exports = {
     put_Tipo_Doc: require("./put_Tipo_Doc"),
     put_Trabajador_Social: require("./put_Trabajador_Social"),
     put_Psicologo: require("./put_Psicologo"),
+
+    delete_Alergias_all: require("./delete_Alergias_all"),
+    delete_Diagnostico_all: require("./delete_Diagnostico_all"),
+    delete_Medicamento_all: require("./delete_Medicamento_all"),
+    delete_Riesgos_all: require("./delete_Riesgos_all")
 };

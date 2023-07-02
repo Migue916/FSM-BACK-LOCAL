@@ -17,6 +17,9 @@ exports.putEgresado= async (req, res, next) => {
     result.postEgreso =
       await beneficiarioServices.putEgreso(egreso);
 
+    result.deleteRegistros =
+      await beneficiarioServices.deleteRegistros(egreso);
+
     response.success(req, res, result, 200, "success");
   } catch (error) {
     const result = {

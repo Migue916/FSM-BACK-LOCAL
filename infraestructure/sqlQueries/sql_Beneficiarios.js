@@ -37,6 +37,18 @@ const sqlQueries = {
     POST_CONSULTA:
         "INSERT INTO public.reporte_modulo (id_beneficiario, id_empleado, id_modulo, hex, fecha, nombre, isFormat, doctype) VALUES (\$2, \$1, \$3, \$4, CURRENT_TIMESTAMP, \$5, \$6, \$7) RETURNING id",
 
+    DELETE_ALERGIAS_ALL:
+        "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1",
+
+    DELETE_RIESGOS_ALL:
+        "DELETE FROM public.beneficiario_rel_riesgo WHERE id_beneficiario = \$1",
+
+    DELETE_MEDICAMENTO_ALL:
+        "DELETE FROM public.beneficiario_rel_medicamento WHERE id_beneficiario = \$1",
+
+    DELETE_DIAGNOSTICO_ALL: 
+        "DELETE FROM public.enfermedad_rel_beneficiario WHERE id_beneficiario = \$1", 
+
     DELETE_ALERGIA:
         "DELETE FROM public.beneficiario_rel_tipo_alergia WHERE id_beneficiario = \$1 AND id_tipo_alergia  = \$2;",
 

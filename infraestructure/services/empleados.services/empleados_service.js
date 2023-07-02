@@ -550,8 +550,7 @@ exports.getProfesionList = async (profesion) => {
 exports.putEmpleadoModulo = async (modulo) => {
   try {
     const putEmpleadoModulo = await queries_Empleados.put_EmpleadoModulo(modulo);
-    const results = [];
-    results.push(results);
+    const results = [{Estado:true}];
     return results;
   } catch (error) {
     throw error;
@@ -561,8 +560,7 @@ exports.putEmpleadoModulo = async (modulo) => {
 exports.putEmpleadoCargo = async (cargo) => {
   try {
     const putEmpleadoCargo = await queries_Empleados.put_EmpleadoCargo(cargo);
-    const results = [];
-    results.push(results);
+    const results = [{Estado:true}];
     return results;
   } catch (error) {
     throw error;
@@ -572,8 +570,7 @@ exports.putEmpleadoCargo = async (cargo) => {
 exports.putEmpleadoProfesion = async (profesion) => {
   try {
     const putEmpleadoProfesion = await queries_Empleados.put_Empleado_Profesion(profesion);
-    const results = [];
-    results.push(results);
+    const results = [{Estado:true}];
     return results;
   } catch (error) {
     throw error;
@@ -583,8 +580,7 @@ exports.putEmpleadoProfesion = async (profesion) => {
 exports.putEmpleadoTipoAdmin = async (tipoAdmin) => {
   try {
     const putEmpleadoTipoAdmin = await queries_Empleados.put_Empleado_Tipo_Admin(tipoAdmin);
-    const results = [];
-    results.push(results);
+    const results = [{Estado:true}];
     return results;
   } catch (error) {
     throw error;
@@ -594,8 +590,7 @@ exports.putEmpleadoTipoAdmin = async (tipoAdmin) => {
 exports.putInfo = async (info) => {
   try {
     const putInfo = await queries_Empleados.put_Info(info);
-    const results = [];
-    results.push(putInfo);
+    const results = [{Estado:true}];
     return results;
   } catch (error) {
     throw error;

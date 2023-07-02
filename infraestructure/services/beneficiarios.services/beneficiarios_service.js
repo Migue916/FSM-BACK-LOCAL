@@ -1079,9 +1079,7 @@ exports.getBeneficiarios = async (page) => {
     for(const row of getBeneficiarios){
 
       let diagnostico = await diagnosticos_principal_beneficiario(row.id);
-      let riesgos = [];
-      riesgos.push( await riesgos_beneficiario(row.id));
-
+      let riesgos = await riesgos_beneficiario(row.id)
 
       const result = {
         id: row.id,
@@ -1094,11 +1092,13 @@ exports.getBeneficiarios = async (page) => {
         id_sede: row.id_sede,
         Fecha_ingreso: row.fecha_ingreso,
         id_orientacion: row.id_orientacion,
-        riesgo: riesgos,     
-        diagnostico: diagnostico
+        riesgo: riesgos[0].Id,     
+        diagnostico: diagnostico[0]
       };
       preview.push(result);
     }
+
+    console.log(preview);
 
     let filtredData = preview;
     
@@ -1127,14 +1127,12 @@ exports.getBeneficiarios = async (page) => {
       filtredData = filtredData.filter(beneficiario => beneficiario.id_sede == page.Sede);
     }
     
-    if (page.Diagnostico_p !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico[0].Id == page.Diagnostico_p);
+    if (page.Diagnostico_p !== undefined && filtredData.diagnostico !== undefined ) {
+      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.Id == page.Diagnostico_p);
     }
     
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => {
-        return beneficiario.riesgo.some(riesgo => riesgo[0].Id === page.Riesgos);
-      });
+      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo ?? null)  == page.Riesgos);
     }
      
     
@@ -1160,6 +1158,8 @@ exports.getBeneficiarios = async (page) => {
       const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
       const genero = await queries_General.get_genero(row.id_genero);
+      let riesgos = await riesgos_beneficiario(row.id);
+
 
       let Empleado_ultima_consulta = null;
       let nombreEmpleados = null;
@@ -1174,13 +1174,13 @@ exports.getBeneficiarios = async (page) => {
         Nombre: row.Nombre,
         Edad: row.Edad,
         Genero: genero[0].genero,
-        Diagnostico_p: row.diagnostico.Value ?? null,
+        Diagnostico_p: row.diagnostico ?? null,
         Sede: sede[0].sede,
         Fecha_ingreso: row.Fecha_ingreso,
         Empleado_ultima_consulta: Empleado_ultima_consulta,
         NombreEmpleado: nombreEmpleados,
         Orientacion: orientacion[0].orientacion,
-        Riesgos: row.riesgo ?? null
+        Riesgos: riesgos ?? null
       };
       results.push(result);
     }
@@ -1614,6 +1614,8 @@ exports.getBeneficiariosLastTen = async () => {
       let riesgos = await riesgos_beneficiario(row.id);
       let diagnostico = await diagnosticos_principal_beneficiario(row.id)
 
+      console.log(diagnostico)
+
       const result = {
         id: id,
         tipo_doc: tipo_doc[0].abreviacion,
@@ -1623,8 +1625,8 @@ exports.getBeneficiariosLastTen = async () => {
         segundo_apellido: segundo_apellido,
         sede: sede[0].sede,
         edad: edad,
-        riesgos: riesgos ?? null,
-        Diagnostico_p: diagnostico[0].Value ?? null,
+        riesgos: riesgos[0] ?? null,
+        Diagnostico_p: diagnostico[0] ?? null,
         fecha_nacimiento: fecha_nacimiento,
         orientacion: orientacion[0].orientacion,
         fecha_ingreso: fecha_ingreso,

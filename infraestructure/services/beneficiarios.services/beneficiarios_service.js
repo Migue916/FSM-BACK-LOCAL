@@ -1092,7 +1092,9 @@ exports.getBeneficiarios = async (page) => {
     for(const row of getBeneficiarios){
 
       let diagnostico = await diagnosticos_principal_beneficiario(row.id);
-      let riesgos = await riesgos_beneficiario(row.id)
+      let riesgos = await riesgos_beneficiario(row.id);
+
+     // console.log(riesgos);
 
       const result = {
         id: row.id,
@@ -1105,16 +1107,14 @@ exports.getBeneficiarios = async (page) => {
         id_sede: row.id_sede,
         Fecha_ingreso: row.fecha_ingreso,
         id_orientacion: row.id_orientacion,
-        riesgo: riesgos[0]?.Id,     
+        riesgos: riesgos ? riesgos: [],
         diagnostico: diagnostico[0]
       };
       preview.push(result);
     }
 
-    console.log(preview);
-
     let filtredData = preview;
-    
+
     if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
     }
@@ -1145,7 +1145,7 @@ exports.getBeneficiarios = async (page) => {
     }
     
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => (beneficiario?.riesgo)  == page.Riesgos);
+      filtredData = filtredData.filter(beneficiario => console.log(beneficiario?.riesgos?.Id)/*(beneficiario?.riesgo?.Id)  == page.Riesgos*/);
     }
      
     
@@ -1626,8 +1626,6 @@ exports.getBeneficiariosLastTen = async () => {
 
       let riesgos = await riesgos_beneficiario(row.id);
       let diagnostico = await diagnosticos_principal_beneficiario(row.id)
-
-      console.log(diagnostico)
 
       const result = {
         id: id,

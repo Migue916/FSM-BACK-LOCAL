@@ -29,6 +29,7 @@ exports.getEmpleadosPorCargo = async (info) => {
         Genero: genero[0].genero,
         Cargo: cargo[0].cargo,
         Modulo: modulo[0].modulo,
+        Correo: (await userFuntion(row.id))[0].email
       };
       results.push(result);
     }
@@ -47,8 +48,29 @@ exports.getEmpleadosPorCargo = async (info) => {
   }
 };
 
+async function userFuntion(id){
+  try { 
+      const getAdmin = await queries_Empleados.get_Admin(id);
+      return getAdmin;
+   } catch (error) {
+     throw error;
+   }
+}
 
-exports.getEmpleadosLastTen = async () => {
+exports.getEmpleadosLastTen = async (id) => {
+  try { 
+   const isAdmin = (await userFuntion(id))[0].cargo;
+    if(isAdmin){
+      return await admin();
+    }else{
+      return await empleado(id);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+async function admin(){
   try { 
     
     const getEmpleadosLastTen = await queries_Empleados.get_Empleados_LastTen();
@@ -81,14 +103,48 @@ exports.getEmpleadosLastTen = async () => {
         Consultas_realizadas: consultas[0].cant,
         Cargo: cargo[0].cargo,
         Modulo: modulo[0].modulo,
+        Correo: (await userFuntion(row.id))[0].email
       };
       results.push(result);
     }
     return results;
   } catch (error) {
     throw error;
-  }
-};
+  }  
+}
+
+async function empleado(id){
+  try { 
+    
+    const getEmpleadosLastTen = await queries_Empleados.get_consultas_LastTen(id);
+    const results = [];
+
+    for (const row of getEmpleadosLastTen) { 
+
+      const beneficiario = await nombreBeneficiario(row.id_beneficiario);
+      const modulo = await queries_General.get_Modulo(row.id_modulo);
+
+      const result = {
+        Nombre: beneficiario[0].Nombre + " " +
+                beneficiario[0].Apellido,
+        Identificacion: beneficiario[0].id,
+        Tipo_doc: beneficiario[0].Tipo_doc,
+        Edad: beneficiario[0].Edad,
+        Id_consulta: row.id,
+        Modulo: modulo[0].modulo,
+        Nombre: row.nombre, 
+        isFormat: row.isFormat, 
+        Fecha: row.fecha, 
+        Hex: row.hex, 
+        DoctType: row.doctype
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }  
+}
 
 exports.getEmpleados = async (page) => {
   try { 
@@ -128,6 +184,7 @@ exports.getEmpleados = async (page) => {
         Consultas_realizadas: consultas[0].cant,
         Cargo: cargo[0].cargo,
         Modulo: modulo[0].modulo,
+        Correo: (await userFuntion(row.id))[0].email
       };
       results.push(result);
     }
@@ -422,7 +479,8 @@ exports.getPerfil = async (id) => {
           Modulo: modulo[0].modulo,
           id_profesion: getPerfil[0].id_profesion,
           Profesion: profesion[0].profesion,
-          Admin: user[0].cargo
+          Admin: user[0].cargo, 
+          Correo: (await userFuntion(getPerfil[0].id))[0].email
         };   
         results.push(result);
         return results;

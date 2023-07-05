@@ -39,5 +39,7 @@ module.exports = {
 
 
     put_Empleado_Profesion: require("./put_Empleado_Profesion"),
-    put_Empleado_Tipo_Admin: require("./put_Empleado_Tipo_Admin")
+    put_Empleado_Tipo_Admin: require("./put_Empleado_Tipo_Admin"),
+    get_Admin: require("./get_Admin"), 
+    get_consultas_LastTen: require("./get_consultas_LastTen"),
 };

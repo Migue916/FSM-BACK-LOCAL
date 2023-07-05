@@ -192,7 +192,7 @@ router.get('/estadisticas/modulo', getEmpleadoController.getStatisticsEmpleadosM
  *                   description: Mensaje de error
  *                   example: "Error al obtener la lista de empleados"
  */
-router.get('/lastTen', getEmpleadoController.getEmpleadosLastTen);
+router.post('/lastTen', getEmpleadoController.getEmpleadosLastTen);
 
 /**
  * @swagger

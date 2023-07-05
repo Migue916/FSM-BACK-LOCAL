@@ -1224,6 +1224,8 @@ exports.getBeneficiariosDownload = async (page) => {
       let diagnostico = await diagnosticos_principal_beneficiario(row.id);
       let riesgos = await riesgos_beneficiario(row.id);
 
+     // console.log(riesgos);
+
       const result = {
         id: row.id,
         Nombre: row.p_nombre + " " +
@@ -1235,14 +1237,14 @@ exports.getBeneficiariosDownload = async (page) => {
         id_sede: row.id_sede,
         Fecha_ingreso: row.fecha_ingreso,
         id_orientacion: row.id_orientacion,
-        riesgo: riesgos,     
-        diagnostico: diagnostico
+        riesgos: riesgos ? riesgos: [],
+        diagnostico: diagnostico[0]
       };
       preview.push(result);
     }
 
     let filtredData = preview;
-    
+
     if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
       filtredData = filtredData.filter(beneficiario => beneficiario.Edad >= page.EdadIn && beneficiario.Edad <= page.EdadFn);
     }
@@ -1268,12 +1270,21 @@ exports.getBeneficiariosDownload = async (page) => {
       filtredData = filtredData.filter(beneficiario => beneficiario.id_sede == page.Sede);
     }
     
-    if (page.Diagnostico_p !== undefined) {
-      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.id == page.Diagnostico_p);
+    if (page.Diagnostico_p !== undefined && filtredData.diagnostico !== undefined ) {
+      filtredData = filtredData.filter(beneficiario => beneficiario.diagnostico.Id == page.Diagnostico_p);
     }
     
     if (page.Riesgos !== undefined) {
-      filtredData = filtredData.filter(beneficiario => (beneficiario.riesgo.id) == page.Riesgos);
+      let idRiesgo = page.Riesgos;
+      console.log(filtredData)
+      filtredData = filtredData.filter((beneficiario) => {
+        let beneficiarioFiltered = beneficiario.riesgos.filter((riesgo) => riesgo.Id === parseInt(idRiesgo));
+        if (beneficiarioFiltered.length > 0) {
+          return true; 
+        } else {
+          return false; 
+        }
+      });
     }
     
     if (page.Orientacion !== undefined) {
@@ -1287,6 +1298,8 @@ exports.getBeneficiariosDownload = async (page) => {
       const ultima_consulta = await queries_Beneficiarios.get_Consultas(row.id);
       const orientacion = await queries_General.get_orientacion(row.id_orientacion);
       const genero = await queries_General.get_genero(row.id_genero);
+      let riesgos = await riesgos_beneficiario(row.id);
+
 
       let Empleado_ultima_consulta = null;
       let nombreEmpleados = null;
@@ -1301,17 +1314,16 @@ exports.getBeneficiariosDownload = async (page) => {
         Nombre: row.Nombre,
         Edad: row.Edad,
         Genero: genero[0].genero,
-        Diagnostico_p: row.diagnostico.enfermedad ?? null,
+        Diagnostico_p: row.diagnostico ?? null,
         Sede: sede[0].sede,
         Fecha_ingreso: row.Fecha_ingreso,
         Empleado_ultima_consulta: Empleado_ultima_consulta,
         NombreEmpleado: nombreEmpleados,
         Orientacion: orientacion[0].orientacion,
-        Riesgos: row.riesgo.riesgo ?? null
+        Riesgos: riesgos ?? null
       };
       results.push(result);
     }
-
     return results;
   } catch (error) {
     throw error;

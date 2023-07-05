@@ -12,7 +12,7 @@ exports.getEmpleadosLastTen= async (req, res, next) => {
     };
 
     result.getEmpleados =
-      await empleadosServices.getEmpleadosLastTen();
+      await empleadosServices.getEmpleadosLastTen(req.body.Id);
       
     response.success(req, res, result, 200, "success");
   } catch (error) {

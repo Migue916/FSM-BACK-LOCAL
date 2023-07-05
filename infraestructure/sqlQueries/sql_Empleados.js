@@ -1,5 +1,11 @@
 const sqlQueries = {
 
+    GET_CONSULTAS_LAST_TEN:
+        "SELECT * FROM reporte_modulo WHERE id_empleado = \$1 LIMIT 10",
+
+    GET_ADMIN: 
+        "SELECT * FROM users WHERE id = \$1",
+
     PUT_EMPLEADO_ISADMIN:
         "UPDATE users SET cargo = \$2 WHERE id = \$1",
 

@@ -143,7 +143,7 @@ exports.new_Password = async (req, res, next) => {
 
     if (todosLosCamposLlenos) {
 
-      const getUser = await queries_General.get_user(originalUser.email);
+      const getUser = await queries_General.get_user(employee.email);
       user =  getUser.length > 0;
 
       if(user){

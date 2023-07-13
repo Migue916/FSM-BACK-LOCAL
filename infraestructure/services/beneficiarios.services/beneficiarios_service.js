@@ -61,7 +61,6 @@ async function deleteBlob(containerName, blobName){
 exports.putAdjuntos = async (req) => {
 
   const storageUrls = upload(req);
-  const storageUrlsString = storageUrls.split(', ');
 
   const { containerName, blobName } = await getContainerAndBlobName(req.hex);
   deleteBlob(containerName, blobName);
@@ -69,7 +68,7 @@ exports.putAdjuntos = async (req) => {
   const Consulta = {
     id_consulta: req.body.id_consulta,
     rutaAnt: req.body.hex,
-    rutaNew: storageUrlsString[0]
+    rutaNew: storageUrls
   };
 
   try {
@@ -87,10 +86,9 @@ exports.putConsulta = async (req) => {
 
   if(!req.body.isFormat){
     const storageUrls = upload(req);
-    const storageUrlsString = storageUrls.split(', ');
     const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
     deleteBlob(containerName, blobName);
-    hex = storageUrlsString[0];
+    hex = storageUrls;
   }else{
     const formato = await format(req);
     hex = JSON.stringify(formato);
@@ -129,7 +127,9 @@ function upload(req) {
     blockBlobClient.uploadData(req.file.buffer, options);
 
     const storageUrl = blockBlobClient.url;
-    return storageUrl;
+    const storageUrlsString = storageUrl.split(', ');
+
+    return storageUrlsString[0];
   }  catch (error) {
     console.error(error);
     return res.status(500).send('Server error');
@@ -139,32 +139,28 @@ function upload(req) {
 
 exports.postConsulta = async (req) => {
 
-  const storageUrls = await upload(req);
-  const storageUrlsString = storageUrls.split(', ');
-
-  const Empleado = await nombreEmpleado(req.body.id_empleado);
-
-  const Consulta = {
-    id_beneficiario: req.body.id_beneficiario,
-    id_empleado: req.body.id_empleado,
-    id_modulo: Empleado.id_modulo,
-    nombre: req.body.nombre,
-    hex: storageUrlsString[0],
-    isFormat: false,
-    docType: require('mime-types').lookup(req.file.originalname)
-  };
-
   try {
-    const postConsulta = await queries_Beneficiarios.post_consulta(Consulta);
-    const result = {
-      id: postConsulta[0].id
-    };
-    const results = []; 
-    
-    results.push(result);
-    results.push(results);
+    const storageUrls = await upload(req);
+    const Empleado = await nombreEmpleado(req.body.id_empleado);
 
+    const consulta = {
+      id_beneficiario: req.body.id_beneficiario,
+      id_empleado: req.body.id_empleado,
+      id_modulo: ""+Empleado.id_modulo,
+      nombre: req.body.nombre,
+      hex: storageUrls,
+      isFormat: false,
+      docType: require('mime-types').lookup(req.file.originalname)
+    };
+
+    const postConsulta = await queries_Beneficiarios.post_consulta(consulta);
+
+    const results = [{
+      Estado: true,
+      Id: postConsulta[0].id
+    }];
     return results;
+
   } catch (error) {
     throw error;
   }
@@ -290,15 +286,13 @@ exports.postFormat = async (req) => {
 exports.postAdjuntos = async (req) => {
   try {
     const storageUrls = await upload(req);
-    const storageUrlsString = storageUrls.split(', ');
 
     const consulta = {
       id_reporte: req.body.id_reporte,
       nombre: req.body.nombre,
-      ruta: storageUrlsString[0],
+      ruta: storageUrls,
       docType: require('mime-types').lookup(req.file.originalname)
     };
-    console.log(consulta);
     const postAdjunto = await queries_Beneficiarios.post_Adjuntos(consulta);
     const results = [{Estado: true}];
     return results;
@@ -888,11 +882,12 @@ exports.getSedeList = async (sede) => {
 
 exports.getPerfil = async (id) => {
   try {
-    const getPerfil = await queries_Beneficiarios.get_Perfil(id);
+    const getPerfil = await queries_Beneficiarios.get_Perfil(""+id);
+
     const results = [];
 
     const sede = await queries_General.get_sede(getPerfil[0].id_sede);
-    const orientacion = await queries_General.get_orientacion(+getPerfil[0].id_orientacion);
+    const orientacion = await queries_General.get_orientacion(getPerfil[0].id_orientacion);
     const eps = await queries_General.get_eps(getPerfil[0].id_eps);
     const genero = await queries_General.get_genero(getPerfil[0].id_genero);
     const tipo_doc = await queries_General.get_tipo_doc(getPerfil[0].id_tipo_doc);
@@ -902,18 +897,18 @@ exports.getPerfil = async (id) => {
     const result = {
       Nombre: getPerfil[0].p_nombre + " " + getPerfil[0].s_nombre,
       Apellido: getPerfil[0].p_apellido + " " + getPerfil[0].s_apellido,
-      Identificacion: getPerfil[0].id,
+      Identificacion: ""+getPerfil[0].id,
       tipo_doc: tipo_doc[0].abreviacion,
       Genero: genero[0].genero,
       Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
       Edad: getPerfil[0].edad,
-      Diagnostico_p: await diagnosticos_principal_beneficiario(id) ?? null,
+      Diagnostico_p: await  (""+id) ?? null,
       Sede: sede[0].sede,
       Fecha_ingreso: getPerfil[0].fecha_ingreso,
-      Diagnostico_s: await diagnosticos_secundarios_beneficiario(id) ?? null,
-      Riesgos: await riesgos_beneficiario(id) ?? null,
-      Alergias: await alergias_beneficiario(id) ?? null,
-      Medicamentos: await medicamentos_beneficiario(id) ?? null,
+      Diagnostico_s: await diagnosticos_secundarios_beneficiario(""+id) ?? null,
+      Riesgos: await riesgos_beneficiario(""+id) ?? null,
+      Alergias: await alergias_beneficiario(""+id) ?? null,
+      Medicamentos: await medicamentos_beneficiario(""+id) ?? null,
       Orientacion: orientacion[0].orientacion,
       eps: eps[0].eps,
       id_trabajador_social: getPerfil[0].id_trabajador_social,
@@ -930,7 +925,7 @@ exports.getPerfil = async (id) => {
 
 const medicamentos_beneficiario = async (id) => {
   try {
-    const medicamentos = await queries_Beneficiarios.get_medicamentos(id);
+    const medicamentos = await queries_Beneficiarios.get_medicamentos(""+id);
     const allMedicamento = [];
     if (medicamentos.length === 0) {
 
@@ -955,7 +950,7 @@ const medicamentos_beneficiario = async (id) => {
 };
 
 const diagnosticos_principal_beneficiario = async (id) => {
-  const diagnostico_principal = await queries_Beneficiarios.get_diagnostico_principal(id);
+  const diagnostico_principal = await queries_Beneficiarios.get_diagnostico_principal(""+id);
   const result = [];
   var getDiagnostico = [];
   if (diagnostico_principal.length === 0) {
@@ -976,7 +971,7 @@ const diagnosticos_principal_beneficiario = async (id) => {
 
 const diagnosticos_secundarios_beneficiario = async (id) => {
   try {
-    const diagnosticos_secundarios = await queries_Beneficiarios.get_diagnosticos_secundarios(id);
+    const diagnosticos_secundarios = await queries_Beneficiarios.get_diagnosticos_secundarios(""+id);
     var allDiagnosticos = [];
     if (diagnosticos_secundarios.length === 0) {
 
@@ -1003,7 +998,7 @@ const diagnosticos_secundarios_beneficiario = async (id) => {
 
 const riesgos_beneficiario = async (id) => {
   try {
-    const riesgos = await queries_Beneficiarios.get_riesgos(id);
+    const riesgos = await queries_Beneficiarios.get_riesgos(""+id);
     const allRiesgo = [];
     if (riesgos.length === 0) {
 
@@ -1029,7 +1024,7 @@ const riesgos_beneficiario = async (id) => {
 
 const alergias_beneficiario = async (id) => {
   try {
-    const alergias = await queries_Beneficiarios.get_alergias(id);
+    const alergias = await queries_Beneficiarios.get_alergias(""+id);
     var allAlergias = [];
 
     if (alergias.length === 0) {

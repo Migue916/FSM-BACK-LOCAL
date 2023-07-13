@@ -3,7 +3,7 @@ const sqlQueries = require("../../sqlQueries/sql_Empleados");
 
 const put_Empleado_Tipo_Admin = async (modulo) => {
     try{
-        const result = await pool.DBConnection.query(sqlQueries.PUT_EMPLEADO_ISADMIN, [modulo.id_beneficiario, modulo.isAdmin]);
+        const result = await pool.DBConnection.query(sqlQueries.PUT_EMPLEADO_ISADMIN, [modulo.id_empleado, modulo.isAdmin]);
         return result.rows;
     } catch(error){
         throw error;

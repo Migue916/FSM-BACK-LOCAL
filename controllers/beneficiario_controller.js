@@ -1184,7 +1184,7 @@ exports.getPerfil= async (req, res, next) => {
     };
 
     result.getPerfil =
-      await beneficiarioServices.getPerfil(req.query.id);
+      await beneficiarioServices.getPerfil(""+req.query.id);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

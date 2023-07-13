@@ -902,8 +902,8 @@ exports.getPerfil = async (id) => {
       Genero: genero[0].genero,
       Fecha_nacimiento: getPerfil[0].fecha_nacimiento,
       Edad: getPerfil[0].edad,
-      Diagnostico_p: await  (""+id) ?? null,
-      Sede: sede[0].sede,
+      Diagnostico_p: await diagnosticos_principal_beneficiario(""+id) ?? null,
+      Sede: sede[0].sede,   
       Fecha_ingreso: getPerfil[0].fecha_ingreso,
       Diagnostico_s: await diagnosticos_secundarios_beneficiario(""+id) ?? null,
       Riesgos: await riesgos_beneficiario(""+id) ?? null,
@@ -1616,8 +1616,52 @@ exports.getBuscaPorNombre = async (nombre) => {
   }
 };
 
+async function userFuntion(id){
+  try { 
+      const getAdmin = await queries_Empleados.get_Admin(id);
+      return getAdmin;
+   } catch (error) {
+     throw error;
+   }
+}
 
-exports.getBeneficiariosLastTen = async () => {
+
+
+async function empleado(id){
+  try { 
+    
+    const getEmpleadosLastTen = await queries_Empleados.get_consultas_LastTen(id);
+    const results = [];
+
+    for (const row of getEmpleadosLastTen) { 
+
+      const beneficiario = await nombreBeneficiario(row.id_beneficiario);
+      const modulo = await queries_General.get_Modulo(row.id_modulo);
+
+      const result = {
+        Nombre: beneficiario[0].Nombre + " " +
+                beneficiario[0].Apellido,
+        Identificacion: beneficiario[0].id,
+        Tipo_doc: beneficiario[0].Tipo_doc,
+        Edad: beneficiario[0].Edad,
+        Id_consulta: row.id,
+        Modulo: modulo[0].modulo,
+        Nombre: row.nombre, 
+        isFormat: row.isFormat, 
+        Fecha: row.fecha, 
+        Hex: row.hex, 
+        DoctType: row.doctype
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }  
+}
+
+async function admin(){
+
   try {
     const lastTen = await queries_Beneficiarios.get_BeneficiariosLastTen();
     const results = [];
@@ -1661,6 +1705,20 @@ exports.getBeneficiariosLastTen = async () => {
       results.push(result);
     }
     return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.getBeneficiariosLastTen = async () => {
+
+  try { 
+    const isAdmin = (await userFuntion(id))[0].cargo;
+    if(isAdmin){
+      return await admin();
+    }else{
+      return await empleado(id);
+    }
   } catch (error) {
     throw error;
   }

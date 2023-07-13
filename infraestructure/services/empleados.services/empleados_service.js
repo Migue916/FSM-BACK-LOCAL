@@ -59,19 +59,6 @@ async function userFuntion(id){
 
 exports.getEmpleadosLastTen = async (id) => {
   try { 
-   const isAdmin = (await userFuntion(id))[0].cargo;
-    if(isAdmin){
-      return await admin();
-    }else{
-      return await empleado(id);
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-
-async function admin(){
-  try { 
     
     const getEmpleadosLastTen = await queries_Empleados.get_Empleados_LastTen();
     const results = [];
@@ -111,40 +98,7 @@ async function admin(){
   } catch (error) {
     throw error;
   }  
-}
-
-async function empleado(id){
-  try { 
-    
-    const getEmpleadosLastTen = await queries_Empleados.get_consultas_LastTen(id);
-    const results = [];
-
-    for (const row of getEmpleadosLastTen) { 
-
-      const beneficiario = await nombreBeneficiario(row.id_beneficiario);
-      const modulo = await queries_General.get_Modulo(row.id_modulo);
-
-      const result = {
-        Nombre: beneficiario[0].Nombre + " " +
-                beneficiario[0].Apellido,
-        Identificacion: beneficiario[0].id,
-        Tipo_doc: beneficiario[0].Tipo_doc,
-        Edad: beneficiario[0].Edad,
-        Id_consulta: row.id,
-        Modulo: modulo[0].modulo,
-        Nombre: row.nombre, 
-        isFormat: row.isFormat, 
-        Fecha: row.fecha, 
-        Hex: row.hex, 
-        DoctType: row.doctype
-      };
-      results.push(result);
-    }
-    return results;
-  } catch (error) {
-    throw error;
-  }  
-}
+};
 
 exports.getEmpleados = async (page) => {
   try { 

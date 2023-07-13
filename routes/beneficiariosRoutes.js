@@ -204,7 +204,7 @@ router.post('/create', getBeneficiarioController.postBeneficiario);
  *         description: Error en la solicitud
  */
 
-router.get('/last_ten', getBeneficiarioController.getLastTenBeneficiarios);
+router.post('/last_ten', getBeneficiarioController.getLastTenBeneficiarios);
 
 /**
  * @swagger

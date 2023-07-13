@@ -1433,7 +1433,7 @@ exports.getLastTenBeneficiarios = async (req, res, next) => {
     };
 
     result.beneficiarios_lastTen =
-      await beneficiarioServices.getBeneficiariosLastTen();
+      await beneficiarioServices.getBeneficiariosLastTen(req.body.Id);
       
     response.success(req, res, result, 200, "success");
   } catch (error) {

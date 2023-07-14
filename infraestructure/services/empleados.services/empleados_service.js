@@ -57,6 +57,10 @@ async function userFuntion(id){
    }
 }
 
+exports.isAdmin = async (id) => {
+  return (await userFuntion(id))[0].cargo;
+}
+
 exports.getEmpleadosLastTen = async (id) => {
   try { 
     
@@ -682,19 +686,37 @@ exports.getBeneficiariosUltimoMes = async (id) => {
     for (const row of getBeneficiariosUltimoMes) {
 
       const modulo = await queries_General.get_Modulo(row.id_modulo);
-      const empleado = await nombreBeneficiario(row.id_beneficiario);
+      const beneficiario = await nombreBeneficiario(row.id_beneficiario);
 
       const result = {
-        hex: row.hex,
         modulo: modulo[0].modulo,
         id_beneficiario: row.id_beneficiario,
-        beneficiario: empleado.Nombre + " " + empleado.Apellido,
-        edad: empleado.Edad,
-        fecha: row.fecha, 
-        id: row.id, 
-        nombre: row.nombre,
-        isFormat: row.isFormat,
-        adjuntos: await getAdjuntos(row.id),
+        Tipo_doc: beneficiario.Tipo_doc,
+        nombre_Beneficiario: beneficiario.Nombre + " " + beneficiario.Apellido,
+        edad: beneficiario.Edad,
+        fecha: row.fecha,
+      };
+      results.push(result);
+    }
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.getBeneficiariosACargo = async (id) => {
+  try {
+    const getBeneficiariosACargo = await queries_Empleados.get_Beneficiarios_A_Cargo(id);
+    const results = [];
+    for (const row of getBeneficiariosACargo) {
+      const tipo_doc = await queries_General.get_tipo_doc(row.id_tipo_doc);
+      const result = {
+        id_beneficiario: row.id,
+        Tipo_doc: tipo_doc[0]?.abreviacion,
+        nombre_Beneficiario: row.p_nombre + " " + row.s_nombre + " " +
+                             row.p_apellido + " " + row.s_apellido,
+        edad: row.Edad,
+        fecha: row.fecha_ingreso,
       };
       results.push(result);
     }

@@ -1044,7 +1044,7 @@ router.post('/download/consulta', getEmpleadoController.getConsultaBuffer);
  *               message:
  *                 type: string
  */
-router.get('/consultas/ultimo-mes', getEmpleadoController.getBeneficiariosUltimoMes);
+router.get('/list/consultas/historico', getEmpleadoController.getBeneficiariosUltimoMes);
 
 
 router.put('/edit/profesion', getEmpleadoController.putEmpleadoProfesion);
@@ -1059,12 +1059,14 @@ router.post('/new/cargo', getEmpleadoController.postCargo);
 
 router.post('/new/profesion', getEmpleadoController.postProfesion);
 
-
+router.post('/isAdmin', getEmpleadoController.getIsAdmin);
 
 router.put('/edit/general/modulo', getEmpleadoController.putGeneralModulo);
 
 router.put('/edit/general/cargo', getEmpleadoController.putGeneralCargo);
 
 router.put('/edit/general/profesion', getEmpleadoController.putGeneralProfesion);
+
+router.get('/list/beneficiarios-a-cargo', getEmpleadoController.getBeneficiariosACargo);
 
 module.exports = router;

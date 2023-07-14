@@ -2108,7 +2108,8 @@ router.post('/new/consulta', upload, getBeneficiarioController.postConsulta);
  *         description: Internal Server Error
  */
 
-router.put('/edit/consulta', upload, getBeneficiarioController.putConsulta);
+router.put('/edit/consulta/archivo', upload, getBeneficiarioController.putConsultaArchivo);
+router.put('/edit/consulta/formato', getBeneficiarioController.putConsultaFormato);
 
 /**
  * @swagger

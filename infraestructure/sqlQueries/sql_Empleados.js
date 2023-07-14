@@ -1,5 +1,8 @@
 const sqlQueries = {
 
+    GET_BENEFICIARIOS_A_CARGO: 
+        "select *, EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) as edad from beneficiario where id_psicologo = \$1  or id_trabajador_social = \$1;",
+
     GET_CONSULTAS_LAST_TEN:
         "SELECT * FROM reporte_modulo WHERE id_empleado = \$1 LIMIT 10",
 
@@ -13,7 +16,7 @@ const sqlQueries = {
         "SELECT DISTINCT id_genero FROM EMPLEADO WHERE ACTIVO = TRUE",
 
     GET_EMPLEADOS_CONSULTA_ULTIMO_MES:
-        "SELECT * FROM reporte_modulo WHERE id_empleado = \$1 AND EXTRACT(MONTH FROM fecha) = EXTRACT(MONTH FROM CURRENT_TIMESTAMP) AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_TIMESTAMP);",
+        "select S.id_beneficiario, S.fecha, T.id_modulo from (SELECT id_beneficiario, MAX(fecha) as fecha FROM reporte_modulo WHERE id_empleado = \$1 GROUP BY id_beneficiario) AS S LEFT JOIN REPORTE_MODULO AS T ON S.id_beneficiario = T.id_beneficiario WHERE S.id_beneficiario = T.id_beneficiario AND S.fecha = T.fecha ORDER BY S.fecha DESC;",
 
     GET_EMPLEADOS_CONSULTA_URL:
         "SELECT * FROM public.reporte_modulo WHERE id_empleado = \$1 AND isFormat = \$2 ORDER BY fecha DESC",

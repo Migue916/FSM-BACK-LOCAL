@@ -80,28 +80,23 @@ exports.putAdjuntos = async (req) => {
   }
 };
 
-exports.putConsulta = async (req) => {
+exports.putConsultaArchivo = async (req) => {
 
-  let hex = '';
+  try {
+    let hex = '';
 
-  if(!req.body.isFormat){
     const storageUrls = upload(req);
     const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
     deleteBlob(containerName, blobName);
+    
     hex = storageUrls;
-  }else{
-    const formato = await format(req);
-    hex = JSON.stringify(formato);
-  }
 
-  const Consulta = {
-    id_consulta: req.body.id_consulta,
-    id_empleado: req.body.id_empleado,
-    rutaAnt: req.body.hex,
-    rutaNew: hex
-  };
+    const Consulta = {
+      id_consulta: req.body.id_consulta,
+      id_empleado: req.body.id_empleado,
+      rutaNew: hex
+    };
 
-  try {
     const putConsulta = await queries_Beneficiarios.put_consulta(Consulta);
     const results = [{Estado: true}];
     return results;
@@ -109,6 +104,28 @@ exports.putConsulta = async (req) => {
     throw error;
   }
 };
+
+exports.putConsultaFormato = async (req) => {
+  try {
+    let hex = '';
+    const formato = await format(req);
+    hex = JSON.stringify(formato);
+  
+    const Consulta = {
+      id_consulta: req.body.id_consulta,
+      id_empleado: req.body.id_empleado,
+      rutaNew: hex
+    };  
+
+    const putConsulta = await queries_Beneficiarios.put_consulta(Consulta);
+    const results = [{Estado: true}];
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 function upload(req) {
   try {

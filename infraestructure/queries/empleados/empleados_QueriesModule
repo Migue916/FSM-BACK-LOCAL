@@ -42,4 +42,6 @@ module.exports = {
     put_Empleado_Tipo_Admin: require("./put_Empleado_Tipo_Admin"),
     get_Admin: require("./get_Admin"), 
     get_consultas_LastTen: require("./get_consultas_LastTen"),
+
+    get_Beneficiarios_A_Cargo: require("./get_Beneficiarios_A_Cargo"),
 };

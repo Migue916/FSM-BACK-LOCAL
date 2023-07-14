@@ -593,8 +593,29 @@ exports.getBeneficiariosUltimoMes= async (req, res, next) => {
       message: "successful",
     };
 
-    result.getBeneficiariosUltimoMes =
+    result.getBeneficiariosListConsultas =
       await empleadosServices.getBeneficiariosUltimoMes(req.query.Id);
+    
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};
+
+exports.getBeneficiariosACargo= async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    result.getBeneficiariosACargo =
+      await empleadosServices.getBeneficiariosACargo(req.query.Id);
     
     response.success(req, res, result, 200, "success");
   } catch (error) {
@@ -782,3 +803,24 @@ exports.putGeneralProfesion= async (req, res, next) => {
   }
 };
 
+exports.getIsAdmin = async (req, res, next) => {
+  try {
+    const result = {
+      status: true,
+      message: "successful",
+    };
+
+    id = req.body.Id;
+    result.isAdmin =
+      await empleadosServices.isAdmin(id);
+
+    response.success(req, res, result, 200, "success");
+  } catch (error) {
+    const result = {
+      status: false,
+      message: error.message,
+    };
+    console.error(error.message);
+    response.error(req, res, result, 400, "error");
+  }
+};

@@ -68,7 +68,8 @@ exports.putAdjuntos = async (req) => {
   const Consulta = {
     id_consulta: req.body.id_consulta,
     docType: require('mime-types').lookup(req.file.originalname),
-    rutaNew: storageUrls
+    rutaNew: storageUrls,
+    nombre: req.body.nombre
   };
 
   try {
@@ -95,6 +96,7 @@ exports.putConsultaArchivo = async (req) => {
       id_consulta: req.body.id_consulta,
       id_empleado: req.body.id_empleado,
       docType: require('mime-types').lookup(req.file.originalname),
+      nombre: req.body.nombre,
       rutaNew: hex
     };
 
@@ -115,6 +117,8 @@ exports.putConsultaFormato = async (req) => {
     const Consulta = {
       id_consulta: req.body.id_consulta,
       id_empleado: req.body.id_empleado,
+      nombre: req.body.nombre,
+      docType: null,
       rutaNew: hex
     };  
 
@@ -164,7 +168,7 @@ exports.postConsulta = async (req) => {
     const consulta = {
       id_beneficiario: req.body.id_beneficiario,
       id_empleado: req.body.id_empleado,
-      id_modulo: ""+Empleado.id_modulo,
+      id_modulo: Empleado.id_modulo,
       nombre: req.body.nombre,
       hex: storageUrls,
       isFormat: false,
@@ -336,6 +340,10 @@ async function downloadBlob(blobServiceClient, containerName, blobName) {
   try {
     const containerClient = blobServiceClient.getContainerClient(containerName);
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    const blobExists = await blockBlobClient.exists();
+    if(!blobExists){
+      throw error;
+    }
     const response = await blockBlobClient.download();
     const blob = await streamToBlob(response.readableStreamBody);
     return blob;
@@ -380,8 +388,11 @@ exports.getConsultaBuffer = async (info) => {
     let file;
     if(!info.isFormat){
       const { containerName, blobName } = await getContainerAndBlobName(info.hex);
+      console.log('1');
       const blob = await downloadBlob(blobServiceClient, containerName, blobName);
+      console.log('2');
       file = await blobToFile(blob, blobName);
+      console.log('3');
     }{
       //file = JSON.parse(info.hex);
     }

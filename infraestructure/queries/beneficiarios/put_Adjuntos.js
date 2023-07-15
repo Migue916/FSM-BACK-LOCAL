@@ -3,7 +3,7 @@ const sqlQueries = require("../../sqlQueries/sql_Beneficiarios");
 
 const put_Adjuntos = async (consulta) => {
     try {
-    const result = await pool.DBConnection.query(sqlQueries.PUT_ADJUNTOS, [consulta.id_consulta, consulta.rutaNew, consulta.docType]);
+    const result = await pool.DBConnection.query(sqlQueries.PUT_ADJUNTOS, [consulta.id_consulta, consulta.rutaNew, consulta.docType, consulta.nombre]);
     return result.rows;
       } catch (err) {
       console.error(err);

@@ -63,10 +63,11 @@ exports.putAdjuntos = async (req) => {
   const storageUrls = upload(req);
 
   const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
-  //deleteBlob(containerName, blobName);
+  deleteBlob(containerName, blobName);
   
   const Consulta = {
     id_consulta: req.body.id_consulta,
+    docType: require('mime-types').lookup(req.file.originalname),
     rutaNew: storageUrls
   };
 
@@ -93,6 +94,7 @@ exports.putConsultaArchivo = async (req) => {
     const Consulta = {
       id_consulta: req.body.id_consulta,
       id_empleado: req.body.id_empleado,
+      docType: require('mime-types').lookup(req.file.originalname),
       rutaNew: hex
     };
 

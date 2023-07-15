@@ -26,10 +26,10 @@ const sqlQueries = {
         "SELECT * FROM public.reporteS_ADJUNTOS WHERE id_reporte = \$1",
     
     PUT_CONSULTA:
-        "UPDATE public.reporte_modulo SET id_empleado = \$2, hex = \$3, fecha = CURRENT_TIMESTAMP WHERE id = \$1",
+        "UPDATE public.reporte_modulo SET id_empleado = \$2, hex = \$3, fecha = CURRENT_TIMESTAMP, doctype = \$4 WHERE id = \$1",
 
     PUT_ADJUNTOS:
-        "UPDATE public.reportes_adjuntos SET hex = \$2 WHERE id = \$1",
+        "UPDATE public.reportes_adjuntos SET hex = \$2, docType = \$3 WHERE id = \$1",
 
     POST_ADJUNTOS:
         "INSERT INTO public.reportes_adjuntos( id_reporte, nombre, hex, doctype) VALUES (\$1, \$3, \$2, \$4);",

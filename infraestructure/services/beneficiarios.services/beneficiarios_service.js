@@ -62,12 +62,11 @@ exports.putAdjuntos = async (req) => {
 
   const storageUrls = upload(req);
 
-  const { containerName, blobName } = await getContainerAndBlobName(req.hex);
-  deleteBlob(containerName, blobName);
+  const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
+  //deleteBlob(containerName, blobName);
   
   const Consulta = {
     id_consulta: req.body.id_consulta,
-    rutaAnt: req.body.hex,
     rutaNew: storageUrls
   };
 
@@ -352,8 +351,8 @@ async function blobToFile(blob, filename) {
 };
 
 async function getContainerAndBlobName(url) {
-
   const urlParts = new URL(url);
+
   const pathParts = urlParts.pathname.split('/');
   const containerName = pathParts[1];
   const blobName = pathParts.slice(2).join('/');

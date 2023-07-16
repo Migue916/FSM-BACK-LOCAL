@@ -354,7 +354,7 @@ async function downloadBlob(blobServiceClient, containerName, blobName) {
 
 async function blobToFile(blob, filename) {
   const buffer = Buffer.from(await blob.arrayBuffer());
-  buffer.name = filename;
+  buffer.name = 'file';
   buffer.type = blob.type;
 
   return buffer;
@@ -388,11 +388,9 @@ exports.getConsultaBuffer = async (info) => {
     let file;
     if(!info.isFormat){
       const { containerName, blobName } = await getContainerAndBlobName(info.hex);
-      console.log('1');
       const blob = await downloadBlob(blobServiceClient, containerName, blobName);
-      console.log('2');
+      console.log(blobName);
       file = await blobToFile(blob, blobName);
-      console.log('3');
     }{
       //file = JSON.parse(info.hex);
     }

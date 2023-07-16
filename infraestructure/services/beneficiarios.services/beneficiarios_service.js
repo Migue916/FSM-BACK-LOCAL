@@ -62,8 +62,8 @@ exports.putAdjuntos = async (req) => {
 
   const storageUrls = upload(req);
 
-  const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
-  deleteBlob(containerName, blobName);
+  //const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
+  //deleteBlob(containerName, blobName);
   
   const Consulta = {
     id_consulta: req.body.id_consulta,

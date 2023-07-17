@@ -430,10 +430,11 @@ exports.getConsulta = async (list) => {
         hex: row.hex,
         docType: row.doctype,
         modulo: modulo[0].modulo,
-        id_responsable: row.id_empleado,
+        id_empleado: row.id_empleado,
         responsable: empleado.Nombre + " " + empleado.Apellido,
+        id_beneficiario: row.id_beneficiario,
         fecha: row.fecha, 
-        id: row.id, 
+        id_consulta: row.id, 
         nombre: row.nombre,
         adjuntos: await getAdjuntos(row.id),
       };

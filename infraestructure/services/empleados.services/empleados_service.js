@@ -627,8 +627,9 @@ exports.getConsulta = async (list) => {
         modulo: modulo[0].modulo,
         id_beneficiario: row.id_beneficiario,
         beneficiario: empleado.Nombre + " " + empleado.Apellido,
+        id_empleado: row.id_empleado,
         fecha: row.fecha, 
-        id: row.id, 
+        id_consulta: row.id, 
         nombre: row.nombre,
         adjuntos: await getAdjuntos(row.id),
       };

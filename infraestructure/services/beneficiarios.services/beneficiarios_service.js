@@ -84,20 +84,16 @@ exports.putAdjuntos = async (req) => {
 exports.putConsultaArchivo = async (req) => {
 
   try {
-    let hex = '';
-
     const storageUrls = upload(req);
     const { containerName, blobName } = await getContainerAndBlobName(req.body.hex);
     deleteBlob(containerName, blobName);
     
-    hex = storageUrls;
-
     const Consulta = {
       id_consulta: req.body.id_consulta,
       id_empleado: req.body.id_empleado,
       docType: require('mime-types').lookup(req.file.originalname),
       nombre: req.body.nombre,
-      rutaNew: hex
+      rutaNew: storageUrls
     };
 
     const putConsulta = await queries_Beneficiarios.put_consulta(Consulta);

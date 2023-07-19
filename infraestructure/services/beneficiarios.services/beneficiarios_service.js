@@ -1734,8 +1734,7 @@ async function admin(){
   }
 };
 
-exports.getBeneficiariosLastTen = async () => {
-
+exports.getBeneficiariosLastTen = async (id) => {
   try { 
     const isAdmin = (await userFuntion(id))[0].cargo;
     if(isAdmin){

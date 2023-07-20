@@ -1069,4 +1069,6 @@ router.put('/edit/general/profesion', getEmpleadoController.putGeneralProfesion)
 
 router.get('/list/beneficiarios-a-cargo', getEmpleadoController.getBeneficiariosACargo);
 
+router.get('download/listAll', getEmpleadoController.getEmpleadosDownload);
+
 module.exports = router;

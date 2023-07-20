@@ -135,6 +135,32 @@ exports.getStatisticsEmpleados = async (req, res, next) => {
         }
 
   };
+
+  exports.getEmpleadosDownload = async (req, res, next) => {
+    try {
+      const result = {
+        status: true,
+        message: "successful",
+      };
+      const page = req.query;
+  
+      result.Total = (await (empleadosServices.getEmpleadosActuales())).value;
+
+      result.empleados =
+        await empleadosServices.getEmpleadosDownload(page);
+  
+      response.success(req, res, result, 200, "success");
+    } catch (error) {
+      const result = {
+        status: false,
+        message: error.message,
+      };
+      console.error(error.message);
+      response.error(req, res, result, 400, "error");
+    }
+
+};
+
   exports.getEmpleadosPorNombre = async (req, res, next) => {
     try {
       const result = {
@@ -243,7 +269,7 @@ exports.putEgresado= async (req, res, next) => {
     };
 
     result.postEgreso =
-      await empleadosServices.putEgreso(egreso);
+      await beneficiarioServices.putEgreso(egreso);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

@@ -191,6 +191,73 @@ exports.getEmpleados = async (page) => {
   }
 };
 
+exports.getEmpleadosDownload = async (page) => {
+  try { 
+    const getEmpleados = await queries_Empleados.get_Empleados(page);
+    const results = [];
+
+    for (const row of getEmpleados) { 
+
+      const consultas = await queries_Empleados.get_Consultas(row.id);
+      const cargo = await queries_Empleados.get_Cargo(row.id_cargo);
+      const modulo = await queries_General.get_Modulo(row.pertenencia_de_modulo);
+      const genero = await queries_General.get_genero(row.id_genero);
+      const profesion = await queries_General.get_profesion(row.id_profesion);
+      const tipo_doc = await queries_General.get_tipo_doc(row.id_tipo_doc);
+
+
+      if (consultas.length === 0){
+        consultas.push(
+          {
+            cant:"0"
+          }
+        )
+    }
+
+      const result = {
+        Nombre: row.p_nombre + " " +
+                row.s_nombre + " " +
+                row.p_apellido + " " +
+                row.s_apellido,
+
+        Identificacion: row.id,
+        Tipo_doc: tipo_doc[0].abreviacion,
+        Genero: genero[0].genero,
+        Edad: row.edad,
+        Profesion: profesion[0].profesion,
+        Consultas_realizadas: consultas[0].cant,
+        Cargo: cargo[0].cargo,
+        Modulo: modulo[0].modulo,
+        Correo: (await userFuntion(row.id))[0].email
+      };
+      results.push(result);
+    }
+    var filtredData = results;
+
+    if (page.EdadIn !== undefined && page.EdadFn !== undefined) {
+      filtredData = filtredData.filter(empleado => empleado.Edad >= page.EdadIn && empleado.Edad <= page.EdadFn);
+    }
+
+    if (page.Cargo !== undefined){
+      filtredData = filtredData.filter(empleado => empleado.Cargo === page.Cargo);
+    }
+    if (page.Modulo !== undefined){
+      filtredData = filtredData.filter(empleado => empleado.Modulo === page.Modulo);
+    }
+    if (page.ConsultasIn !== undefined && page.ConsultasFn !== undefined) {
+      filtredData = filtredData.filter(empleado => 
+        empleado.Consultas_realizadas >= page.ConsultasIn && empleado.Consultas_realizadas <= page.ConsultasFn
+      );
+    }
+    if (page.Genero !== undefined) {
+      filtredData = filtredData.filter(empleado => empleado.Genero === page.Genero);
+    }
+    
+    return filtredData;
+} catch (error) {
+  throw error;
+}
+};
 
 exports.nombreEmpleado = async(id) =>{
   try { 
@@ -716,7 +783,7 @@ exports.getBeneficiariosACargo = async (id) => {
         Tipo_doc: tipo_doc[0]?.abreviacion,
         nombre_Beneficiario: row.p_nombre + " " + row.s_nombre + " " +
                              row.p_apellido + " " + row.s_apellido,
-        edad: row.Edad,
+        edad: row.edad,
         fecha: row.fecha_ingreso,
       };
       results.push(result);

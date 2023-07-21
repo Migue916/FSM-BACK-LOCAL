@@ -221,7 +221,7 @@ const sqlQueries = {
         "UPDATE public.beneficiario SET estado = false WHERE id = \$1",
 
     POST_EGRESO:
-        "INSERT INTO public.egreso( id_persona, fecha, observacion, tipo_usuario) VALUES (\$1, CURRENT_TIMESTAMP, \$2, \$3);"
+        "INSERT INTO public.egreso( id_persona, fecha, observacion, tipo_usuario) VALUES (\$1, CURRENT_TIMESTAMP, \$2, \$3);",
 }; 
     
 module.exports = sqlQueries;

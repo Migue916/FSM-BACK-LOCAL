@@ -52,7 +52,7 @@ const sqlQueries = {
         "select * from modulo",
 
     PUT_ESTADO_EMPLEADO:
-        "UPDATE empleados SET activo = false WHERE id=\$1",
+        "UPDATE empleado SET activo = false WHERE id=\$1",
 
     GET_TIPO_CARGO:
         "SELECT cargo FROM users WHERE id = \$1",

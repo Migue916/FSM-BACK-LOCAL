@@ -1656,12 +1656,11 @@ const nombreBeneficiario = async (id) => {
 
     const result = {
       id: id,
-      Nombre: nombreBeneficiario[0]?.p_nombre + " " + nombreBeneficiario[0]?.s_nombre,
-      Apellido: nombreBeneficiario[0]?.p_apellido + " " + nombreBeneficiario[0]?.s_apellido,
+      Nombre_beneficiario: nombreBeneficiario[0]?.p_nombre + " " + nombreBeneficiario[0]?.s_nombre,
+      Apellido_beneficiario: nombreBeneficiario[0]?.p_apellido + " " + nombreBeneficiario[0]?.s_apellido,
       Edad: nombreBeneficiario[0]?.edad,
       Tipo_doc: tipo_doc[0]?.abreviacion
     };
-
     return result;
   } catch (error) {
     throw error;
@@ -1675,24 +1674,40 @@ async function empleado(id){
     const results = [];
 
     for (const row of getEmpleadosLastTen) { 
+      const beneficiario = await queries_Beneficiarios.get_nombre(row.id_beneficiario);
+      const tipo_doc = await queries_General.get_tipo_doc(beneficiario[0]?.id_tipo_doc);
+      const primer_nombre = beneficiario[0].p_nombre;
+      const segundo_nombre = beneficiario[0].s_nombre;
+      const primer_apellido = beneficiario[0].p_apellido;
+      const segundo_apellido = beneficiario[0].s_apellido;
+      const id = beneficiario[0].id;
+      const id_sede = beneficiario[0].id_sede;
+      const fecha_nacimiento = beneficiario[0].fecha_nacimiento;
+      const edad = beneficiario[0].edad;
+      const id_orientacion = beneficiario[0].id_orientacion;
+      const fecha_ingreso = beneficiario[0].fecha_ingreso;
+      const sede = await queries_General.get_sede(+id_sede);
+      const orientacion = await queries_General.get_orientacion(+id_orientacion);
 
-      const beneficiario = await nombreBeneficiario(row.id_beneficiario);
-      const modulo = await queries_General.get_Modulo(row.id_modulo);
+      let riesgos = await riesgos_beneficiario(id);
+      let diagnostico = await diagnosticos_principal_beneficiario(id)
 
       const result = {
-        Nombre: beneficiario[0].Nombre + " " +
-                beneficiario[0].Apellido,
-        Identificacion: beneficiario[0].id,
-        Tipo_doc: beneficiario[0].Tipo_doc,
-        Edad: beneficiario[0].Edad,
-        Id_consulta: row.id,
-        Modulo: modulo[0].modulo,
-        Nombre: row.nombre, 
-        isFormat: row.isFormat, 
-        Fecha: row.fecha, 
-        Hex: row.hex, 
-        DoctType: row.doctype
+        id: id,
+        tipo_doc: tipo_doc[0].abreviacion,
+        primer_nombre: primer_nombre,
+        segundo_nombre: segundo_nombre,
+        primer_apellido: primer_apellido,
+        segundo_apellido: segundo_apellido,
+        sede: sede[0].sede,
+        edad: edad,
+        riesgos: riesgos ?? null,
+        Diagnostico_p: diagnostico[0] ?? null,
+        fecha_nacimiento: fecha_nacimiento,
+        orientacion: orientacion[0].orientacion,
+        fecha_ingreso: fecha_ingreso,
       };
+      console.log(result);
       results.push(result);
     }
     return results;

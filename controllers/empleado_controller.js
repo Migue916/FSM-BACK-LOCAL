@@ -269,7 +269,7 @@ exports.putEgresado= async (req, res, next) => {
     };
 
     result.postEgreso =
-      await beneficiarioServices.putEgreso(egreso);
+      await empleadosServices.putEgreso(egreso);
 
     response.success(req, res, result, 200, "success");
   } catch (error) {

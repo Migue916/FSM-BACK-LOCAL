@@ -85,5 +85,5 @@ module.exports = {
     delete_Alergias_all: require("./delete_Alergias_all"),
     delete_Diagnostico_all: require("./delete_Diagnostico_all"),
     delete_Medicamento_all: require("./delete_Medicamento_all"),
-    delete_Riesgos_all: require("./delete_Riesgos_all")
+    delete_Riesgos_all: require("./delete_Riesgos_all"),
 };

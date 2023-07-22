@@ -280,7 +280,7 @@ router.get('/estadisticas', getBeneficiarioController.getStatisticsBeneficiarios
  *                     $ref: '#/components/schemas/BuscaPorNombre'
  */
 
-router.get('/ten/', getBeneficiarioController.getBuscaPorNombre);
+router.post('/ten/', getBeneficiarioController.getBuscaPorNombre);
 
 /**
  * @swagger

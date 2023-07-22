@@ -1596,45 +1596,14 @@ exports.getBalance = async (anio) => {
   }
 };
 
-exports.getBuscaPorNombre = async (nombre) => {
-  try {
-    const buscaPorNombre = await queries_Beneficiarios.get_BuscaPorNombre(nombre);
-    const results = [];
-
-    for (const row of buscaPorNombre) {
-      const id = row.id;
-      const id_tipo_doc = row.id_tipo_doc;
-      const primer_nombre = row.p_nombre;
-      const segundo_nombre = row.s_nombre;
-      const primer_apellido = row.p_apellido;
-      const segundo_apellido = row.s_apellido;
-      const id_sede = row.id_sede;
-      const fecha_nacimiento = row.fecha_nacimiento;
-      const id_orientacion = row.id_orientacion;
-      const fecha_ingreso = row.fecha_ingreso;
-
-
-      const tipo_doc = await queries_General.get_tipo_doc(+id_tipo_doc);
-      const sede = await queries_General.get_sede(+id_sede);
-      const orientacion = await queries_General.get_orientacion(+id_orientacion);
-
-      const result = {
-        id: id,
-        tipo_doc: tipo_doc[0].abreviacion,
-        primer_nombre: primer_nombre,
-        segundo_nombre: segundo_nombre,
-        primer_apellido: primer_apellido,
-        segundo_apellido: segundo_apellido,
-        edad: row.edad,
-        sede: sede[0].sede,
-        fecha_nacimiento: fecha_nacimiento,
-        orientacion: orientacion[0].orientacion,
-        fecha_ingreso: fecha_ingreso,
-      };
-
-      results.push(result);
+exports.getBuscaPorNombre = async (busqueda) => {
+  try { 
+    const isAdmin = (await userFuntion(busqueda.id))[0].cargo;
+    if(isAdmin){
+      return await adminBusca(busqueda.Search);
+    }else{
+      return await empleadoBusca(busqueda);
     }
-    return results;
   } catch (error) {
     throw error;
   }
@@ -1649,23 +1618,132 @@ async function userFuntion(id){
    }
 }
 
-const nombreBeneficiario = async (id) => {
-  try {
-    const nombreBeneficiario = await queries_Beneficiarios.get_nombre(id);
-    const tipo_doc = await queries_General.get_tipo_doc(nombreBeneficiario[0]?.id_tipo_doc);
 
-    const result = {
-      id: id,
-      Nombre_beneficiario: nombreBeneficiario[0]?.p_nombre + " " + nombreBeneficiario[0]?.s_nombre,
-      Apellido_beneficiario: nombreBeneficiario[0]?.p_apellido + " " + nombreBeneficiario[0]?.s_apellido,
-      Edad: nombreBeneficiario[0]?.edad,
-      Tipo_doc: tipo_doc[0]?.abreviacion
-    };
-    return result;
+async function empleadoBusca(busqueda){
+  try { 
+    
+    const getEmpleadosLastTen = await queries_Empleados.get_consultas_LastTen(busqueda.id);
+    let results = [];
+
+    for (const row of getEmpleadosLastTen) { 
+      const beneficiario = await queries_Beneficiarios.get_nombre(row.id_beneficiario);
+      const tipo_doc = await queries_General.get_tipo_doc(beneficiario[0]?.id_tipo_doc);
+      const primer_nombre = beneficiario[0].p_nombre;
+      const segundo_nombre = beneficiario[0].s_nombre;
+      const primer_apellido = beneficiario[0].p_apellido;
+      const segundo_apellido = beneficiario[0].s_apellido;
+      const id = beneficiario[0].id;
+      const id_sede = beneficiario[0].id_sede;
+      const fecha_nacimiento = beneficiario[0].fecha_nacimiento;
+      const edad = beneficiario[0].edad;
+      const id_orientacion = beneficiario[0].id_orientacion;
+      const fecha_ingreso = beneficiario[0].fecha_ingreso;
+      const sede = await queries_General.get_sede(+id_sede);
+      const orientacion = await queries_General.get_orientacion(+id_orientacion);
+
+      let riesgos = await riesgos_beneficiario(id);
+      let diagnostico = await diagnosticos_principal_beneficiario(id)
+
+      const result = {
+        id: id,
+        tipo_doc: tipo_doc[0].abreviacion,
+        primer_nombre: primer_nombre,
+        segundo_nombre: segundo_nombre,
+        primer_apellido: primer_apellido,
+        segundo_apellido: segundo_apellido,
+        sede: sede[0].sede,
+        edad: edad,
+        riesgos: riesgos ?? null,
+        Diagnostico_p: diagnostico[0] ?? null,
+        fecha_nacimiento: fecha_nacimiento,
+        orientacion: orientacion[0].orientacion,
+        fecha_ingreso: fecha_ingreso,
+      };
+      console.log(result);
+      results.push(result);
+    }
+
+    let searchString = (busqueda.Search).toLowerCase();
+
+    results = results.filter(
+        item => 
+            item.id.includes(searchString) || 
+            item.primer_nombre.toLowerCase().includes(searchString) || 
+            item.segundo_nombre.toLowerCase().includes(searchString) ||
+            item.primer_apellido.toLowerCase().includes(searchString) ||
+            item.segundo_apellido.toLowerCase().includes(searchString)
+    );
+
+    return results;
+  } catch (error) {
+    throw error;
+  }  
+}
+
+async function adminBusca(Search){
+
+  try {
+    const lastTen = await queries_Beneficiarios.get_BeneficiariosLastTen();
+    let results = [];
+
+    for (const row of lastTen) {
+      const id = row.id;
+      const id_tipo_doc = row.id_tipo_doc;
+      const primer_nombre = row.p_nombre;
+      const segundo_nombre = row.s_nombre;
+      const primer_apellido = row.p_apellido;
+      const segundo_apellido = row.s_apellido;
+      const id_sede = row.id_sede;
+      const fecha_nacimiento = row.fecha_nacimiento;
+      const edad = row.edad;
+      const id_orientacion = row.id_orientacion;
+      const fecha_ingreso = row.fecha_ingreso;
+
+      const tipo_doc = await queries_General.get_tipo_doc(id_tipo_doc);
+      const sede = await queries_General.get_sede(+id_sede);
+      const orientacion = await queries_General.get_orientacion(+id_orientacion);
+
+      let riesgos = await riesgos_beneficiario(row.id);
+      let diagnostico = await diagnosticos_principal_beneficiario(row.id)
+
+      const result = {
+        id: id,
+        tipo_doc: tipo_doc[0].abreviacion,
+        primer_nombre: primer_nombre,
+        segundo_nombre: segundo_nombre,
+        primer_apellido: primer_apellido,
+        segundo_apellido: segundo_apellido,
+        sede: sede[0].sede,
+        edad: edad,
+        riesgos: riesgos ?? null,
+        Diagnostico_p: diagnostico[0] ?? null,
+        fecha_nacimiento: fecha_nacimiento,
+        orientacion: orientacion[0].orientacion,
+        fecha_ingreso: fecha_ingreso,
+      };
+
+      results.push(result);
+    }
+
+    let searchString = (Search).toLowerCase();
+    
+    results = results.filter(
+        item => 
+            item.id.includes(searchString) || 
+            item.primer_nombre.toLowerCase().includes(searchString) || 
+            item.segundo_nombre.toLowerCase().includes(searchString) ||
+            item.primer_apellido.toLowerCase().includes(searchString) ||
+            item.segundo_apellido.toLowerCase().includes(searchString)
+    );
+
+    return results;
   } catch (error) {
     throw error;
   }
 };
+
+
+
 
 async function empleado(id){
   try { 

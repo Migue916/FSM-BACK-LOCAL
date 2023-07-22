@@ -1428,9 +1428,13 @@ exports.getBuscaPorNombre = async (req, res, next) => {
       message: "successful",
     };
 
-    const nombre = req.query;
+    const busqueda = {
+      Search: req.body.Search,
+      id: req.body.Id
+    };
+
     result.getBuscaPorNombre =
-      await beneficiarioServices.getBuscaPorNombre(nombre);
+      await beneficiarioServices.getBuscaPorNombre(busqueda);
       
     response.success(req, res, result, 200, "success");
   } catch (error) {

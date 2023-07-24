@@ -97,7 +97,7 @@ const sqlQueries = {
         "SELECT COUNT(*) FROM empleado WHERE activo = true AND EXTRACT(MONTH FROM fecha_ingreso) != EXTRACT(MONTH FROM CURRENT_TIMESTAMP);",
     
     GET_EMPLEADOS_POR_GENERO:
-        "SELECT COUNT(CASE WHEN ID_GENERO = 1 THEN 1 END) AS MASCULINO, COUNT(CASE WHEN ID_GENERO = 2 THEN 1 END) AS FEMENINO FROM EMPLEADO WHERE ACTIVO = TRUE;",
+        "SELECT id_genero, count(*) FROM EMPLEADO WHERE ACTIVO = TRUE group by id_genero",
 
     GET_EMPLEADOS_POR_MODULO:
         "SELECT pertenencia_de_modulo, count(pertenencia_de_modulo) as cant FROM empleado group by pertenencia_de_modulo",

@@ -252,7 +252,7 @@ exports.getEmpleadosDownload = async (page) => {
     if (page.Genero !== undefined) {
       filtredData = filtredData.filter(empleado => empleado.Genero === page.Genero);
     }
-    
+
     return filtredData;
 } catch (error) {
   throw error;
@@ -351,19 +351,27 @@ exports.getEmpleadosModulo = async () => {
 
 exports.getEmpleadosGenero = async () => {
     try {
+      const results = [];
+      const estadistica = await queries_Empleados.get_EmpleadosGeneros();
+      let total = 0;
       
-      const estadistica = 
-        await queries_Empleados.get_EmpleadosGeneros();
+      for(const row of estadistica){
+        const genero = await queries_General.get_genero(row.id_genero);
+        const result = {
+          Value: genero[0].genero,
+          Cant: +row.count
+        };
+        total += +row.count;
+        results.push(result);
+      }
 
-      const Masculino = +estadistica[0].masculino;
-      const Femenino = +estadistica[0].femenino;
-        
       const result = {
-        Masculino: Masculino,
-        Femenino: Femenino, 
-        Total: Masculino + Femenino
+        Value: "Total",
+        Cant: total
       };
-      return result;
+      results.push(result);
+
+      return results;
     } catch (error) {
       throw error;
     }

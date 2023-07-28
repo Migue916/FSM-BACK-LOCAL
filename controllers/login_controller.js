@@ -1,6 +1,6 @@
 const response = require("./responses/response");
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const queries_General = require("../infraestructure/queries/general/general_QueriesModule");
 const empleadosServices = require("../infraestructure/services/empleados.services/empleados_service");
@@ -12,42 +12,50 @@ exports.ingresar = async (req, res, next) => {
       message: "successful",
     };
 
-      const originalUser = {
-        email: req.body.correo,
-        contrasena: req.body.contrasena,
-      };
+    const originalUser = {
+      email: req.body.correo,
+      contrasena: req.body.contrasena,
+    };
 
-    var todosLosCamposLlenos = Object.values(originalUser).every((value) => value !== undefined && value !== '');
+    var todosLosCamposLlenos = Object.values(originalUser).every(
+      (value) => value !== undefined && value !== ""
+    );
 
-    if (todosLosCamposLlenos) {   
-
+    if (todosLosCamposLlenos) {
       const getUser = await queries_General.get_user(originalUser.email);
-      todosLosCamposLlenos =  getUser.length > 0;
+      todosLosCamposLlenos = getUser.length > 0;
 
-      if(todosLosCamposLlenos){
+      if (todosLosCamposLlenos) {
+        const isPasswordValid = await bcrypt.compare(
+          originalUser.contrasena,
+          getUser[0].contrasena
+        );
 
-        const isPasswordValid = await bcrypt.compare(originalUser.contrasena, getUser[0].contrasena);
-
-        if (isPasswordValid){
-          const empleado = await empleadosServices.nombreEmpleado(getUser[0].id);
-          jwt.sign({getUser}, 'S3cr3tK3yF$M', {expiresIn: '10h'}, (err, token) =>{
-            res.json({
+        if (isPasswordValid) {
+          const empleado = await empleadosServices.nombreEmpleado(
+            getUser[0].id
+          );
+          jwt.sign(
+            { getUser },
+            "S3cr3tK3yF$M",
+            { expiresIn: "10h" },
+            (err, token) => {
+              res.json({
                 id: getUser[0].id,
-                Administrador: getUser[0].cargo, 
+                Administrador: getUser[0].cargo,
                 Modulo: empleado.Modulo,
-                token 
+                token,
               });
-            });
-
-        }else{     
-            
+            }
+          );
+        } else {
           result = {
             status: false,
             message: "Contrasena incorrecta",
           };
           response.error(req, res, result, 400, "error");
         }
-      }else{
+      } else {
         result = {
           status: false,
           message: "Correo incorrecto",
@@ -72,7 +80,6 @@ exports.ingresar = async (req, res, next) => {
   }
 };
 
-
 exports.user_create = async (req, res, next) => {
   let result = [];
   try {
@@ -94,19 +101,21 @@ exports.user_create = async (req, res, next) => {
       contrasena: await bcrypt.hash(req.body.contrasena, saltRounds),
       cargo: req.body.cargo,
     };
-    const todosLosCamposLlenos = Object.values(employee).every((value) => value !== undefined && value !== '');
+    const todosLosCamposLlenos = Object.values(employee).every(
+      (value) => value !== undefined && value !== ""
+    );
     if (todosLosCamposLlenos) {
       let creacionUser = false;
       creacionUser = await queries_General.create_user_account(employee);
-      if(creacionUser){
+      if (creacionUser) {
         await queries_General.create_user(employee);
-      }else{
+      } else {
         res.status(200);
         result = {
           status: false,
           message: "Error algun valor ya existe",
         };
-        res.send(result)
+        res.send(result);
       }
       result = {
         status: true,
@@ -122,38 +131,37 @@ exports.user_create = async (req, res, next) => {
     }
     response.success(req, res, result, 200, "success");
   } catch (error) {
-    console.error(error.message);
+    console.log(error);
     result = {
       status: false,
-      message: error.message,
+      message: error.constraint,
     };
     response.error(req, res, result, 400, "error");
   }
 };
-
 
 exports.new_Password = async (req, res, next) => {
   let result = [];
   try {
     const employee = {
       email: req.body.email,
-      contrasena: await bcrypt.hash(req.body.contrasena, saltRounds)
+      contrasena: await bcrypt.hash(req.body.contrasena, saltRounds),
     };
-    const todosLosCamposLlenos = Object.values(employee).every((value) => value !== undefined && value !== '');
+    const todosLosCamposLlenos = Object.values(employee).every(
+      (value) => value !== undefined && value !== ""
+    );
 
     if (todosLosCamposLlenos) {
-
       const getUser = await queries_General.get_user(employee.email);
-      user =  getUser.length > 0;
+      user = getUser.length > 0;
 
-      if(user){
+      if (user) {
         await queries_General.new_Password(employee);
       }
       result = {
         status: true,
         message: "successful",
       };
-
     } else {
       res.status(400);
       result = {
